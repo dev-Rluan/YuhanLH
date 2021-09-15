@@ -7,4 +7,8 @@
 		<int name ="playerId"/>
 		<string name ="chat"/>
 	</packet>
+	<packet name = "S_Test">
+		<int name ="test"/>
+		<string name ="name"/>
+	</packet>
 </PDL>
