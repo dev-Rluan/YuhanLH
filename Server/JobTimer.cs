@@ -35,6 +35,7 @@ namespace Server
             }
         }
 
+        // 줄을 비워줌
         public void Flush()
         {
             while (true)
@@ -47,8 +48,15 @@ namespace Server
                 {
                     if (_pq.Count == 0)
                         break;
+
                     job = _pq.Peek();
+                    if (job.execTick > now)
+                        break;
+
+                    _pq.Pop();
                 }
+
+                job.action.Invoke();
             }
         }
     }

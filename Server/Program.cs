@@ -16,6 +16,12 @@ namespace Server
         static Listener listener = new Listener();
         public static GameRoom Room = new GameRoom();
 
+        static void FlushRoom()
+        {
+            Room.Push(() => Room.Flush());
+            JobTimer.Instance.Push(FlushRoom, 250);
+        }
+
         //static void OnAcceptHandler(Socket client_socket)
         //{
         //    try
@@ -64,21 +70,25 @@ namespace Server
             listener.Init(endPoint, () => { return SessionManager.Instance.Generate();  });
             Console.WriteLine("Listening...");
 
-            int roomTick = 0;
+            //FlushRoom();
+            JobTimer.Instance.Push(FlushRoom);
+            //int roomTick = 0;
             //
             //
             //
             //
             //
 
+
             while (true)
             {
-                int now = System.Environment.TickCount;
-                if (roomTick < now)
-                {
-                    Room.Push(() => Room.Flush());
-                    roomTick = now + 250;
-                }
+                //int now = System.Environment.TickCount;
+                //if (roomTick < now)
+                //{
+                //    Room.Push(() => Room.Flush());
+                //    roomTick = now + 250;
+                //}
+                JobTimer.Instance.Flush();
 
             }
 
