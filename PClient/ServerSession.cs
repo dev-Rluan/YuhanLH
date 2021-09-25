@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 
-namespace SClient
+namespace PClient
 {
 	
 	class ServerSession : PacketSession

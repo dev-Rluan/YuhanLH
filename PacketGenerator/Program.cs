@@ -11,7 +11,14 @@ namespace PacketGenerator
         static ushort packetId;
         static string packetEnum;
 
-        static string clientRegister;
+        static string pcPacketHandler;
+        static string scPacketHandler;
+        static string sPacketHandler;
+        
+
+
+        static string pclientRegister;
+        static string sclientRegister;
         static string serverRegister;
 
 
@@ -46,10 +53,23 @@ namespace PacketGenerator
 
                 string fileText = string.Format(PacketFormat.fillFormat, packetEnum, genPackets);
                 File.WriteAllText("GenPackets.cs", fileText);
-                string clientText = string.Format(PacketFormat.managerFormat, clientRegister);
-                File.WriteAllText("ClientPacketManager.cs", clientText);
-                string ServerText = string.Format(PacketFormat.managerFormat, serverRegister);
+                string pclientText = string.Format(PacketFormat.managerFormat, pclientRegister, "PClient");
+                File.WriteAllText("PClientPacketManager.cs", pclientText);
+                string sclientText = string.Format(PacketFormat.managerFormat, sclientRegister, "SClient");
+                File.WriteAllText("SClientPacketManager.cs", sclientText);
+                string ServerText = string.Format(PacketFormat.managerFormat, serverRegister, "Server");
                 File.WriteAllText("ServerPacketManager.cs", ServerText);
+
+                string pcPacketHandlerText = string.Format(PacketFormat.handlerFormat, "PClient", pcPacketHandler);
+                File.WriteAllText("PCPacketHandler.cs", pcPacketHandlerText);
+                string scPacketHandlerText = string.Format(PacketFormat.handlerFormat, "SClient", scPacketHandler); ;
+                File.WriteAllText("SCPacketHandler.cs", scPacketHandlerText);
+                string sPacketHandlerText = string.Format(PacketFormat.handlerFormat, "Server", sPacketHandler); ;
+                File.WriteAllText("SPacketHandler.cs", sPacketHandlerText);
+
+
+                
+
 
             }
 
@@ -81,12 +101,29 @@ namespace PacketGenerator
             genPackets += string.Format(PacketFormat.packetFormat, packetName, t.Item1, t.Item2, t.Item3);
             packetEnum += string.Format(PacketFormat.packetEnumFormat, packetName, ++packetId) + Environment.NewLine + "\t";
 
-            if(packetName.StartsWith("S_") || packetName.StartsWith("s_"))
-                clientRegister += string.Format(PacketFormat.managerRegisterFormat, packetName) + Environment.NewLine;
-            if(packetName.StartsWith("C_") || packetName.StartsWith("c_"))
-                serverRegister += string.Format(PacketFormat.managerRegisterFormat, packetName) + Environment.NewLine;
+            
 
+
+
+            if (packetName.StartsWith("SP_") || packetName.StartsWith("sp_") || packetName.StartsWith("Sp_") || packetName.StartsWith("sP_"))
+            {
+                pclientRegister += string.Format(PacketFormat.managerRegisterFormat, packetName) + Environment.NewLine;
+                pcPacketHandler += string.Format(PacketFormat.handlerMemberFormat, packetName);
+            }                
+            if(packetName.StartsWith("SS_") || packetName.StartsWith("ss_") || packetName.StartsWith("Ss_") || packetName.StartsWith("sS_"))
+            {
+                sclientRegister += string.Format(PacketFormat.managerRegisterFormat, packetName) + Environment.NewLine;
+                scPacketHandler += string.Format(PacketFormat.handlerMemberFormat, packetName);
+            }                
+            if(packetName.StartsWith("PC_") || packetName.StartsWith("pc_") || packetName.StartsWith("Pc_") || packetName.StartsWith("pC_") || 
+                packetName.StartsWith("SC_") || packetName.StartsWith("sc_") || packetName.StartsWith("Sc_") || packetName.StartsWith("sC_"))
+            {
+                serverRegister += string.Format(PacketFormat.managerRegisterFormat, packetName) + Environment.NewLine;
+                sPacketHandler += string.Format(PacketFormat.handlerMemberFormat, packetName) + Environment.NewLine;
+                
             }
+
+        }
 
         public static Tuple<string, string, string> ParseMembers(XmlReader r)
         {

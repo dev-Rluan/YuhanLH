@@ -30,14 +30,14 @@ namespace Server
 
         public void Broadcast(ClientSession session, string chat)
         {
-            S_Chat packet = new S_Chat();
-            packet.playerId = session.SessionId;
-            packet.chat =  $"{chat} I am {packet.playerId}";
-            ArraySegment<byte> segment = packet.Write();
+            //S_Chat packet = new S_Chat();
+            //packet.playerId = session.SessionId;
+            //packet.chat =  $"{chat} I am {packet.playerId}";
+            //ArraySegment<byte> segment = packet.Write();
 
-            _pendingList.Add(segment);
-                //foreach (ClientSession s in _sessions)
-                //    s.Send(segment);
+            //_pendingList.Add(segment);
+            //    //foreach (ClientSession s in _sessions)
+            //    //    s.Send(segment);
         
         } 
 

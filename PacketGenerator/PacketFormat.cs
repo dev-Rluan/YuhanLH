@@ -8,9 +8,29 @@ namespace PacketGenerator
 {
     class PacketFormat
     {
-        // {0} 패킷 등록
-        public static string managerFormat =
-@"using ServerCore;
+        // {0} using 이름
+        // {1} 패킷 핸들러
+        public static string handlerFormat =
+@"using {0};
+using System;
+class PacketHandler
+{{
+    {1}
+    
+
+}}";
+        // {0} 패킷 이름
+        public static string handlerMemberFormat =
+@"     
+        public static void {0}Handler(PacketSession session, IPacket packet)
+        {{
+
+        }}";
+        
+    // {0} 패킷 등록
+    // {1} using 이름
+    public static string managerFormat =
+@"using {1};
 using System;
 using System.Collections.Generic;
 
@@ -64,13 +84,14 @@ class PacketManager
 
         // {0} 패킷 이름
         public static string managerRegisterFormat =
-@"      _onRecv.Add((ushort)PacketID.{0}, MakePacket<{0}>);
+@"  
+        _onRecv.Add((ushort)PacketID.{0}, MakePacket<{0}>);
         _handler.Add((ushort)PacketID.{0}, PacketHandler.{0}Handler);";
         // {0} 패킷 이름/번호 목록
         // {1} 패킷 목록
+        // {2} using 
         public static string fillFormat =
-@"using ServerCore;
-using System;
+@"using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;

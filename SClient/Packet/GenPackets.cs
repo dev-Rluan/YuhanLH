@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using Server;
+using SClient;
+
 
 public enum PacketID
 {

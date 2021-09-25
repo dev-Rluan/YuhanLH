@@ -1,4 +1,4 @@
-using ServerCore;
+using Server;
 using System;
 using System.Collections.Generic;
 
@@ -21,8 +21,24 @@ class PacketManager
     Dictionary<ushort, Action<PacketSession, IPacket>> _handler = new Dictionary<ushort, Action<PacketSession, IPacket>>();
     public void Register()
     {
-      _onRecv.Add((ushort)PacketID.C_Chat, MakePacket<C_Chat>);
-        _handler.Add((ushort)PacketID.C_Chat, PacketHandler.C_ChatHandler);
+  
+        _onRecv.Add((ushort)PacketID.PC_Login, MakePacket<PC_Login>);
+        _handler.Add((ushort)PacketID.PC_Login, PacketHandler.PC_LoginHandler);
+  
+        _onRecv.Add((ushort)PacketID.SC_Login, MakePacket<SC_Login>);
+        _handler.Add((ushort)PacketID.SC_Login, PacketHandler.SC_LoginHandler);
+  
+        _onRecv.Add((ushort)PacketID.PC_Chat, MakePacket<PC_Chat>);
+        _handler.Add((ushort)PacketID.PC_Chat, PacketHandler.PC_ChatHandler);
+  
+        _onRecv.Add((ushort)PacketID.SC_Chat, MakePacket<SC_Chat>);
+        _handler.Add((ushort)PacketID.SC_Chat, PacketHandler.SC_ChatHandler);
+  
+        _onRecv.Add((ushort)PacketID.PC_ScreenRequest, MakePacket<PC_ScreenRequest>);
+        _handler.Add((ushort)PacketID.PC_ScreenRequest, PacketHandler.PC_ScreenRequestHandler);
+  
+        _onRecv.Add((ushort)PacketID.SC_ScreenResult, MakePacket<SC_ScreenResult>);
+        _handler.Add((ushort)PacketID.SC_ScreenResult, PacketHandler.SC_ScreenResultHandler);
 
     }
 
