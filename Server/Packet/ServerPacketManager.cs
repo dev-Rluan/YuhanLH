@@ -22,23 +22,23 @@ class PacketManager
     public void Register()
     {
   
-        _onRecv.Add((ushort)PacketID.PC_Login, MakePacket<PC_Login>);
-        _handler.Add((ushort)PacketID.PC_Login, PacketHandler.PC_LoginHandler);
+        _onRecv.Add((ushort)PacketID.CP_Login, MakePacket<CP_Login>);
+        _handler.Add((ushort)PacketID.CP_Login, PacketHandler.CP_LoginHandler);
   
-        _onRecv.Add((ushort)PacketID.SC_Login, MakePacket<SC_Login>);
-        _handler.Add((ushort)PacketID.SC_Login, PacketHandler.SC_LoginHandler);
+        _onRecv.Add((ushort)PacketID.CS_Login, MakePacket<CS_Login>);
+        _handler.Add((ushort)PacketID.CS_Login, PacketHandler.CS_LoginHandler);
   
-        _onRecv.Add((ushort)PacketID.PC_Chat, MakePacket<PC_Chat>);
-        _handler.Add((ushort)PacketID.PC_Chat, PacketHandler.PC_ChatHandler);
+        _onRecv.Add((ushort)PacketID.CP_Chat, MakePacket<CP_Chat>);
+        _handler.Add((ushort)PacketID.CP_Chat, PacketHandler.CP_ChatHandler);
   
-        _onRecv.Add((ushort)PacketID.SC_Chat, MakePacket<SC_Chat>);
-        _handler.Add((ushort)PacketID.SC_Chat, PacketHandler.SC_ChatHandler);
+        _onRecv.Add((ushort)PacketID.CS_Chat, MakePacket<CS_Chat>);
+        _handler.Add((ushort)PacketID.CS_Chat, PacketHandler.CS_ChatHandler);
   
-        _onRecv.Add((ushort)PacketID.PC_ScreenRequest, MakePacket<PC_ScreenRequest>);
-        _handler.Add((ushort)PacketID.PC_ScreenRequest, PacketHandler.PC_ScreenRequestHandler);
+        _onRecv.Add((ushort)PacketID.CP_ScreenRequest, MakePacket<CP_ScreenRequest>);
+        _handler.Add((ushort)PacketID.CP_ScreenRequest, PacketHandler.CP_ScreenRequestHandler);
   
-        _onRecv.Add((ushort)PacketID.SC_ScreenResult, MakePacket<SC_ScreenResult>);
-        _handler.Add((ushort)PacketID.SC_ScreenResult, PacketHandler.SC_ScreenResultHandler);
+        _onRecv.Add((ushort)PacketID.CS_ScreenResult, MakePacket<CS_ScreenResult>);
+        _handler.Add((ushort)PacketID.CS_ScreenResult, PacketHandler.CS_ScreenResultHandler);
 
     }
 

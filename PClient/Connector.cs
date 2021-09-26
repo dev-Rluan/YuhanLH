@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace PClient
 {
@@ -49,16 +50,35 @@ namespace PClient
         void OnConnectCompleted(object sender, SocketAsyncEventArgs args)
         {            
             if(args.SocketError == SocketError.Success)
-            {
-                
-                Console.WriteLine("1");
+            {                
                 Session session = _sessionFactory.Invoke();
                 session.Start(args.ConnectSocket);
                 session.OnConnected(args.RemoteEndPoint);
+                if (PClientForm.pclientform.lbServerConn.InvokeRequired == true)
+                {
+                    PClientForm.pclientform.lbServerConn.Invoke((MethodInvoker)delegate
+                    {
+                        PClientForm.pclientform.lbServerConn.Text = "서버연결 : success";
+                    });
+                }
+                else
+                {
+                    PClientForm.pclientform.lbServerConn.Text = "서버연결 : success";
+                }
             }
             else
             {
-                Console.WriteLine($"OnConnectCompleted Fail : { args.SocketError }");
+                if (PClientForm.pclientform.lbServerConn.InvokeRequired == true)
+                {
+                    PClientForm.pclientform.lbServerConn.Invoke((MethodInvoker)delegate
+                    {
+                        PClientForm.pclientform.lbServerConn.Text = $"OnConnectCompleted Fail : { args.SocketError }";
+                    });
+                }
+                else
+                {
+                    PClientForm.pclientform.lbServerConn.Text = $"OnConnectCompleted Fail : { args.SocketError }";
+                }
             }
         }
     }

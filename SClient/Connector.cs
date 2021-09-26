@@ -5,11 +5,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SClient
 {
     public class Connector
     {
+       
         // 어떤 세션을 만들지
         Func<Session> _sessionFactory;
         public void Connect(IPEndPoint endPoint, Func<Session> sessionFactory, int count = 1)
@@ -50,15 +52,38 @@ namespace SClient
         {            
             if(args.SocketError == SocketError.Success)
             {
-                
-                Console.WriteLine("1");
                 Session session = _sessionFactory.Invoke();
                 session.Start(args.ConnectSocket);
                 session.OnConnected(args.RemoteEndPoint);
+                if(SClientForm.sclientform.lbConn.InvokeRequired == true)
+                {
+                    SClientForm.sclientform.lbConn.Invoke((MethodInvoker)delegate
+                    {
+                        SClientForm.sclientform.lbConn.Text = "서버연결 : success";
+                    });
+                }
+                else
+                {
+                    SClientForm.sclientform.lbConn.Text = "서버연결 : success";
+                }
+                
             }
             else
             {
-                Console.WriteLine($"OnConnectCompleted Fail : { args.SocketError }");
+                if (SClientForm.sclientform.lbConn.InvokeRequired == true)
+                {
+                    SClientForm.sclientform.lbConn.Invoke((MethodInvoker)delegate
+                    {
+                        SClientForm.sclientform.lbConn.Text = $"OnConnectCompleted Fail : { args.SocketError }";
+                    });
+                }
+                else
+                {
+                    SClientForm.sclientform.lbConn.Text = $"OnConnectCompleted Fail : { args.SocketError }";
+                }
+                
+
+
             }
         }
     }

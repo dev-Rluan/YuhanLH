@@ -1,7 +1,7 @@
 ﻿
 namespace PClient
 {
-    partial class Form1
+    partial class PClientForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -31,13 +31,14 @@ namespace PClient
         {
             this.btnLogin = new System.Windows.Forms.Button();
             this.btnLogout = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.txtBox = new System.Windows.Forms.TextBox();
+            this.ptBox = new System.Windows.Forms.PictureBox();
             this.btnImgRequest = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.lbServerConn = new System.Windows.Forms.Label();
             this.lbChat = new System.Windows.Forms.Label();
             this.lbLogin = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.lbImg = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.ptBox)).BeginInit();
             this.SuspendLayout();
             // 
             // btnLogin
@@ -48,6 +49,7 @@ namespace PClient
             this.btnLogin.TabIndex = 0;
             this.btnLogin.Text = "로그인";
             this.btnLogin.UseVisualStyleBackColor = true;
+            this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
             // btnLogout
             // 
@@ -58,21 +60,21 @@ namespace PClient
             this.btnLogout.Text = "로그아웃";
             this.btnLogout.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // txtBox
             // 
-            this.textBox1.Location = new System.Drawing.Point(46, 101);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(171, 297);
-            this.textBox1.TabIndex = 2;
+            this.txtBox.Location = new System.Drawing.Point(46, 101);
+            this.txtBox.Multiline = true;
+            this.txtBox.Name = "txtBox";
+            this.txtBox.Size = new System.Drawing.Size(171, 297);
+            this.txtBox.TabIndex = 2;
             // 
-            // pictureBox1
+            // ptBox
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(271, 32);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(215, 367);
-            this.pictureBox1.TabIndex = 3;
-            this.pictureBox1.TabStop = false;
+            this.ptBox.Location = new System.Drawing.Point(271, 32);
+            this.ptBox.Name = "ptBox";
+            this.ptBox.Size = new System.Drawing.Size(215, 367);
+            this.ptBox.TabIndex = 3;
+            this.ptBox.TabStop = false;
             // 
             // btnImgRequest
             // 
@@ -83,14 +85,14 @@ namespace PClient
             this.btnImgRequest.Text = "이미지 요청";
             this.btnImgRequest.UseVisualStyleBackColor = true;
             // 
-            // label1
+            // lbServerConn
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(543, 383);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(39, 15);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "label1";
+            this.lbServerConn.AutoSize = true;
+            this.lbServerConn.Location = new System.Drawing.Point(543, 383);
+            this.lbServerConn.Name = "lbServerConn";
+            this.lbServerConn.Size = new System.Drawing.Size(91, 15);
+            this.lbServerConn.TabIndex = 5;
+            this.lbServerConn.Text = "서버연결 : Faild";
             // 
             // lbChat
             // 
@@ -110,23 +112,33 @@ namespace PClient
             this.lbLogin.TabIndex = 7;
             this.lbLogin.Text = "로그인 : logout";
             // 
-            // Form1
+            // lbImg
+            // 
+            this.lbImg.AutoSize = true;
+            this.lbImg.Location = new System.Drawing.Point(543, 62);
+            this.lbImg.Name = "lbImg";
+            this.lbImg.Size = new System.Drawing.Size(95, 15);
+            this.lbImg.TabIndex = 8;
+            this.lbImg.Text = "이미지 수신없음";
+            // 
+            // PClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.lbImg);
             this.Controls.Add(this.lbLogin);
             this.Controls.Add(this.lbChat);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.lbServerConn);
             this.Controls.Add(this.btnImgRequest);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.ptBox);
+            this.Controls.Add(this.txtBox);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.btnLogin);
-            this.Name = "Form1";
+            this.Name = "PClientForm";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.Load += new System.EventHandler(this.PClientForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.ptBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -136,16 +148,17 @@ namespace PClient
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btnLogout;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button btnImgRequest;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label lbLogin;
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.Label lbChat;
         private System.Windows.Forms.Button lbImageRequest;
         private System.Windows.Forms.Button btnImgRe;
+        public System.Windows.Forms.PictureBox ptBox;
+        public System.Windows.Forms.Label lbLogin;
+        public System.Windows.Forms.Label lbServerConn;
+        public System.Windows.Forms.TextBox txtBox;
+        public System.Windows.Forms.Label lbImg;
     }
 }
 

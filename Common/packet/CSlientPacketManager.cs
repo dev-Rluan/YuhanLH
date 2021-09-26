@@ -1,4 +1,4 @@
-using Server;
+using SClient;
 using System;
 using System.Collections.Generic;
 
@@ -22,23 +22,8 @@ class PacketManager
     public void Register()
     {
   
-        _onRecv.Add((ushort)PacketID.CP_Login, MakePacket<CP_Login>);
-        _handler.Add((ushort)PacketID.CP_Login, PacketHandler.CP_LoginHandler);
-  
-        _onRecv.Add((ushort)PacketID.CS_Login, MakePacket<CS_Login>);
-        _handler.Add((ushort)PacketID.CS_Login, PacketHandler.CS_LoginHandler);
-  
-        _onRecv.Add((ushort)PacketID.CP_Chat, MakePacket<CP_Chat>);
-        _handler.Add((ushort)PacketID.CP_Chat, PacketHandler.CP_ChatHandler);
-  
-        _onRecv.Add((ushort)PacketID.CS_Chat, MakePacket<CS_Chat>);
-        _handler.Add((ushort)PacketID.CS_Chat, PacketHandler.CS_ChatHandler);
-  
-        _onRecv.Add((ushort)PacketID.CP_ScreenRequest, MakePacket<CP_ScreenRequest>);
-        _handler.Add((ushort)PacketID.CP_ScreenRequest, PacketHandler.CP_ScreenRequestHandler);
-  
-        _onRecv.Add((ushort)PacketID.CS_ScreenResult, MakePacket<CS_ScreenResult>);
-        _handler.Add((ushort)PacketID.CS_ScreenResult, PacketHandler.CS_ScreenResultHandler);
+        _onRecv.Add((ushort)PacketID.SS_Result, MakePacket<SS_Result>);
+        _handler.Add((ushort)PacketID.SS_Result, PacketHandler.SS_ResultHandler);
 
     }
 

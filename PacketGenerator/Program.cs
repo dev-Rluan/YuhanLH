@@ -54,16 +54,16 @@ namespace PacketGenerator
                 string fileText = string.Format(PacketFormat.fillFormat, packetEnum, genPackets);
                 File.WriteAllText("GenPackets.cs", fileText);
                 string pclientText = string.Format(PacketFormat.managerFormat, pclientRegister, "PClient");
-                File.WriteAllText("PClientPacketManager.cs", pclientText);
+                File.WriteAllText("CPlientPacketManager.cs", pclientText);
                 string sclientText = string.Format(PacketFormat.managerFormat, sclientRegister, "SClient");
-                File.WriteAllText("SClientPacketManager.cs", sclientText);
+                File.WriteAllText("CSlientPacketManager.cs", sclientText);
                 string ServerText = string.Format(PacketFormat.managerFormat, serverRegister, "Server");
                 File.WriteAllText("ServerPacketManager.cs", ServerText);
 
                 string pcPacketHandlerText = string.Format(PacketFormat.handlerFormat, "PClient", pcPacketHandler);
-                File.WriteAllText("PCPacketHandler.cs", pcPacketHandlerText);
+                File.WriteAllText("CPPacketHandler.cs", pcPacketHandlerText);
                 string scPacketHandlerText = string.Format(PacketFormat.handlerFormat, "SClient", scPacketHandler); ;
-                File.WriteAllText("SCPacketHandler.cs", scPacketHandlerText);
+                File.WriteAllText("CSPacketHandler.cs", scPacketHandlerText);
                 string sPacketHandlerText = string.Format(PacketFormat.handlerFormat, "Server", sPacketHandler); ;
                 File.WriteAllText("SPacketHandler.cs", sPacketHandlerText);
 
@@ -115,8 +115,8 @@ namespace PacketGenerator
                 sclientRegister += string.Format(PacketFormat.managerRegisterFormat, packetName) + Environment.NewLine;
                 scPacketHandler += string.Format(PacketFormat.handlerMemberFormat, packetName);
             }                
-            if(packetName.StartsWith("PC_") || packetName.StartsWith("pc_") || packetName.StartsWith("Pc_") || packetName.StartsWith("pC_") || 
-                packetName.StartsWith("SC_") || packetName.StartsWith("sc_") || packetName.StartsWith("Sc_") || packetName.StartsWith("sC_"))
+            if(packetName.StartsWith("CP_") || packetName.StartsWith("cp_") || packetName.StartsWith("cP_") || packetName.StartsWith("Cp_") || 
+                packetName.StartsWith("CS_") || packetName.StartsWith("cs_") || packetName.StartsWith("cS_") || packetName.StartsWith("Cs_"))
             {
                 serverRegister += string.Format(PacketFormat.managerRegisterFormat, packetName) + Environment.NewLine;
                 sPacketHandler += string.Format(PacketFormat.handlerMemberFormat, packetName) + Environment.NewLine;
@@ -198,6 +198,11 @@ namespace PacketGenerator
                         readCode += t.Item2;
                         writeCode += t.Item3;
                         break;
+                    case "bytes":
+                        memberCode += string.Format(PacketFormat.memberFormat, "byte[]", memberName);
+                        readCode += string.Format(PacketFormat.readBytesFormat, memberName);
+                        writeCode += string.Format(PacketFormat.writeBytesFormat, memberName);
+                        break;
                     default:
                         break;
                 }
@@ -208,6 +213,7 @@ namespace PacketGenerator
             return new Tuple<string, string, string>(memberCode, readCode, writeCode);
 
         }
+         
 
         public static Tuple<string, string, string>ParseList(XmlReader r)
         {

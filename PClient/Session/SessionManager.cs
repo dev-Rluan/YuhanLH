@@ -4,29 +4,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SClient
+namespace PClient
 {
     class SessionManager
     {
         static SessionManager _session = new SessionManager();
         public static SessionManager Instance { get { return _session; } }
 
-        List<ServerSession> _sessions = new List<ServerSession>();
+        
         object _lock = new object();
-
-        public void SendForEach()
+        ServerSession _sessions = new ServerSession();
+        public void LoginSend()
         {
             lock (_lock)
             {
-                foreach(ServerSession session in _sessions)
-                {
-                    //C_Chat chatPacket = new C_Chat();
-                    //chatPacket.chat = $"Hello Server";
-                    //ArraySegment<byte> segment = chatPacket.Write();
+                CP_Login loging_packet = new CP_Login();
 
-                    //session.Send(segment);
-                }
+                loging_packet.id = "test";
+                loging_packet.pwd = "1234";
+                ArraySegment<byte> segment = loging_packet.Write();
+                _sessions.Send(segment);
+
+                
             }
+
         }
 
         public ServerSession Generate()
@@ -34,7 +35,7 @@ namespace SClient
             lock (_lock)
             {
                 ServerSession session = new ServerSession();
-                _sessions.Add(session);
+                this._sessions = session;
                 return session;
             }
         }

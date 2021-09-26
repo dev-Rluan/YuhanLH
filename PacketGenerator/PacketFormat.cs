@@ -204,6 +204,16 @@ count += sizeof({2});";
 @"this.{0} = ({1})segment.Array[segment.Offset + count];
 count += sizeof({1});";
 
+        // {0} 변수이름
+        public static string readBytesFormat =
+@"ushort {0}Len = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+count += sizeof(ushort);
+ArraySegment<byte> {0}Array;
+{0}Array = segment.Slice(segment.Offset + count, {0}Len);
+this.img = {0}Array.ToArray();      
+count += {0}Len;
+";
+
         // {0} 변수 이름
         public static string readStringFormat =
 @"ushort {0}Len = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
@@ -235,6 +245,14 @@ count += sizeof({1});";
         public static string writeByteFormat =
 @"segment.Array[segment.Offset + count] = (byte)this.{0};
 count += sizeof({1});";
+
+        // {0} 변수이름 
+        public static string writeBytesFormat =
+@"ushort {0}Len = (ushort)this.{0}.Length;
+ Array.Copy(BitConverter.GetBytes({0}Len), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+ Array.Copy(this.img, 0, segment.Array, segment.Offset + count + sizeof(ushort), {0}Len);
+ count += sizeof(ushort);
+ count += {0}Len;";
 
         // {0} 변수 이름
         public static string writeStringFormat =

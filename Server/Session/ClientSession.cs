@@ -12,7 +12,7 @@ namespace Server
 	class ClientSession : PacketSession
     {   
         public int SessionId { get; set; }
-        public GameRoom Room { get; set; }
+        public ClassRoom Room { get; set; }
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnConnected : {endPoint}");
@@ -28,7 +28,7 @@ namespace Server
             if(Room != null)
             {
                 // 룸이 비었어도 에러가 안나도록 (빈공간 삭제 방지)
-                GameRoom room = Room;
+                ClassRoom room = Room;
 
                 room.Push(() => room.Leave(this));                
                 Room = null;

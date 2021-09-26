@@ -1,5 +1,4 @@
-﻿using ServerCore;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    class GameRoom : IJobQueue
+    class ClassRoom : IJobQueue
     {
         List<ClientSession> _sessions = new List<ClientSession>();       
         JobQueue _jobQueue = new JobQueue();
@@ -28,8 +27,19 @@ namespace Server
             _pendingList.Clear();
         }
 
-        public void Broadcast(ClientSession session, string chat)
+        public void Broadcast(ClientSession session, byte[] img, string id)
         {
+            SP_ScreenResult sp_screenPacket = new SP_ScreenResult();
+            sp_screenPacket.id = id;
+            sp_screenPacket.img = img;
+            ArraySegment<byte> segment = sp_screenPacket.Write();
+            _pendingList.Add(segment);
+
+            foreach (ClientSession s in _sessions)
+                s.Send(segment);
+
+            Console.WriteLine("이미지전송");
+
             //S_Chat packet = new S_Chat();
             //packet.playerId = session.SessionId;
             //packet.chat =  $"{chat} I am {packet.playerId}";
@@ -38,7 +48,7 @@ namespace Server
             //_pendingList.Add(segment);
             //    //foreach (ClientSession s in _sessions)
             //    //    s.Send(segment);
-        
+
         } 
 
         public void Enter(ClientSession session)

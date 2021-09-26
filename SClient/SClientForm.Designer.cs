@@ -1,7 +1,7 @@
 ﻿
 namespace SClient
 {
-    partial class Form1
+    partial class SClientForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -36,6 +36,7 @@ namespace SClient
             this.btnLogin = new System.Windows.Forms.Button();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.btnSend = new System.Windows.Forms.Button();
+            this.lbConn = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -100,12 +101,23 @@ namespace SClient
             this.btnSend.TabIndex = 14;
             this.btnSend.Text = "전송";
             this.btnSend.UseVisualStyleBackColor = true;
+            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
-            // Form1
+            // lbConn
+            // 
+            this.lbConn.AutoSize = true;
+            this.lbConn.Location = new System.Drawing.Point(665, 393);
+            this.lbConn.Name = "lbConn";
+            this.lbConn.Size = new System.Drawing.Size(91, 15);
+            this.lbConn.TabIndex = 15;
+            this.lbConn.Text = "서버연결 : Faild";
+            // 
+            // SClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.lbConn);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.lbLogin);
@@ -113,9 +125,9 @@ namespace SClient
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.btnLogin);
-            this.Name = "Form1";
+            this.Name = "SClientForm";
             this.Text = "Form1";
-            this.Load += new System.EventHandler(this.Form1_Load);
+            this.Load += new System.EventHandler(this.SClientForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -123,14 +135,14 @@ namespace SClient
         }
 
         #endregion
-
-        private System.Windows.Forms.Label lbLogin;
         private System.Windows.Forms.Label lbChat;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.Button btnLogout;
         private System.Windows.Forms.Button btnLogin;
-        private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button btnSend;
+        public System.Windows.Forms.Label lbConn;
+        public System.Windows.Forms.Label lbLogin;
+        public System.Windows.Forms.TextBox textBox1;
+        public System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
