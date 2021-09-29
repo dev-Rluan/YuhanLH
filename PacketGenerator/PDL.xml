@@ -1,14 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PDL>
-	<packet name ="C_Chat">
-		<string name ="chat"/>
+	<packet name ="CP_Login">
+		<string name ="id"/>
+		<string name ="pwd"/>
 	</packet>
-	<packet name = "S_Chat">
-		<int name ="playerId"/>
-		<string name ="chat"/>
+	<packet name = "CS_Login">
+		<string name ="id"/>
+		<string name ="pwd"/>
 	</packet>
-	<packet name = "S_Test">
-		<int name ="test"/>
-		<string name ="name"/>
+	<packet name = "SS_Result">
+		<bool name ="result"/>		
 	</packet>
+	<packet name = "SP_Result">
+		<bool name ="result"/>
+	</packet>
+	<packet name = "CP_Chat">
+		<string name = "id" />
+		<string name = "chat"/>
+	</packet>
+	<packet name = "CS_Chat">
+		<string name = "id" />
+		<string name = "chat"/>
+	</packet>
+	<packet name = "CP_ScreenRequest">
+		<string name ="id"/>
+		<string name ="student"/>
+	</packet>
+	<packet name = "CS_ScreenResult">
+		<string name ="id"/>
+		<bytes name ="img"/>
+	</packet>
+	<packet name = "SP_ScreenResult">
+		<string name ="id"/>
+		<bytes name ="img"/>
+	</packet>
+	
 </PDL>

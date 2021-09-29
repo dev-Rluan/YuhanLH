@@ -5,8 +5,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using ServerCore;
-
 
 namespace Server
 {
@@ -14,7 +12,13 @@ namespace Server
     class Program
     {
         static Listener listener = new Listener();
-        public static GameRoom Room = new GameRoom();
+        public static ClassRoom Room = new ClassRoom();
+
+        static void FlushRoom()
+        {
+            Room.Push(() => Room.Flush());
+            JobTimer.Instance.Push(FlushRoom, 50);
+        }
 
         //static void OnAcceptHandler(Socket client_socket)
         //{
@@ -53,32 +57,34 @@ namespace Server
         //}
         static void Main(string[] args)
         {
-            
-
             String host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = ipHost.AddressList[0];
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);
+            for (int i = 7771; i < 7775; i++)
+            {
+                IPEndPoint endPoint = new IPEndPoint(ipAddr, i);
+                listener.Init(endPoint, () => { return SessionManager.Instance.Generate(); });
+                Console.WriteLine($"Listening... port : {i}");
+            }
+           
+            
+            
 
+            //FlushRoom();
+            JobTimer.Instance.Push(FlushRoom);
+            //int roomTick = 0;
+        
 
-            listener.Init(endPoint, () => { return SessionManager.Instance.Generate();  });
-            Console.WriteLine("Listening...");
-
-            int roomTick = 0;
-            //
-            //
-            //
-            //
-            //
 
             while (true)
             {
-                int now = System.Environment.TickCount;
-                if (roomTick < now)
-                {
-                    Room.Push(() => Room.Flush());
-                    roomTick = now + 250;
-                }
+                //int now = System.Environment.TickCount;
+                //if (roomTick < now)
+                //{
+                //    Room.Push(() => Room.Flush());
+                //    roomTick = now + 250;
+                //}
+                JobTimer.Instance.Flush();
 
             }
 

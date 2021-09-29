@@ -31,11 +31,8 @@ namespace ServerCore
 
                 RegisterAccept(args);
             }
-
-           
-
+ 
         }
-
         
 
        void RegisterAccept(SocketAsyncEventArgs args)

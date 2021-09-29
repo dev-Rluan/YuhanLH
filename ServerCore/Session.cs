@@ -87,9 +87,9 @@ namespace ServerCore
             _sendArgs.Completed += new EventHandler<SocketAsyncEventArgs>(OnSendCompleted);
             RegistRecv();
         }
-        public void Send(List<ArraySegment<byte>> sendBufferList)
+        public void Send(List<ArraySegment<byte>> sendBuffList)
         {
-            if(sendBufferList.Count == 0)
+            if(sendBuffList.Count == 0)
             {
                 return;
             }
@@ -97,7 +97,7 @@ namespace ServerCore
             //_socket.Send(sendBuffer);
             lock (_lock)
             {
-                foreach(ArraySegment<byte> sendBuffer in sendBufferList)
+                foreach(ArraySegment<byte> sendBuffer in sendBuffList)
                      _sendQueue.Enqueue(sendBuffer);
 
                 if (_pendingList.Count == 0)
@@ -112,10 +112,10 @@ namespace ServerCore
             lock (_lock)
             {
                 _sendQueue.Enqueue(sendBuffer);
-                    if(_pendingList.Count == 0)
-                  {
-                         RegistSend();
-                   }
+                if(_pendingList.Count == 0)
+                {
+                     RegistSend();
+                }
             }  
         }
         public void Disconnect()
@@ -159,9 +159,6 @@ namespace ServerCore
             {
                 Console.WriteLine($"RegisterSend Faild{e}");
             }
-
-            
-
         }
 
         void OnSendCompleted(object sender, SocketAsyncEventArgs args)
