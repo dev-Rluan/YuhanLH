@@ -77,6 +77,7 @@ namespace ServerCore
 			return ret;
 		}
 
+		// 조회
 		public T Peek()
 		{
 			if (_heap.Count == 0)

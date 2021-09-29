@@ -18,7 +18,7 @@ namespace DummyClient
             IPAddress ipAddr = ipHost.AddressList[0];            
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 7777);           
             Connector connector = new Connector();
-            connector.Connect(endPoint, () => { return SessionManager.Instance.Generate();  }, 100);
+            connector.Connect(endPoint, () => { return SessionManager.Instance.Generate();  });
 
             while (true)
             {               

@@ -32,6 +32,8 @@ namespace Server
             }
         }
 
+        
+
         public ClientSession Find(int id)
         {
             lock (_lock)
