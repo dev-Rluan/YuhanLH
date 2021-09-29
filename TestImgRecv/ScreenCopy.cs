@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace SClient
+namespace TestImgRecv
 {
     public class ScreenCopy
     {

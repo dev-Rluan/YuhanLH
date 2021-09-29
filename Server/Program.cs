@@ -17,7 +17,7 @@ namespace Server
         static void FlushRoom()
         {
             Room.Push(() => Room.Flush());
-            JobTimer.Instance.Push(FlushRoom, 250);
+            JobTimer.Instance.Push(FlushRoom, 50);
         }
 
         //static void OnAcceptHandler(Socket client_socket)

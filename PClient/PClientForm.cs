@@ -22,7 +22,8 @@ namespace PClient
 
         private void PClientForm_Load(object sender, EventArgs e)
         {
-            IPHostEntry ipHost = Dns.GetHostEntry("49.170.231.107");
+            String host = Dns.GetHostName();
+            IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = ipHost.AddressList[0];
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 7773);
             Connector connector = new Connector();

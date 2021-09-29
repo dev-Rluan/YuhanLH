@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -24,7 +25,8 @@ namespace SClient
 
         private void SClientForm_Load(object sender, EventArgs e)
         {
-            IPHostEntry ipHost = Dns.GetHostEntry("49.170.231.107");
+            String host = Dns.GetHostName();
+            IPHostEntry ipHost = Dns.GetHostEntry(host);
             IPAddress ipAddr = ipHost.AddressList[0];
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 7773);
             Connector connector = new Connector();
@@ -41,7 +43,7 @@ namespace SClient
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            byte[] img = ScreenCopy.Copy();
+            byte[] img = ScreenCopy.Copy();            
             SessionManager.Instance.ImgSend(img);
             Bitmap bmp;
             bmp = ScreenCopy.GetBitmap(img);

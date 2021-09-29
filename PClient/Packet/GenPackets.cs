@@ -443,7 +443,7 @@ class SP_ScreenResult : IPacket
     public  ArraySegment<byte> Write()
     {
              
-        ArraySegment<byte> segment = SendBufferHelper.Open(65535);            
+        ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
         ushort count = 0;        
 
         count += sizeof(ushort);
