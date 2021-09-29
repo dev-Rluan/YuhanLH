@@ -72,7 +72,8 @@ namespace PClient
             // 
             this.ptBox.Location = new System.Drawing.Point(271, 32);
             this.ptBox.Name = "ptBox";
-            this.ptBox.Size = new System.Drawing.Size(215, 367);
+            this.ptBox.Size = new System.Drawing.Size(215, 127);
+            this.ptBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.ptBox.TabIndex = 3;
             this.ptBox.TabStop = false;
             // 
@@ -90,42 +91,38 @@ namespace PClient
             this.lbServerConn.AutoSize = true;
             this.lbServerConn.Location = new System.Drawing.Point(543, 383);
             this.lbServerConn.Name = "lbServerConn";
-            this.lbServerConn.Size = new System.Drawing.Size(91, 15);
+            this.lbServerConn.Size = new System.Drawing.Size(0, 15);
             this.lbServerConn.TabIndex = 5;
-            this.lbServerConn.Text = "서버연결 : Faild";
             // 
             // lbChat
             // 
             this.lbChat.AutoSize = true;
             this.lbChat.Location = new System.Drawing.Point(46, 80);
             this.lbChat.Name = "lbChat";
-            this.lbChat.Size = new System.Drawing.Size(31, 15);
+            this.lbChat.Size = new System.Drawing.Size(0, 15);
             this.lbChat.TabIndex = 6;
-            this.lbChat.Text = "채팅";
             // 
             // lbLogin
             // 
             this.lbLogin.AutoSize = true;
             this.lbLogin.Location = new System.Drawing.Point(46, 11);
             this.lbLogin.Name = "lbLogin";
-            this.lbLogin.Size = new System.Drawing.Size(89, 15);
+            this.lbLogin.Size = new System.Drawing.Size(0, 15);
             this.lbLogin.TabIndex = 7;
-            this.lbLogin.Text = "로그인 : logout";
             // 
             // lbImg
             // 
             this.lbImg.AutoSize = true;
             this.lbImg.Location = new System.Drawing.Point(543, 62);
             this.lbImg.Name = "lbImg";
-            this.lbImg.Size = new System.Drawing.Size(95, 15);
+            this.lbImg.Size = new System.Drawing.Size(0, 15);
             this.lbImg.TabIndex = 8;
-            this.lbImg.Text = "이미지 수신없음";
             // 
             // PClientForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(750, 450);
             this.Controls.Add(this.lbImg);
             this.Controls.Add(this.lbLogin);
             this.Controls.Add(this.lbChat);
@@ -136,7 +133,6 @@ namespace PClient
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.btnLogin);
             this.Name = "PClientForm";
-            this.Text = "Form1";
             this.Load += new System.EventHandler(this.PClientForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.ptBox)).EndInit();
             this.ResumeLayout(false);

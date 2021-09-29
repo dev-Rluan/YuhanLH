@@ -34,10 +34,10 @@ namespace SClient
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.btnLogout = new System.Windows.Forms.Button();
             this.btnLogin = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.ptBox = new System.Windows.Forms.PictureBox();
             this.btnSend = new System.Windows.Forms.Button();
             this.lbConn = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptBox)).BeginInit();
             this.SuspendLayout();
             // 
             // lbLogin
@@ -85,13 +85,14 @@ namespace SClient
             this.btnLogin.UseVisualStyleBackColor = true;
             this.btnLogin.Click += new System.EventHandler(this.btnLogin_Click);
             // 
-            // pictureBox1
+            // ptBox
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(291, 43);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(211, 366);
-            this.pictureBox1.TabIndex = 13;
-            this.pictureBox1.TabStop = false;
+            this.ptBox.Location = new System.Drawing.Point(291, 43);
+            this.ptBox.Name = "ptBox";
+            this.ptBox.Size = new System.Drawing.Size(211, 126);
+            this.ptBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.ptBox.TabIndex = 13;
+            this.ptBox.TabStop = false;
             // 
             // btnSend
             // 
@@ -119,7 +120,7 @@ namespace SClient
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.lbConn);
             this.Controls.Add(this.btnSend);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.ptBox);
             this.Controls.Add(this.lbLogin);
             this.Controls.Add(this.lbChat);
             this.Controls.Add(this.textBox1);
@@ -128,7 +129,7 @@ namespace SClient
             this.Name = "SClientForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.SClientForm_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.ptBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -142,7 +143,7 @@ namespace SClient
         public System.Windows.Forms.Label lbConn;
         public System.Windows.Forms.Label lbLogin;
         public System.Windows.Forms.TextBox textBox1;
-        public System.Windows.Forms.PictureBox pictureBox1;
+        public System.Windows.Forms.PictureBox ptBox;
     }
 }
 

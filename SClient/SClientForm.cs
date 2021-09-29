@@ -43,6 +43,10 @@ namespace SClient
         {
             byte[] img = ScreenCopy.Copy();
             SessionManager.Instance.ImgSend(img);
+            Bitmap bmp;
+            bmp = ScreenCopy.GetBitmap(img);
+            ptBox.Image = bmp;
+
         }
     }
 }
