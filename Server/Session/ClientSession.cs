@@ -13,6 +13,7 @@ namespace Server
     {   
         public int SessionId { get; set; }
         public ClassRoom Room { get; set; }
+        public SessionManager _sessionManager = Program.sessionManager;
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnConnected : {endPoint}");
@@ -24,7 +25,7 @@ namespace Server
 
         public override void OnDisConnected(EndPoint endPoint)
         {
-            SessionManager.Instance.Remove(this);
+            _sessionManager.Remove(this);
             if(Room != null)
             {
                 // 룸이 비었어도 에러가 안나도록 (빈공간 삭제 방지)
