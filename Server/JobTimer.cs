@@ -20,8 +20,7 @@ namespace Server
     {
         PriorityQueue<JobTimerElem> _pq = new PriorityQueue<JobTimerElem>();
         object _lock = new object();
-
-        public static JobTimer Instance { get; } = new JobTimer();
+                
 
         public void Push(Action action, int tickAfter = 0)
         {

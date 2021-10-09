@@ -23,7 +23,7 @@ namespace Server
             foreach (ClientSession s in _sessions)
                 s.Send(_pendingList);
 
-            Console.WriteLine($"Flushed {_pendingList.Count} items");
+            //Console.WriteLine($"Flushed {_pendingList.Count} items");
             _pendingList.Clear();
         }
 
@@ -39,15 +39,7 @@ namespace Server
                 s.Send(segment);
 
             Console.WriteLine("이미지전송");
-
-            //S_Chat packet = new S_Chat();
-            //packet.playerId = session.SessionId;
-            //packet.chat =  $"{chat} I am {packet.playerId}";
-            //ArraySegment<byte> segment = packet.Write();
-
-            //_pendingList.Add(segment);
-            //    //foreach (ClientSession s in _sessions)
-            //    //    s.Send(segment);
+            
 
         } 
 

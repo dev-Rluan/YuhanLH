@@ -25,6 +25,9 @@ class PacketHandler
                 r_packet.result = true;
                 Console.WriteLine($"{pc_loginPacket.id} 로그인요청 Success");
                 break;
+            default:
+                Console.WriteLine($"{pc_loginPacket.id} 로그인요청 Faild");
+                break;
         }
         
         ArraySegment<byte> segment = r_packet.Write();

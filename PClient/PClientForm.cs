@@ -14,10 +14,14 @@ namespace PClient
     public partial class PClientForm : Form
     {
         public static PClientForm pclientform;
+        public static SessionManager sessionManager;
+        
+
         public PClientForm()
         {
             InitializeComponent();
             pclientform = this;
+            sessionManager = new SessionManager();
         }
 
         private void PClientForm_Load(object sender, EventArgs e)
@@ -27,13 +31,16 @@ namespace PClient
             IPAddress ipAddr = ipHost.AddressList[0];
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 7773);
             Connector connector = new Connector();
-            connector.Connect(endPoint, () => { return SessionManager.Instance.Generate(); });
+            connector.Connect(endPoint, () => { return sessionManager.Generate(); });
 
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            SessionManager.Instance.LoginSend();
-        }
+
+            sessionManager.LoginSend();
+        }       
+
+       
     }
 }

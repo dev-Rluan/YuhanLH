@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SClient
 {
-    class SessionManager
+    public class SessionManager
     {
-        static SessionManager _session = new SessionManager();
-        public static SessionManager Instance { get { return _session; } }
+        
 
         ServerSession _sessions;
         object _lock = new object();

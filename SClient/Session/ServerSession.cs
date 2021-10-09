@@ -6,7 +6,7 @@ using System.Text;
 namespace SClient
 {
 	
-	class ServerSession : PacketSession
+	public class ServerSession : PacketSession
     {
 
         /* static unsafe void ToBytes(byte[] array,int offset, ulong value)

@@ -34,7 +34,7 @@ namespace Server
                 room.Push(() => room.Leave(this));                
                 Room = null;
             }
-            //Console.WriteLine($"Transferred bytes: {endPoint}");
+            Console.WriteLine($"Transferred bytes: {endPoint}");
         }
 
         //역 직렬화

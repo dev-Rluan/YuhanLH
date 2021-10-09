@@ -14,10 +14,11 @@ namespace Server
         static Listener listener = new Listener();
         public static ClassRoom Room = new ClassRoom();
         public static SessionManager sessionManager = new SessionManager();
+        public static JobTimer jobTimer = new JobTimer();
         static void FlushRoom()
         {
             Room.Push(() => Room.Flush());
-            JobTimer.Instance.Push(FlushRoom, 50);
+            jobTimer.Push(FlushRoom, 50);
         }
 
         //static void OnAcceptHandler(Socket client_socket)
@@ -66,12 +67,12 @@ namespace Server
                 listener.Init(endPoint, () => { return sessionManager.Generate(); });
                 Console.WriteLine($"Listening... port : {i}");
             }
-           
-            
-            
+
+
+
 
             //FlushRoom();
-            JobTimer.Instance.Push(FlushRoom);
+            jobTimer.Push(FlushRoom);
             //int roomTick = 0;
         
 
@@ -84,7 +85,7 @@ namespace Server
                 //    Room.Push(() => Room.Flush());
                 //    roomTick = now + 250;
                 //}
-                JobTimer.Instance.Flush();
+                jobTimer.Flush();
 
             }
 

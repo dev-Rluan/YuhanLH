@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace PClient
 {
-    class SessionManager
+    public class SessionManager
     {
-        static SessionManager _session = new SessionManager();
-        public static SessionManager Instance { get { return _session; } }
-
-        
         object _lock = new object();
         ServerSession _sessions = new ServerSession();
         public void LoginSend()
@@ -20,7 +16,7 @@ namespace PClient
             {
                 CP_Login loging_packet = new CP_Login();
 
-                loging_packet.id = "test";
+                loging_packet.id = "Ptest";
                 loging_packet.pwd = "1234";
                 ArraySegment<byte> segment = loging_packet.Write();
                 _sessions.Send(segment);
@@ -38,6 +34,11 @@ namespace PClient
                 this._sessions = session;
                 return session;
             }
+        }
+
+        public void CloseForm()
+        {
+            _sessions.Disconnect();
         }
     }
 }
