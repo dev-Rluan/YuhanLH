@@ -15,16 +15,21 @@ class PacketHandler
         //room.Push(
         //    () => room.Broadcast(clientSession, pc_loginPacket.id));
         SP_Result r_packet = new SP_Result();
-        if (pc_loginPacket.id == "test" || pc_loginPacket.pwd == "1234")
+        switch (pc_loginPacket.id, pc_loginPacket.pwd)
         {
-            r_packet.result = true;
-            Console.WriteLine($"{pc_loginPacket.id} 로그인요청 Success");
+            case ("Ptest", "1234") :
+                r_packet.result = true;
+                Console.WriteLine($"{pc_loginPacket.id} 로그인요청 Success");
+                break;
+            case ("Stest", "1234"):
+                r_packet.result = true;
+                Console.WriteLine($"{pc_loginPacket.id} 로그인요청 Success");
+                break;
+            default:
+                Console.WriteLine($"{pc_loginPacket.id} 로그인요청 Faild");
+                break;
         }
-        else
-        {
-            r_packet.result = false;            
-            Console.WriteLine($"{pc_loginPacket.id} 로그인요청 Faild");
-        }
+        
         ArraySegment<byte> segment = r_packet.Write();
         clientSession.Send(segment);
     }

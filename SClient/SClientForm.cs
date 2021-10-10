@@ -16,11 +16,12 @@ namespace SClient
     public partial class SClientForm : Form
     {
         public static SClientForm sclientform;
-
+        public static SessionManager sessionManager;
         public SClientForm()
         {
             InitializeComponent();
             sclientform = this;
+            sessionManager = new SessionManager();
         }
 
         private void SClientForm_Load(object sender, EventArgs e)
@@ -30,21 +31,21 @@ namespace SClient
             IPAddress ipAddr = ipHost.AddressList[0];
             IPEndPoint endPoint = new IPEndPoint(ipAddr, 7773);
             Connector connector = new Connector();
-            connector.Connect(endPoint, () => { return SessionManager.Instance.Generate(); });
+            connector.Connect(endPoint, () => { return sessionManager.Generate(); });
             
             
         }
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            SessionManager.Instance.LoginSend();
+            sessionManager.LoginSend();
 
         }
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            byte[] img = ScreenCopy.Copy();            
-            SessionManager.Instance.ImgSend(img);
+            byte[] img = ScreenCopy.Copy();
+            sessionManager.ImgSend(img);
             Bitmap bmp;
             bmp = ScreenCopy.GetBitmap(img);
             ptBox.Image = bmp;

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -31,12 +32,18 @@ namespace TestImgRecv
 
             conn_socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             conn_socket.Connect(endPoint);
-
-           
-
-
+            
+            
 
 
+        }
+        private void time()
+        {
+            while (true)
+            {
+                
+                Thread.Sleep(500);
+            }
         }
 
         private void btnRecv_Click(object sender, EventArgs e)
@@ -48,6 +55,7 @@ namespace TestImgRecv
 
             ptBox.Image = bmp;
             
+
         }
     }
 }
