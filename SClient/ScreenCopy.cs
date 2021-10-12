@@ -53,7 +53,7 @@ namespace SClient
             byte[] data = ms.GetBuffer();
 
             return data;
-            bmp.Dispose();
+            
 
         }
         public static Bitmap GetBitmap(byte[] sourceByteArray)
@@ -67,7 +67,18 @@ namespace SClient
             return (byte[])converter.ConvertTo(img, typeof(byte[]));
         }
 
-
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
+        }
 
     }
 }
