@@ -25,7 +25,7 @@ namespace SClient
 
         public static ArraySegment<byte> Close(int usedSize)
         {
-            return CurrentBuffer.Value.Close(usedSize);
+          return CurrentBuffer.Value.Close(usedSize);
         }
 
     }

@@ -70,9 +70,9 @@ namespace PClient
             // 
             // ptBox
             // 
-            this.ptBox.Location = new System.Drawing.Point(271, 32);
+            this.ptBox.Location = new System.Drawing.Point(291, 43);
             this.ptBox.Name = "ptBox";
-            this.ptBox.Size = new System.Drawing.Size(215, 127);
+            this.ptBox.Size = new System.Drawing.Size(211, 126);
             this.ptBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.ptBox.TabIndex = 3;
             this.ptBox.TabStop = false;
