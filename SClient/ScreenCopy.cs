@@ -45,10 +45,10 @@ namespace SClient
             byte[] t = ImageToByte(bmp);
 
             MemoryStream ms = new MemoryStream();
-            bmp.Save(ms, ImageFormat.Png);
-            byte[] data = ms.GetBuffer();
+            bmp.Save(ms, ImageFormat.Jpeg);
+            byte[] data = ms.ToArray();
 
-            return t;
+            return data;
 
             // Bitmap 데이타를 파일로 저장
             // bmp.Save(outputFilename); 
