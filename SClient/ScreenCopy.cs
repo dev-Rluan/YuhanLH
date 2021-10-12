@@ -42,17 +42,19 @@ namespace SClient
                 gr.CopyFromScreen(rect.Left, rect.Top, 0, 0, rect.Size);
             }
 
-            byte[] t = ImageToByte(bmp);
-
             MemoryStream ms = new MemoryStream();
-            bmp.Save(ms, ImageFormat.Jpeg);
-            byte[] data = ms.ToArray();
+            ScreenCopy tempimg = new ScreenCopy();
+            ImageCodecInfo jpgEncoder = tempimg.GetEncoder(ImageFormat.Jpeg);
+            System.Drawing.Imaging.Encoder myencoder = System.Drawing.Imaging.Encoder.Quality;
+            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+            EncoderParameter myEncoderParameter = new EncoderParameter(myencoder, 0L);
+            myEncoderParameters.Param[0] = myEncoderParameter;
+            bmp.Save(ms, jpgEncoder, myEncoderParameters);
+            byte[] data = ms.GetBuffer();
 
             return data;
+            bmp.Dispose();
 
-            // Bitmap 데이타를 파일로 저장
-            // bmp.Save(outputFilename); 
-            //bmp.Dispose();
         }
         public static Bitmap GetBitmap(byte[] sourceByteArray)
         {
