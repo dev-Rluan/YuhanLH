@@ -42,7 +42,6 @@ namespace SClient
                 gr.CopyFromScreen(rect.Left, rect.Top, 0, 0, rect.Size);
             }
 
-            byte[] t = ImageToByte(bmp);
             MemoryStream ms = new MemoryStream();
             ScreenCopy tempimg = new ScreenCopy();
             ImageCodecInfo jpgEncoder = tempimg.GetEncoder(ImageFormat.Jpeg);
