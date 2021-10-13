@@ -42,12 +42,16 @@ namespace SClient
                 gr.CopyFromScreen(rect.Left, rect.Top, 0, 0, rect.Size);
             }
 
-            byte[] t = ImageToByte(bmp);
+            //byte[] t = ImageToByte(bmp);
 
             MemoryStream ms = new MemoryStream();
-            bmp.Save(ms, ImageFormat.Png);
+            bmp.Save(ms, ImageFormat.Jpeg);
             byte[] data = ms.GetBuffer();
 
+            //bmp.Save("test.png");
+            //string imgPath= "test.png";
+            //Image img = Image.FromFile(imgPath);
+            byte[] t = ImageToByte(bmp);
             return t;
 
             // Bitmap 데이타를 파일로 저장

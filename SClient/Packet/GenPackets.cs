@@ -365,7 +365,7 @@ class CS_ScreenResult : IPacket
     public ushort Protocol { get { return (ushort)PacketID.CS_ScreenResult; } }
     public  void Read(ArraySegment<byte> segment)
     {
-        ushort count = 0;
+        int count = 0;
         BitConverter.ToUInt16(segment.Array, segment.Offset + count);
         count += sizeof(ushort);
         count += sizeof(ushort);
@@ -374,7 +374,7 @@ class CS_ScreenResult : IPacket
 		count += sizeof(ushort);
 		this.id = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, idLen);
 		count += idLen;
-		ushort imgLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+		int imgLen = BitConverter.ToInt32(segment.Array, segment.Offset + count);
 		count += sizeof(ushort);
 		ArraySegment<byte> imgArray;
 		imgArray = segment.Slice(segment.Offset + count, imgLen);
@@ -389,7 +389,7 @@ class CS_ScreenResult : IPacket
     {
              
         ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
-        ushort count = 0;        
+        int count = 0;        
 
         count += sizeof(ushort);
         Array.Copy(BitConverter.GetBytes((ushort)PacketID.CS_ScreenResult), 0, segment.Array, segment.Offset + count, sizeof(ushort));
@@ -399,12 +399,12 @@ class CS_ScreenResult : IPacket
 		Array.Copy(BitConverter.GetBytes(idLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
 		count += idLen;
-		ushort imgLen = (ushort)this.img.Length;
+		int imgLen = (int)this.img.Length;
 		 Array.Copy(BitConverter.GetBytes(imgLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		 Array.Copy(this.img, 0, segment.Array, segment.Offset + count + sizeof(ushort), imgLen);
 		 count += sizeof(ushort);
 		 count += imgLen;
-        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
         return SendBufferHelper.Close(count);
 
