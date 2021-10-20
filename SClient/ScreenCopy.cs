@@ -45,14 +45,18 @@ namespace SClient
             byte[] t = ImageToByte(bmp);
 
             MemoryStream ms = new MemoryStream();
-            bmp.Save(ms, ImageFormat.Png);
+            ScreenCopy tempimg = new ScreenCopy();
+            ImageCodecInfo jpgEncoder = tempimg.GetEncoder(ImageFormat.Jpeg);
+            System.Drawing.Imaging.Encoder myencoder = System.Drawing.Imaging.Encoder.Quality;
+            EncoderParameters myEncoderParameters = new EncoderParameters(1);
+            EncoderParameter myEncoderParameter = new EncoderParameter(myencoder, 6L);
+            myEncoderParameters.Param[0] = myEncoderParameter;
+            bmp.Save(ms, jpgEncoder, myEncoderParameters);
             byte[] data = ms.GetBuffer();
 
-            return t;
+            return data;
+            
 
-            // Bitmap 데이타를 파일로 저장
-            // bmp.Save(outputFilename); 
-            //bmp.Dispose();
         }
         public static Bitmap GetBitmap(byte[] sourceByteArray)
         {
@@ -65,7 +69,18 @@ namespace SClient
             return (byte[])converter.ConvertTo(img, typeof(byte[]));
         }
 
-
+        private ImageCodecInfo GetEncoder(ImageFormat format)
+        {
+            ImageCodecInfo[] codecs = ImageCodecInfo.GetImageEncoders();
+            foreach (ImageCodecInfo codec in codecs)
+            {
+                if (codec.FormatID == format.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
+        }
 
     }
 }

@@ -54,9 +54,9 @@ namespace PacketGenerator
                 string fileText = string.Format(PacketFormat.fillFormat, packetEnum, genPackets);
                 File.WriteAllText("GenPackets.cs", fileText);
                 string pclientText = string.Format(PacketFormat.managerFormat, pclientRegister, "PClient");
-                File.WriteAllText("CPlientPacketManager.cs", pclientText);
+                File.WriteAllText("PClientPacketManager.cs", pclientText);
                 string sclientText = string.Format(PacketFormat.managerFormat, sclientRegister, "SClient");
-                File.WriteAllText("CSlientPacketManager.cs", sclientText);
+                File.WriteAllText("SClientPacketManager.cs", sclientText);
                 string ServerText = string.Format(PacketFormat.managerFormat, serverRegister, "Server");
                 File.WriteAllText("ServerPacketManager.cs", ServerText);
 
@@ -68,7 +68,7 @@ namespace PacketGenerator
                 //File.WriteAllText("SPacketHandler.cs", sPacketHandlerText);
 
 
-                
+
 
 
             }

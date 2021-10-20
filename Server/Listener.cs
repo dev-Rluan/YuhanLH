@@ -14,6 +14,7 @@ namespace Server
         //어떤 세션을 만들지
         Func<Session> _sessionFactory;
          
+        // 초기화
         public void Init(IPEndPoint endPoint, Func<Session> sessionFactory, int register = 10, int backlog = 100)
         {
                         
@@ -34,9 +35,10 @@ namespace Server
  
         }
         
-
+        // accept 실행
        void RegisterAccept(SocketAsyncEventArgs args)
-        {
+        {   
+            //이벤트에 연결된 소켓 제거
             args.AcceptSocket = null;
 
             bool pending = listen_socket.AcceptAsync(args);

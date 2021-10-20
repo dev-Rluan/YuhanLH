@@ -13,6 +13,7 @@ namespace Server
     public abstract class PacketSession : Session
     {
         public static readonly int HeaderSize = 2;
+
         public sealed override int OnRecv(ArraySegment<byte> buffer)
         {
             
@@ -25,7 +26,7 @@ namespace Server
                     break;
 
                 // 패킷이 완전체로 도작했는지 확인
-                ushort dataSize = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+                int dataSize = BitConverter.ToInt32(buffer.Array, buffer.Offset);
                 if (buffer.Count < dataSize)
                     break;
 
@@ -54,7 +55,7 @@ namespace Server
         Socket _socket;
         int _disconnected = 0;
 
-        RecvBuffer _recvBuffer = new RecvBuffer(65535);
+        RecvBuffer _recvBuffer = new RecvBuffer(37483647);
 
         Queue<ArraySegment<byte>> _sendQueue = new Queue<ArraySegment<byte>>();        
         List<ArraySegment<byte>>    _pendingList = new List<ArraySegment<byte>>();
@@ -192,6 +193,7 @@ namespace Server
 
             }
         }
+        // 
         void RegistRecv()
         {
             if (_disconnected == 1)
