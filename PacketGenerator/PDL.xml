@@ -1,38 +1,103 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PDL>
+	<!-- CP_ = 교수클라이언트에서 보내는 패킷-->
 	<packet name ="CP_Login">
 		<string name ="id"/>
 		<string name ="pwd"/>
 	</packet>
-	<packet name = "CS_Login">
-		<string name ="id"/>
-		<string name ="pwd"/>
+	<packet name ="CP_QuizOX">
+		<string name ="quiz"/>
+		<list name ="students">
+			<string name ="studentid"/>
+		</list>
 	</packet>
-	<packet name = "SS_Result">
-		<bool name ="result"/>		
+	<packet name ="CP_Quiz">
+		<string name ="quiz"/>
+		<list name ="students">
+			<string name ="studentid"/>
+		</list>
 	</packet>
-	<packet name = "SP_Result">
-		<bool name ="result"/>
+	<packet name ="CP_QResult">
+		<string name="studentID"/>
+		<string name="result"/>
 	</packet>
-	<packet name = "CP_Chat">
-		<string name = "id" />
-		<string name = "chat"/>
+	<packet name ="CP_Atd">
 	</packet>
-	<packet name = "CS_Chat">
-		<string name = "id" />
-		<string name = "chat"/>
+	<packet name ="CP_StudentList">
 	</packet>
 	<packet name = "CP_ScreenRequest">
 		<string name ="id"/>
 		<string name ="student"/>
 	</packet>
+
+	<!-- CS_ = 학생클라이언트에서 보내는 패킷 -->
+	<packet name = "CS_Login">
+		<string name ="id"/>
+		<string name ="pwd"/>
+	</packet>
+	<packet name = "CS_Quiz">
+		<string name ="result"/>
+	</packet>
+	<packet name = "CS_QuizOX">
+		<bool name ="ox"/>
+	</packet>
 	<packet name = "CS_ScreenResult">
 		<string name ="id"/>
 		<bytes name ="img"/>
 	</packet>
+	<packet name = "CS_QustionText">
+		<string name ="qustion"/>
+	</packet>
+	<packet name = "CS_QustionImg">
+		<bytes name ="img"/>
+	</packet>
+	<packet name = "CS_Qustion">
+		<string name ="qustion"/>
+		<bytes name ="img"/>
+	</packet>
+	<packet name = "CS_AtdCheck">
+	</packet>
+
+
+
+	<!-- SP_ = 서버에서 교수클라이언트에게 보내느 패킷-->
+	<!-- SP_Result = 테스트용 로그인 반환값-->
+
+	<packet name = "SP_Result">
+		<bool name ="result"/>
+	</packet>
+	<packet name = "SP_LoginFailed">
+		<ushort name ="result"/>
+	</packet>
+	<packet name = "SP_LoginResult">
+		<list name ="students">
+			<string name ="studentID"/>
+			<bool name ="state"/>
+		</list>
+		<list name ="schedule">
+			<string name ="date"/>
+			<string name ="subject"/>
+		</list>
+	</packet>
+
 	<packet name = "SP_ScreenResult">
 		<string name ="id"/>
 		<bytes name ="img"/>
 	</packet>
-	
+	<packet name = "SP_StudentInfo">
+		<list name ="students">
+			<string name ="studentID"/>
+			<bool name ="state"/>
+			<bytes name="img"/>
+		</list>
+	</packet>
+
+	<!-- SS_ = 서버에서 학생클라이언트에게 보내느 패킷-->
+	<!-- Sㄴ_Result = 테스트용 로그인 반환값-->
+	<packet name = "SS_Result">
+		<bool name ="result"/>
+	</packet>
+
 </PDL>
+	
+
