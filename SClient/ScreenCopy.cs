@@ -42,12 +42,14 @@ namespace SClient
                 gr.CopyFromScreen(rect.Left, rect.Top, 0, 0, rect.Size);
             }
 
+            byte[] t = ImageToByte(bmp);
+
             MemoryStream ms = new MemoryStream();
             ScreenCopy tempimg = new ScreenCopy();
             ImageCodecInfo jpgEncoder = tempimg.GetEncoder(ImageFormat.Jpeg);
             System.Drawing.Imaging.Encoder myencoder = System.Drawing.Imaging.Encoder.Quality;
             EncoderParameters myEncoderParameters = new EncoderParameters(1);
-            EncoderParameter myEncoderParameter = new EncoderParameter(myencoder, 0L);
+            EncoderParameter myEncoderParameter = new EncoderParameter(myencoder, 6L);
             myEncoderParameters.Param[0] = myEncoderParameter;
             bmp.Save(ms, jpgEncoder, myEncoderParameters);
             byte[] data = ms.GetBuffer();

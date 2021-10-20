@@ -17,11 +17,13 @@ namespace SClient
     {
         public static SClientForm sclientform;
         public static SessionManager sessionManager;
+        public static PacketManager packetManager;
         public SClientForm()
         {
             InitializeComponent();
             sclientform = this;
             sessionManager = new SessionManager();
+            packetManager = new PacketManager();
         }
 
         private void SClientForm_Load(object sender, EventArgs e)

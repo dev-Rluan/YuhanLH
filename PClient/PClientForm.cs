@@ -15,13 +15,14 @@ namespace PClient
     {
         public static PClientForm pclientform;
         public static SessionManager sessionManager;
-        
+        public static PacketManager packetManager;
 
         public PClientForm()
         {
             InitializeComponent();
             pclientform = this;
             sessionManager = new SessionManager();
+            packetManager = new PacketManager();
         }
 
         private void PClientForm_Load(object sender, EventArgs e)

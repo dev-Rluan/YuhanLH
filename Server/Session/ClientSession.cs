@@ -18,13 +18,14 @@ namespace Server
         {
             Console.WriteLine($"OnConnected : {endPoint}");
 
-            //TODO
+            // 서버에 접속했을때
             Program.Room.Push(() => Program.Room.Enter(this));
 
         }
 
         public override void OnDisConnected(EndPoint endPoint)
         {
+            //세션매니저 삭제
             _sessionManager.Remove(this);
             if(Room != null)
             {
@@ -40,7 +41,7 @@ namespace Server
         //역 직렬화
         public override void OnRecvPacket(ArraySegment<byte> buffer)
         {
-            PacketManager.Instance.OnRecvPacket(this, buffer);
+            Program.packetManager.OnRecvPacket(this, buffer);
         }
 
      

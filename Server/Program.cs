@@ -15,6 +15,7 @@ namespace Server
         public static ClassRoom Room = new ClassRoom();
         public static SessionManager sessionManager = new SessionManager();
         public static JobTimer jobTimer = new JobTimer();
+        public static PacketManager packetManager = new PacketManager();
         static void FlushRoom()
         {
             Room.Push(() => Room.Flush());

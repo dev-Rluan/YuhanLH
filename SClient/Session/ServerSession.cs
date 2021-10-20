@@ -28,7 +28,7 @@ namespace SClient
 
         public override void OnRecvPacket(ArraySegment<byte> buffer)
         {
-            PacketManager.Instance.OnRecvPacket(this, buffer);
+            SClientForm.packetManager.OnRecvPacket(this, buffer);
         }
 
         public override void OnSend(int numOfByteser)

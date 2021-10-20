@@ -34,17 +34,11 @@ class PacketHandler
 using System;
 using System.Collections.Generic;
 
-class PacketManager
+public class PacketManager
 {{
-    #region Singleton
-    static PacketManager _instance = new PacketManager();
-    public static PacketManager Instance
-    {{
-        get{{ return _instance; }}
-    }}
-    #endregion
+    
 
-    PacketManager()
+    public PacketManager()
     {{
         Register();
     }}
@@ -58,10 +52,10 @@ class PacketManager
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
     {{
-        ushort count = 0;
+        int count = 0;
 
-        ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
-        count += 2;
+        int size = BitConverter.ToInt32(buffer.Array, buffer.Offset);
+        count += sizeof(int);
         ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
         count += 2;
 
@@ -125,13 +119,18 @@ interface IPacket
 class {0} : IPacket
 {{
     {1}    
-        
+    // 프로토콜 구분   
     public ushort Protocol {{ get {{ return (ushort)PacketID.{0}; }} }}
+
     public  void Read(ArraySegment<byte> segment)
     {{
-        ushort count = 0;
-        BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-        count += sizeof(ushort);
+        // 배열 현재 위치 초기화
+        int count = 0;
+        // 전체 데이터 사이즈
+        BitConverter.ToInt32(segment.Array, segment.Offset + count);
+        // 배열 현재 위치 이동
+        count += sizeof(int);
+        // 배열 현재 위치 이동
         count += sizeof(ushort);
         
         {2}
@@ -141,16 +140,20 @@ class {0} : IPacket
 
     public  ArraySegment<byte> Write()
     {{
-             
-        ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
-        ushort count = 0;        
-
-        count += sizeof(ushort);
+        // 버퍼 짤라서 이동시킬 크기     
+        ArraySegment<byte> segment = SendBufferHelper.Open(4096);   
+        // 배열 현재 위치 초기화
+        int count = 0;        
+        // 전체 데이터 사이즈 (마지막에 합쳐서 넣을것이므로 여기서는 인트 크기만큼만 배열의 현재 위치를 미리 옮겨준다. )
+        count += sizeof(int);
+        // 프로토콜 지정
         Array.Copy(BitConverter.GetBytes((ushort)PacketID.{0}), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+       // 배열 현재 위치 이동
         count += sizeof(ushort);
 
         {3}
-        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+        // 전체 데이터사이즈를 배열 처음부터 인트크기만큼 넣어준다.
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
         return SendBufferHelper.Close(count);
 
@@ -172,13 +175,15 @@ class {0} : IPacket
 @"public class {0}
 {{
    {2}
-    
-    public void Read(ArraySegment<byte> segment, ref ushort count)
+
+    // 데이터 읽어오는 부분
+    public void Read(ArraySegment<byte> segment, ref int count)
     {{
        {3}
     }}
 
-    public bool Write(ArraySegment<byte> segment, ref ushort count)
+    // 데이터 쓰는 부분
+    public bool Write(ArraySegment<byte> segment, ref int count)
     {{
         bool success = true;
         {4}
@@ -206,11 +211,11 @@ count += sizeof({1});";
 
         // {0} 변수이름
         public static string readBytesFormat =
-@"ushort {0}Len = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-count += sizeof(ushort);
+@"int {0}Len = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+count += sizeof(int);
 ArraySegment<byte> {0}Array;
 {0}Array = segment.Slice(segment.Offset + count, {0}Len);
-this.img = {0}Array.ToArray();      
+this.{0} = {0}Array.ToArray();      
 count += {0}Len;
 ";
 
@@ -248,10 +253,10 @@ count += sizeof({1});";
 
         // {0} 변수이름 
         public static string writeBytesFormat =
-@"ushort {0}Len = (ushort)this.{0}.Length;
- Array.Copy(BitConverter.GetBytes({0}Len), 0, segment.Array, segment.Offset + count, sizeof(ushort));
- Array.Copy(this.img, 0, segment.Array, segment.Offset + count + sizeof(ushort), {0}Len);
- count += sizeof(ushort);
+@"int {0}Len = (int)this.{0}.Length;
+ Array.Copy(BitConverter.GetBytes({0}Len), 0, segment.Array, segment.Offset + count, sizeof(int));
+ Array.Copy(this.img, 0, segment.Array, segment.Offset + count + sizeof(int), {0}Len);
+ count += sizeof(int);
  count += {0}Len;";
 
         // {0} 변수 이름
