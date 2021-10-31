@@ -29,9 +29,9 @@ class PacketManager
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
     {
-        ushort count = 0;
+        int count = 0;
 
-        ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+        int size = BitConverter.ToInt32(buffer.Array, buffer.Offset);
         count += 2;
         ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
         count += 2;

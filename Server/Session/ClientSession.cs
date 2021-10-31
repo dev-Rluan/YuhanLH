@@ -9,6 +9,8 @@ using System.Threading;
 
 namespace Server
 {
+    //클라이언트의 정보를 갖고있는 세션
+
 	class ClientSession : PacketSession
     {   
         public int SessionId { get; set; }

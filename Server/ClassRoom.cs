@@ -11,6 +11,7 @@ namespace Server
         List<ClientSession> _sessions = new List<ClientSession>();       
         JobQueue _jobQueue = new JobQueue();
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
+        Dictionary<string, Queue<string>> _room = new Dictionary<string, Queue<string>>();
 
 
         public void Push(Action job)
@@ -27,7 +28,7 @@ namespace Server
             _pendingList.Clear();
         }
 
-        public void Broadcast(ClientSession session, byte[] img, string id)
+        public void Img_Broadcast(ClientSession session, byte[] img, string id)
         {
             SP_ScreenResult sp_screenPacket = new SP_ScreenResult();
             sp_screenPacket.id = id;
@@ -47,6 +48,7 @@ namespace Server
         {
           
             _sessions.Add(session);
+
             session.Room = this;
             
             

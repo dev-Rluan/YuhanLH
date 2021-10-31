@@ -48,9 +48,11 @@ namespace TestImgRecv
 
         private void btnRecv_Click(object sender, EventArgs e)
         {
-            byte[] img = new byte[65535];
-            conn_socket.Receive(img);
-
+            
+            byte[] size = new byte[8];
+            conn_socket.Receive(size);
+            int a = BitConverter.ToInt32(size);
+            byte[] img = new byte[a];
             Bitmap bmp = ScreenCopy.GetBitmap(img);
 
             ptBox.Image = bmp;

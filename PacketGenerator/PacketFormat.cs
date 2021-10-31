@@ -58,9 +58,9 @@ class PacketManager
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
     {{
-        ushort count = 0;
+        int count = 0;
 
-        ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+        int size = BitConverter.ToInt32(buffer.Array, buffer.Offset);
         count += 2;
         ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
         count += 2;
@@ -129,9 +129,9 @@ class {0} : IPacket
     public ushort Protocol {{ get {{ return (ushort)PacketID.{0}; }} }}
     public  void Read(ArraySegment<byte> segment)
     {{
-        ushort count = 0;
+        int count = 0;
         BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-        count += sizeof(ushort);
+        count += sizeof(int);
         count += sizeof(ushort);
         
         {2}
@@ -143,14 +143,14 @@ class {0} : IPacket
     {{
              
         ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
-        ushort count = 0;        
+        int count = 0;        
 
-        count += sizeof(ushort);
+        count += sizeof(int);
         Array.Copy(BitConverter.GetBytes((ushort)PacketID.{0}), 0, segment.Array, segment.Offset + count, sizeof(ushort));
         count += sizeof(ushort);
 
         {3}
-        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
         return SendBufferHelper.Close(count);
 
@@ -173,12 +173,12 @@ class {0} : IPacket
 {{
    {2}
     
-    public void Read(ArraySegment<byte> segment, ref ushort count)
+    public void Read(ArraySegment<byte> segment, ref int count)
     {{
        {3}
     }}
 
-    public bool Write(ArraySegment<byte> segment, ref ushort count)
+    public bool Write(ArraySegment<byte> segment, ref int count)
     {{
         bool success = true;
         {4}
@@ -206,11 +206,11 @@ count += sizeof({1});";
 
         // {0} 변수이름
         public static string readBytesFormat =
-@"ushort {0}Len = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-count += sizeof(ushort);
+@"int {0}Len = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+count += sizeof(int);
 ArraySegment<byte> {0}Array;
 {0}Array = segment.Slice(segment.Offset + count, {0}Len);
-this.img = {0}Array.ToArray();      
+this.{0} = {0}Array.ToArray();      
 count += {0}Len;
 ";
 
@@ -248,10 +248,10 @@ count += sizeof({1});";
 
         // {0} 변수이름 
         public static string writeBytesFormat =
-@"ushort {0}Len = (ushort)this.{0}.Length;
- Array.Copy(BitConverter.GetBytes({0}Len), 0, segment.Array, segment.Offset + count, sizeof(ushort));
- Array.Copy(this.img, 0, segment.Array, segment.Offset + count + sizeof(ushort), {0}Len);
- count += sizeof(ushort);
+@"int {0}Len = (int)this.{0}.Length;
+ Array.Copy(BitConverter.GetBytes({0}Len), 0, segment.Array, segment.Offset + count, sizeof(int));
+ Array.Copy(this.img, 0, segment.Array, segment.Offset + count + sizeof(int), {0}Len);
+ count += sizeof(int);
  count += {0}Len;";
 
         // {0} 변수 이름

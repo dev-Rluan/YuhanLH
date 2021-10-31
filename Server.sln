@@ -17,9 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SClient", "SClient\SClient.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PClient", "PClient\PClient.csproj", "{409F3832-3759-458C-B47F-D0E0B78213E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestImgSend", "TestImgSend\TestImgSend.csproj", "{2900A11E-3761-4126-BC2C-D49FE49C7958}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestImgSend", "TestImgSend\TestImgSend.csproj", "{2900A11E-3761-4126-BC2C-D49FE49C7958}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestImgRecv", "TestImgRecv\TestImgRecv.csproj", "{9FB5D190-D578-4DC7-879A-59FB52E6CC54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestImgRecv", "TestImgRecv\TestImgRecv.csproj", "{9FB5D190-D578-4DC7-879A-59FB52E6CC54}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBLogin", "DBLogin\DBLogin.csproj", "{25C65658-1BC4-4BDD-AC1E-475B0E089ABC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -59,6 +61,10 @@ Global
 		{9FB5D190-D578-4DC7-879A-59FB52E6CC54}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9FB5D190-D578-4DC7-879A-59FB52E6CC54}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9FB5D190-D578-4DC7-879A-59FB52E6CC54}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25C65658-1BC4-4BDD-AC1E-475B0E089ABC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25C65658-1BC4-4BDD-AC1E-475B0E089ABC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25C65658-1BC4-4BDD-AC1E-475B0E089ABC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25C65658-1BC4-4BDD-AC1E-475B0E089ABC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

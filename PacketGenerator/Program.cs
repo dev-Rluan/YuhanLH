@@ -60,15 +60,15 @@ namespace PacketGenerator
                 string ServerText = string.Format(PacketFormat.managerFormat, serverRegister, "Server");
                 File.WriteAllText("ServerPacketManager.cs", ServerText);
 
-                //string pcPacketHandlerText = string.Format(PacketFormat.handlerFormat, "PClient", pcPacketHandler);
-                //File.WriteAllText("CPPacketHandler.cs", pcPacketHandlerText);
-                //string scPacketHandlerText = string.Format(PacketFormat.handlerFormat, "SClient", scPacketHandler); ;
-                //File.WriteAllText("CSPacketHandler.cs", scPacketHandlerText);
-                //string sPacketHandlerText = string.Format(PacketFormat.handlerFormat, "Server", sPacketHandler); ;
-                //File.WriteAllText("SPacketHandler.cs", sPacketHandlerText);
+                string pcPacketHandlerText = string.Format(PacketFormat.handlerFormat, "PClient", pcPacketHandler);
+                File.WriteAllText("CPPacketHandler.cs", pcPacketHandlerText);
+                string scPacketHandlerText = string.Format(PacketFormat.handlerFormat, "SClient", scPacketHandler); ;
+                File.WriteAllText("CSPacketHandler.cs", scPacketHandlerText);
+                string sPacketHandlerText = string.Format(PacketFormat.handlerFormat, "Server", sPacketHandler); ;
+                File.WriteAllText("SPacketHandler.cs", sPacketHandlerText);
 
 
-                
+
 
 
             }

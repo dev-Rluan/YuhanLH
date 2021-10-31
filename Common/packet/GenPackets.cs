@@ -34,9 +34,9 @@ class CP_Login : IPacket
     public ushort Protocol { get { return (ushort)PacketID.CP_Login; } }
     public  void Read(ArraySegment<byte> segment)
     {
-        ushort count = 0;
+        int count = 0;
         BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-        count += sizeof(ushort);
+        count += sizeof(int);
         count += sizeof(ushort);
         
         ushort idLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
@@ -55,9 +55,9 @@ class CP_Login : IPacket
     {
              
         ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
-        ushort count = 0;        
+        int count = 0;        
 
-        count += sizeof(ushort);
+        count += sizeof(int);
         Array.Copy(BitConverter.GetBytes((ushort)PacketID.CP_Login), 0, segment.Array, segment.Offset + count, sizeof(ushort));
         count += sizeof(ushort);
 
@@ -69,7 +69,7 @@ class CP_Login : IPacket
 		Array.Copy(BitConverter.GetBytes(pwdLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
 		count += pwdLen;
-        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
         return SendBufferHelper.Close(count);
 
@@ -85,9 +85,9 @@ class CS_Login : IPacket
     public ushort Protocol { get { return (ushort)PacketID.CS_Login; } }
     public  void Read(ArraySegment<byte> segment)
     {
-        ushort count = 0;
+        int count = 0;
         BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-        count += sizeof(ushort);
+        count += sizeof(int);
         count += sizeof(ushort);
         
         ushort idLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
@@ -106,9 +106,9 @@ class CS_Login : IPacket
     {
              
         ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
-        ushort count = 0;        
+        int count = 0;        
 
-        count += sizeof(ushort);
+        count += sizeof(int);
         Array.Copy(BitConverter.GetBytes((ushort)PacketID.CS_Login), 0, segment.Array, segment.Offset + count, sizeof(ushort));
         count += sizeof(ushort);
 
@@ -120,7 +120,7 @@ class CS_Login : IPacket
 		Array.Copy(BitConverter.GetBytes(pwdLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
 		count += pwdLen;
-        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
         return SendBufferHelper.Close(count);
 
@@ -135,9 +135,9 @@ class SS_Result : IPacket
     public ushort Protocol { get { return (ushort)PacketID.SS_Result; } }
     public  void Read(ArraySegment<byte> segment)
     {
-        ushort count = 0;
+        int count = 0;
         BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-        count += sizeof(ushort);
+        count += sizeof(int);
         count += sizeof(ushort);
         
         this.result = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
@@ -150,15 +150,15 @@ class SS_Result : IPacket
     {
              
         ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
-        ushort count = 0;        
+        int count = 0;        
 
-        count += sizeof(ushort);
+        count += sizeof(int);
         Array.Copy(BitConverter.GetBytes((ushort)PacketID.SS_Result), 0, segment.Array, segment.Offset + count, sizeof(ushort));
         count += sizeof(ushort);
 
         Array.Copy(BitConverter.GetBytes(result), 0, segment.Array, segment.Offset + count, sizeof(bool));
 		count += sizeof(bool);
-        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
         return SendBufferHelper.Close(count);
 
@@ -173,9 +173,9 @@ class SP_Result : IPacket
     public ushort Protocol { get { return (ushort)PacketID.SP_Result; } }
     public  void Read(ArraySegment<byte> segment)
     {
-        ushort count = 0;
+        int count = 0;
         BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-        count += sizeof(ushort);
+        count += sizeof(int);
         count += sizeof(ushort);
         
         this.result = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
@@ -188,15 +188,15 @@ class SP_Result : IPacket
     {
              
         ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
-        ushort count = 0;        
+        int count = 0;        
 
-        count += sizeof(ushort);
+        count += sizeof(int);
         Array.Copy(BitConverter.GetBytes((ushort)PacketID.SP_Result), 0, segment.Array, segment.Offset + count, sizeof(ushort));
         count += sizeof(ushort);
 
         Array.Copy(BitConverter.GetBytes(result), 0, segment.Array, segment.Offset + count, sizeof(bool));
 		count += sizeof(bool);
-        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
         return SendBufferHelper.Close(count);
 
@@ -212,9 +212,9 @@ class CP_Chat : IPacket
     public ushort Protocol { get { return (ushort)PacketID.CP_Chat; } }
     public  void Read(ArraySegment<byte> segment)
     {
-        ushort count = 0;
+        int count = 0;
         BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-        count += sizeof(ushort);
+        count += sizeof(int);
         count += sizeof(ushort);
         
         ushort idLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
@@ -233,9 +233,9 @@ class CP_Chat : IPacket
     {
              
         ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
-        ushort count = 0;        
+        int count = 0;        
 
-        count += sizeof(ushort);
+        count += sizeof(int);
         Array.Copy(BitConverter.GetBytes((ushort)PacketID.CP_Chat), 0, segment.Array, segment.Offset + count, sizeof(ushort));
         count += sizeof(ushort);
 
@@ -247,7 +247,7 @@ class CP_Chat : IPacket
 		Array.Copy(BitConverter.GetBytes(chatLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
 		count += chatLen;
-        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
         return SendBufferHelper.Close(count);
 
@@ -263,9 +263,9 @@ class CS_Chat : IPacket
     public ushort Protocol { get { return (ushort)PacketID.CS_Chat; } }
     public  void Read(ArraySegment<byte> segment)
     {
-        ushort count = 0;
+        int count = 0;
         BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-        count += sizeof(ushort);
+        count += sizeof(int);
         count += sizeof(ushort);
         
         ushort idLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
@@ -284,9 +284,9 @@ class CS_Chat : IPacket
     {
              
         ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
-        ushort count = 0;        
+        int count = 0;        
 
-        count += sizeof(ushort);
+        count += sizeof(int);
         Array.Copy(BitConverter.GetBytes((ushort)PacketID.CS_Chat), 0, segment.Array, segment.Offset + count, sizeof(ushort));
         count += sizeof(ushort);
 
@@ -298,7 +298,7 @@ class CS_Chat : IPacket
 		Array.Copy(BitConverter.GetBytes(chatLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
 		count += chatLen;
-        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
         return SendBufferHelper.Close(count);
 
@@ -314,9 +314,9 @@ class CP_ScreenRequest : IPacket
     public ushort Protocol { get { return (ushort)PacketID.CP_ScreenRequest; } }
     public  void Read(ArraySegment<byte> segment)
     {
-        ushort count = 0;
+        int count = 0;
         BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-        count += sizeof(ushort);
+        count += sizeof(int);
         count += sizeof(ushort);
         
         ushort idLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
@@ -335,9 +335,9 @@ class CP_ScreenRequest : IPacket
     {
              
         ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
-        ushort count = 0;        
+        int count = 0;        
 
-        count += sizeof(ushort);
+        count += sizeof(int);
         Array.Copy(BitConverter.GetBytes((ushort)PacketID.CP_ScreenRequest), 0, segment.Array, segment.Offset + count, sizeof(ushort));
         count += sizeof(ushort);
 
@@ -349,7 +349,7 @@ class CP_ScreenRequest : IPacket
 		Array.Copy(BitConverter.GetBytes(studentLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
 		count += studentLen;
-        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
         return SendBufferHelper.Close(count);
 
@@ -365,17 +365,17 @@ class CS_ScreenResult : IPacket
     public ushort Protocol { get { return (ushort)PacketID.CS_ScreenResult; } }
     public  void Read(ArraySegment<byte> segment)
     {
-        ushort count = 0;
+        int count = 0;
         BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-        count += sizeof(ushort);
+        count += sizeof(int);
         count += sizeof(ushort);
         
         ushort idLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
 		count += sizeof(ushort);
 		this.id = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, idLen);
 		count += idLen;
-		ushort imgLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-		count += sizeof(ushort);
+		int imgLen = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+		count += sizeof(int);
 		ArraySegment<byte> imgArray;
 		imgArray = segment.Slice(segment.Offset + count, imgLen);
 		this.img = imgArray.ToArray();      
@@ -389,9 +389,9 @@ class CS_ScreenResult : IPacket
     {
              
         ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
-        ushort count = 0;        
+        int count = 0;        
 
-        count += sizeof(ushort);
+        count += sizeof(int);
         Array.Copy(BitConverter.GetBytes((ushort)PacketID.CS_ScreenResult), 0, segment.Array, segment.Offset + count, sizeof(ushort));
         count += sizeof(ushort);
 
@@ -399,12 +399,12 @@ class CS_ScreenResult : IPacket
 		Array.Copy(BitConverter.GetBytes(idLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
 		count += idLen;
-		ushort imgLen = (ushort)this.img.Length;
-		 Array.Copy(BitConverter.GetBytes(imgLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
-		 Array.Copy(this.img, 0, segment.Array, segment.Offset + count + sizeof(ushort), imgLen);
-		 count += sizeof(ushort);
+		int imgLen = (int)this.img.Length;
+		 Array.Copy(BitConverter.GetBytes(imgLen), 0, segment.Array, segment.Offset + count, sizeof(int));
+		 Array.Copy(this.img, 0, segment.Array, segment.Offset + count + sizeof(int), imgLen);
+		 count += sizeof(int);
 		 count += imgLen;
-        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
         return SendBufferHelper.Close(count);
 
@@ -420,17 +420,17 @@ class SP_ScreenResult : IPacket
     public ushort Protocol { get { return (ushort)PacketID.SP_ScreenResult; } }
     public  void Read(ArraySegment<byte> segment)
     {
-        ushort count = 0;
+        int count = 0;
         BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-        count += sizeof(ushort);
+        count += sizeof(int);
         count += sizeof(ushort);
         
         ushort idLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
 		count += sizeof(ushort);
 		this.id = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, idLen);
 		count += idLen;
-		ushort imgLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-		count += sizeof(ushort);
+		int imgLen = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+		count += sizeof(int);
 		ArraySegment<byte> imgArray;
 		imgArray = segment.Slice(segment.Offset + count, imgLen);
 		this.img = imgArray.ToArray();      
@@ -444,9 +444,9 @@ class SP_ScreenResult : IPacket
     {
              
         ArraySegment<byte> segment = SendBufferHelper.Open(4096);            
-        ushort count = 0;        
+        int count = 0;        
 
-        count += sizeof(ushort);
+        count += sizeof(int);
         Array.Copy(BitConverter.GetBytes((ushort)PacketID.SP_ScreenResult), 0, segment.Array, segment.Offset + count, sizeof(ushort));
         count += sizeof(ushort);
 
@@ -454,12 +454,12 @@ class SP_ScreenResult : IPacket
 		Array.Copy(BitConverter.GetBytes(idLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
 		count += idLen;
-		ushort imgLen = (ushort)this.img.Length;
-		 Array.Copy(BitConverter.GetBytes(imgLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
-		 Array.Copy(this.img, 0, segment.Array, segment.Offset + count + sizeof(ushort), imgLen);
-		 count += sizeof(ushort);
+		int imgLen = (int)this.img.Length;
+		 Array.Copy(BitConverter.GetBytes(imgLen), 0, segment.Array, segment.Offset + count, sizeof(int));
+		 Array.Copy(this.img, 0, segment.Array, segment.Offset + count + sizeof(int), imgLen);
+		 count += sizeof(int);
 		 count += imgLen;
-        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
         return SendBufferHelper.Close(count);
 

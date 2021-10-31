@@ -43,7 +43,13 @@ namespace TestImgSend
             listen_socket.Listen(30);
 
             listen_socket.Accept();
+
             
+            byte[] img = ScreenCopy.Copy();
+            int a = img.Length;
+            byte[] size = BitConverter.GetBytes(a);
+            listen_socket.Send(size);
+            listen_socket.Send(img);
 
 
 

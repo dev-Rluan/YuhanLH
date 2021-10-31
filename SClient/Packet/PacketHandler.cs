@@ -1,25 +1,49 @@
 ﻿/*using SClient;
 using System;
+using System.Windows.Forms;
 
+class PacketHandler
+{
 
-    class PacketHandler
+    public static void SS_ResultHandler(PacketSession session, IPacket packet)
     {
-        // 어떤세션에서 조립 되었는가. 
-        public static void S_ChatHandler(PacketSession session, IPacket packet) 
+        SS_Result result = packet as SS_Result;
+        ServerSession serverSession = session as ServerSession;
+        if (result.result == true)
         {
-        //S_Chat chatPacket = packet as S_Chat;
-        //ServerSession serverSession = session as ServerSession;
+            if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
+            {
+                SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
+                {
+                    SClientForm.sclientform.lbLogin.Text = "로그인 : success";
+                });
+            }
+            else
+            {
+                SClientForm.sclientform.lbLogin.Text = "로그인 : success";
+            }
+        }
+        else
+        {
+            if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
+            {
+                SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
+                {
+                    SClientForm.sclientform.lbLogin.Text = "로그인 : Faild";
+                });
+            }
+            else
+            {
+                SClientForm.sclientform.lbLogin.Text = "로그인 : Faild";
+            }
+        }
 
-        //if (chatPacket.playerId == 1)
-        //    Console.WriteLine(chatPacket.chat);
     }
 
-        public static void S_TestHandler(PacketSession session, IPacket packet)
-       {
-
-       }
 
 
 
-    }
-*/
+
+
+
+}*/
