@@ -8,7 +8,7 @@
 		<string name ="id"/>
 		<string name ="pwd"/>
 	</packet>
-	<packet name = "SS_Result">
+	<packet name = "SS_Result"> 
 		<bool name ="result"/>		
 	</packet>
 	<packet name = "SP_Result">
@@ -35,4 +35,5 @@
 		<bytes name ="img"/>
 	</packet>
 	
+  
 </PDL>
