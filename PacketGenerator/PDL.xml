@@ -92,7 +92,7 @@
 			<string name ="subject"/>
 		</list>
 	</packet>
-	<!--AA-->
+	<!--학생 정보-->
 	<packet name = "SP_StudentInfo">
 		<list name ="students">
 			<string name ="studentID"/>
@@ -100,30 +100,38 @@
 			<bytes name="img"/>
 		</list>
 	</packet>
+	<!--학생 스크린샷 반환-->
 	<packet name = "SP_ScreenResult">
 		<string name ="id"/>
 		<bytes name ="img"/>
 	</packet>
+	<!--학생질문 (텍스트)-->
 	<pakcet name ="SP_QustionText">
 		<string name ="qustion"/>
 	</pakcet>
+	<!--학생질문 (이미지)-->
 	<pakcet name ="SP_QustionImg">
 		<bytes name ="img"/>
 	</pakcet>
+	<!--학생질문 (텍스트와 이미지)-->
 	<pakcet name ="SP_Qustion">
 		<string name ="qustion"/>
 		<bytes name ="img"/>
 	</pakcet>
+	<!--퀴즈에대한 학생의 답-->
 	<pakcet name ="SP_QuizResult">
 		<string name ="studentID"/>
 		<string name ="result"/>
 	</pakcet>
+	<!--학생 접속-->
 	<pakcet name ="SP_AddStudent">
 		<string name ="studentID"/>
 	</pakcet>
+	<!--학생 나감-->
 	<pakcet name ="SP_LeaveStudent">
 		<string name ="studentID"/>
 	</pakcet>
+	<!--출석 체크 요청-->
 	<pakcet name ="SP_AddAtd">
 		<string name ="studentID"/>
 	</pakcet>
@@ -132,25 +140,30 @@
 	<packet name = "SS_Result">
 		<bool name ="result"/>
 	</packet>
-
+	<!--학생 로그인 실패-->
 	<packet name = "SS_LoginFailed">
 		<ushort name ="result"/>
 	</packet>
+	<!--학생 로그인성공, 시간표 가져오기-->
 	<packet name = "SS_LoginResult">
 		<list name ="schedule">
 			<string name ="date"/>
 			<string name ="subject"/>
 		</list>
 	</packet>
+	<!--질문에대한 교수의 답변-->
 	<packet name = "SS_QResult">
-		<ushort name ="result"/>
+		<string name ="result"/>
 	</packet>
+	<!--출석 체크 요청-->
 	<packet name = "SS_AtdRequest">
 		<ushort name ="result"/>
 	</packet>
+	<!--OX 퀴즈-->
 	<packet name = "SS_QuizOX">
 		<ushort name ="quiz"/>
 	</packet>
+	<!--퀴즈-->
 	<packet name = "SS_Quiz">
 		<ushort name ="quiz"/>
 	</packet>

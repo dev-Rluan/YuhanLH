@@ -8,10 +8,15 @@ namespace Server
 {
     class ClassRoom : IJobQueue
     {
+        // 전체 클라이언트 정보
         List<ClientSession> _sessions = new List<ClientSession>();       
+        
+       
         JobQueue _jobQueue = new JobQueue();
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
-
+        Queue<string> waitingQueue = new Queue<string>();
+        Dictionary<int, string> _host = new Dictionary<int, string>();
+        
 
         public void Push(Action job)
         {
@@ -38,8 +43,7 @@ namespace Server
             foreach (ClientSession s in _sessions)
                 s.Send(segment);
 
-            Console.WriteLine("이미지전송");
-            
+            Console.WriteLine("이미지전송");            
 
         } 
 

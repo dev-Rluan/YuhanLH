@@ -10,9 +10,12 @@ public class PacketManager
     {
         Register();
     }
-
+    // 패킷
     Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>> _onRecv = new Dictionary<ushort, Action<PacketSession, ArraySegment<byte>>>();
+    // 핸들러
     Dictionary<ushort, Action<PacketSession, IPacket>> _handler = new Dictionary<ushort, Action<PacketSession, IPacket>>();
+
+    // 핸들러 추가
     public void Register()
     {
   
