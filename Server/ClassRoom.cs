@@ -11,6 +11,9 @@ namespace Server
     /// </summary>
     class ClassRoom : IJobQueue
     {
+        // 호스트 교수자
+        public string ProfessorID { get; set; }
+
         /// <summary>
         /// 전체 클라이언트 정보
         /// </summary>

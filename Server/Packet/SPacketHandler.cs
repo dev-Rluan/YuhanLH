@@ -89,6 +89,8 @@ class PacketHandler
             r_packet.result = false;
             Console.WriteLine($"{sc_loginPacket.id} 로그인요청 Faild");
         }
+        SessionManager sm = new SessionManager();
+        sm.Login(clientSession, sc_loginPacket.id, 0);
         ArraySegment<byte> segment = r_packet.Write();
         clientSession.Send(segment);
     }
