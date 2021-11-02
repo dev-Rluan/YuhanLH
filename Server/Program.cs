@@ -16,11 +16,11 @@ namespace Server
         public static SessionManager sessionManager = new SessionManager();
         public static JobTimer jobTimer = new JobTimer();
         public static PacketManager packetManager = new PacketManager();
-        static void FlushRoom()
+      /*  static void FlushRoom()
         {
             Room.Push(() => Room.Flush());
             jobTimer.Push(FlushRoom, 50);
-        }
+        }*/
 
         //static void OnAcceptHandler(Socket client_socket)
         //{
@@ -73,7 +73,7 @@ namespace Server
 
 
             //FlushRoom();
-            jobTimer.Push(FlushRoom);
+            //jobTimer.Push(FlushRoom);
             //int roomTick = 0;
         
 
@@ -86,7 +86,7 @@ namespace Server
                 //    Room.Push(() => Room.Flush());
                 //    roomTick = now + 250;
                 //}
-                jobTimer.Flush();
+                //jobTimer.Flush();
 
             }
 

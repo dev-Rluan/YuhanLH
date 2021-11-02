@@ -18,6 +18,24 @@ public class PacketManager
   
         _onRecv.Add((ushort)PacketID.SS_Result, MakePacket<SS_Result>);
         _handler.Add((ushort)PacketID.SS_Result, PacketHandler.SS_ResultHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_LoginFailed, MakePacket<SS_LoginFailed>);
+        _handler.Add((ushort)PacketID.SS_LoginFailed, PacketHandler.SS_LoginFailedHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_LoginResult, MakePacket<SS_LoginResult>);
+        _handler.Add((ushort)PacketID.SS_LoginResult, PacketHandler.SS_LoginResultHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_QResult, MakePacket<SS_QResult>);
+        _handler.Add((ushort)PacketID.SS_QResult, PacketHandler.SS_QResultHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_AtdRequest, MakePacket<SS_AtdRequest>);
+        _handler.Add((ushort)PacketID.SS_AtdRequest, PacketHandler.SS_AtdRequestHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_QuizOX, MakePacket<SS_QuizOX>);
+        _handler.Add((ushort)PacketID.SS_QuizOX, PacketHandler.SS_QuizOXHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_Quiz, MakePacket<SS_Quiz>);
+        _handler.Add((ushort)PacketID.SS_Quiz, PacketHandler.SS_QuizHandler);
 
     }
 

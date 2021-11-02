@@ -230,14 +230,15 @@ count += {0}Len;";
         // {1} 리스트 이름 [소문자]
         public static string readListFormat =
 @"this.{1}s.Clear();
-ushort {1}Len = BitConverter.ToUInt16(s.Slice(segment.Array, segment.Offset + count));
+ushort {1}Len = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
 count += sizeof(ushort); 
 for(int i = 0; i < {1}Len; i++)
 {{
     {0} {1} = new {0}();
-    {1}.Read(s, ref count);
+    {1}.Read(segment, ref count);
     {1}s.Add({1});
 }}";
+
 
         // {0} 변수 이름
         // {1} 변수 형식
@@ -269,7 +270,7 @@ count += {0}Len;";
         // {0} 리스트 이름 [대문자]
         // {1} 리스트 이름 [소문자]
         public static string writeListFormat =
-@"Array.Copy(BitConverter.GetBytes((ushort)this.{1}s.Count), 0, segment.Array, segment.Offset + count, sizeof({ushort}));
+@"Array.Copy(BitConverter.GetBytes((ushort)this.{1}s.Count), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 count += sizeof(ushort);
 foreach({0} {1} in {1}s)
     {1}.Write(segment, ref count);";

@@ -9,20 +9,22 @@
 	<!--학생 캡처화면 요청-->
 	<packet name = "CP_ScreenRequest">
 		<string name ="id"/>
-		<string name ="student"/>
+    <list name ="student">
+				<string name="studentID"/>
+    </list>
 	</packet>
 	<!--OX 퀴즈 요청-->
 	<packet name ="CP_QuizOX">
 		<string name ="quiz"/>
-		<list name ="students">
-			<string name ="studentid"/>
+		<list name ="student">
+			<string name ="studentId"/>
 		</list>
 	</packet>
 	<!--퀴즈 요청-->
 	<packet name ="CP_Quiz">
 		<string name ="quiz"/>
-		<list name ="students">
-			<string name ="studentid"/>
+		<list name ="student">
+			<string name ="studentId"/>
 		</list>
 	</packet>
 	<!--학생의 질문에 대한 답변-->
@@ -49,7 +51,8 @@
 		<string name ="result"/>
 	</packet>
 	<!--스크린샷 요청에 대한 결과-->
-	<packet name = "CS_ScreenResult">
+	<packet name = "CS_ScreenResult">    
+		<string name ="studentID"/>
 		<bytes name ="img"/>
 	</packet>
 	<!--학생 질문 (텍스트)-->
@@ -82,10 +85,10 @@
 	</packet>
 	<!--교수 로그인 성공-->
 	<packet name = "SP_LoginResult">
-		<list name ="students">
+		<list name ="student">
 			<string name ="studentID"/>
 			<string name ="studentName"/>
-			<bool name ="state"/>
+			<ushort name ="state"/>
 		</list>
 		<list name ="schedule">
 			<string name ="date"/>
@@ -94,15 +97,15 @@
 	</packet>
 	<!--학생 정보-->
 	<packet name = "SP_StudentInfo">
-		<list name ="students">
+		<list name ="student">
 			<string name ="studentID"/>
-			<bool name ="state"/>
+			<ushort name ="state"/>
 			<bytes name="img"/>
 		</list>
 	</packet>
 	<!--학생 스크린샷 반환-->
 	<packet name = "SP_ScreenResult">
-		<string name ="id"/>
+		<string name ="studentID"/>
 		<bytes name ="img"/>
 	</packet>
 	<!--학생질문 (텍스트)-->

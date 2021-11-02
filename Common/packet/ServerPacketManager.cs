@@ -19,20 +19,44 @@ public class PacketManager
         _onRecv.Add((ushort)PacketID.CP_Login, MakePacket<CP_Login>);
         _handler.Add((ushort)PacketID.CP_Login, PacketHandler.CP_LoginHandler);
   
-        _onRecv.Add((ushort)PacketID.CS_Login, MakePacket<CS_Login>);
-        _handler.Add((ushort)PacketID.CS_Login, PacketHandler.CS_LoginHandler);
-  
-        _onRecv.Add((ushort)PacketID.CP_Chat, MakePacket<CP_Chat>);
-        _handler.Add((ushort)PacketID.CP_Chat, PacketHandler.CP_ChatHandler);
-  
-        _onRecv.Add((ushort)PacketID.CS_Chat, MakePacket<CS_Chat>);
-        _handler.Add((ushort)PacketID.CS_Chat, PacketHandler.CS_ChatHandler);
-  
         _onRecv.Add((ushort)PacketID.CP_ScreenRequest, MakePacket<CP_ScreenRequest>);
         _handler.Add((ushort)PacketID.CP_ScreenRequest, PacketHandler.CP_ScreenRequestHandler);
   
+        _onRecv.Add((ushort)PacketID.CP_QuizOX, MakePacket<CP_QuizOX>);
+        _handler.Add((ushort)PacketID.CP_QuizOX, PacketHandler.CP_QuizOXHandler);
+  
+        _onRecv.Add((ushort)PacketID.CP_Quiz, MakePacket<CP_Quiz>);
+        _handler.Add((ushort)PacketID.CP_Quiz, PacketHandler.CP_QuizHandler);
+  
+        _onRecv.Add((ushort)PacketID.CP_QResult, MakePacket<CP_QResult>);
+        _handler.Add((ushort)PacketID.CP_QResult, PacketHandler.CP_QResultHandler);
+  
+        _onRecv.Add((ushort)PacketID.CP_Atd, MakePacket<CP_Atd>);
+        _handler.Add((ushort)PacketID.CP_Atd, PacketHandler.CP_AtdHandler);
+  
+        _onRecv.Add((ushort)PacketID.CP_StudentList, MakePacket<CP_StudentList>);
+        _handler.Add((ushort)PacketID.CP_StudentList, PacketHandler.CP_StudentListHandler);
+  
+        _onRecv.Add((ushort)PacketID.CS_Login, MakePacket<CS_Login>);
+        _handler.Add((ushort)PacketID.CS_Login, PacketHandler.CS_LoginHandler);
+  
+        _onRecv.Add((ushort)PacketID.CS_Quiz, MakePacket<CS_Quiz>);
+        _handler.Add((ushort)PacketID.CS_Quiz, PacketHandler.CS_QuizHandler);
+  
         _onRecv.Add((ushort)PacketID.CS_ScreenResult, MakePacket<CS_ScreenResult>);
         _handler.Add((ushort)PacketID.CS_ScreenResult, PacketHandler.CS_ScreenResultHandler);
+  
+        _onRecv.Add((ushort)PacketID.CS_QustionText, MakePacket<CS_QustionText>);
+        _handler.Add((ushort)PacketID.CS_QustionText, PacketHandler.CS_QustionTextHandler);
+  
+        _onRecv.Add((ushort)PacketID.CS_QustionImg, MakePacket<CS_QustionImg>);
+        _handler.Add((ushort)PacketID.CS_QustionImg, PacketHandler.CS_QustionImgHandler);
+  
+        _onRecv.Add((ushort)PacketID.CS_Qustion, MakePacket<CS_Qustion>);
+        _handler.Add((ushort)PacketID.CS_Qustion, PacketHandler.CS_QustionHandler);
+  
+        _onRecv.Add((ushort)PacketID.CS_AtdCheck, MakePacket<CS_AtdCheck>);
+        _handler.Add((ushort)PacketID.CS_AtdCheck, PacketHandler.CS_AtdCheckHandler);
 
     }
 
@@ -40,7 +64,7 @@ public class PacketManager
     {
         int count = 0;
 
-        int size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+        int size = BitConverter.ToInt32(buffer.Array, buffer.Offset);
         count += sizeof(int);
         ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
         count += 2;

@@ -9,9 +9,13 @@ using System.Threading;
 
 namespace Server
 {
+    
 	class ClientSession : PacketSession
     {   
         public int SessionId { get; set; }
+        public string Name { get; set; }
+        public string ID { get; set; }
+        public string Host { get; set; }
         public ClassRoom Room { get; set; }
         public SessionManager _sessionManager = Program.sessionManager;
         public override void OnConnected(EndPoint endPoint)

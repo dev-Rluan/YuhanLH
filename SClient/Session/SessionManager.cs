@@ -34,7 +34,7 @@ namespace SClient
             {
                 CS_ScreenResult Img_packet = new CS_ScreenResult();
 
-                Img_packet.id = "test";
+                Img_packet.studentID = "test";
 
                 Img_packet.img = img;
                 ArraySegment<byte> segment = Img_packet.Write();
