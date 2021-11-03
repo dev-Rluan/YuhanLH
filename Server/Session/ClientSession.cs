@@ -9,22 +9,44 @@ using System.Threading;
 
 namespace Server
 {
-	class ClientSession : PacketSession
-    {   
+
+    class ClientSession : PacketSession
+    {
+        /// <summary>
+        /// 객체를 구분하는 번호
+        /// </summary>
         public int SessionId { get; set; }
+        /// <summary>
+        /// 이름
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 객체의 아이디
+        /// </summary>
+        public string ID { get; set; }
+        /// <summary>
+        /// 학생이면 현재 수업받는 교수의 아이디, 교수라면 본인의 아이디
+        /// </summary>
+        public string Host { get; set; }
+        /// <summary>
+        /// 학생인지 교수인지 구분 0이면 교수, 0제외 학생, 다른
+        /// </summary>
+        public int Flag {get; set;}
         public ClassRoom Room { get; set; }
+        public SessionManager _sessionManager = Program.sessionManager;
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnConnected : {endPoint}");
 
-            //TODO
+            // 서버에 접속했을때
             Program.Room.Push(() => Program.Room.Enter(this));
 
         }
 
         public override void OnDisConnected(EndPoint endPoint)
         {
-            SessionManager.Instance.Remove(this);
+            //세션매니저 삭제
+            _sessionManager.Remove(this);
             if(Room != null)
             {
                 // 룸이 비었어도 에러가 안나도록 (빈공간 삭제 방지)
@@ -33,13 +55,13 @@ namespace Server
                 room.Push(() => room.Leave(this));                
                 Room = null;
             }
-            //Console.WriteLine($"Transferred bytes: {endPoint}");
+            Console.WriteLine($"Transferred bytes: {endPoint}");
         }
 
         //역 직렬화
         public override void OnRecvPacket(ArraySegment<byte> buffer)
         {
-            PacketManager.Instance.OnRecvPacket(this, buffer);
+            Program.packetManager.OnRecvPacket(this, buffer);
         }
 
      

@@ -27,9 +27,7 @@ namespace TestImgSend
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            byte[] img;
-            img = ScreenCopy.Copy();
-            listen_socket.Send(img);
+           
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -45,7 +43,7 @@ namespace TestImgSend
             listen_socket.Listen(30);
 
             listen_socket.Accept();
-
+            
 
 
 

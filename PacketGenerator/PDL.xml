@@ -1,38 +1,175 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PDL>
+	<!-- CP_ = 교수클라이언트에서 보내는 패킷-->
+	<!--로그인 요청-->
 	<packet name ="CP_Login">
 		<string name ="id"/>
 		<string name ="pwd"/>
 	</packet>
+	<!--학생 캡처화면 요청-->
+	<packet name = "CP_ScreenRequest">
+		<string name ="id"/>
+    <list name ="student">
+				<string name="studentID"/>
+    </list>
+	</packet>
+	<!--OX 퀴즈 요청-->
+	<packet name ="CP_QuizOX">
+		<string name ="quiz"/>
+		<list name ="student">
+			<string name ="studentId"/>
+		</list>
+	</packet>
+	<!--퀴즈 요청-->
+	<packet name ="CP_Quiz">
+		<string name ="quiz"/>
+		<list name ="student">
+			<string name ="studentId"/>
+		</list>
+	</packet>
+	<!--학생의 질문에 대한 답변-->
+	<packet name ="CP_QResult">
+		<string name="studentID"/>
+		<string name="result"/>
+	</packet>
+	<!--출석 요청-->
+	<packet name ="CP_Atd">
+	</packet>
+	<!--학생 리스트 최신화 요청-->
+	<packet name ="CP_StudentList">
+	</packet>
+	
+
+	<!-- CS_ = 학생클라이언트에서 보내는 패킷 -->
+	<!--로그인 요청-->
 	<packet name = "CS_Login">
 		<string name ="id"/>
 		<string name ="pwd"/>
 	</packet>
-	<packet name = "SS_Result">
-		<bool name ="result"/>		
+	<!--퀴즈 답변-->
+	<packet name = "CS_Quiz">
+		<string name ="result"/>
 	</packet>
+	<!--스크린샷 요청에 대한 결과-->
+	<packet name = "CS_ScreenResult">    
+		<string name ="studentID"/>
+		<bytes name ="img"/>
+	</packet>
+	<!--학생 질문 (텍스트)-->
+	<packet name = "CS_QustionText">
+		<string name ="qustion"/>
+	</packet>
+	<!--학생 질문 (이미지)-->
+	<packet name = "CS_QustionImg">
+		<bytes name ="img"/>
+	</packet>
+	<!--학생 질문 (텍스트와 이미지)-->
+	<packet name = "CS_Qustion">
+		<string name ="qustion"/>
+		<bytes name ="img"/>
+	</packet>
+	<!--출석 체크-->
+	<packet name = "CS_AtdCheck">
+	</packet>
+
+
+
+	<!-- SP_ = 서버에서 교수클라이언트에게 보내느 패킷-->
+	<!-- SP_Result = 테스트용 로그인 반환값-->
 	<packet name = "SP_Result">
 		<bool name ="result"/>
 	</packet>
-	<packet name = "CP_Chat">
-		<string name = "id" />
-		<string name = "chat"/>
+	<!--교수 로그인 실패-->
+	<packet name = "SP_LoginFailed">
+		<ushort name ="result"/>
 	</packet>
-	<packet name = "CS_Chat">
-		<string name = "id" />
-		<string name = "chat"/>
+	<!--교수 로그인 성공-->
+	<packet name = "SP_LoginResult">
+		<list name ="student">
+			<string name ="studentID"/>
+			<string name ="studentName"/>
+			<ushort name ="state"/>
+		</list>
+		<list name ="schedule">
+			<string name ="date"/>
+			<string name ="subject"/>
+		</list>
 	</packet>
-	<packet name = "CP_ScreenRequest">
-		<string name ="id"/>
-		<string name ="student"/>
+	<!--학생 정보-->
+	<packet name = "SP_StudentInfo">
+		<list name ="student">
+			<string name ="studentID"/>
+			<ushort name ="state"/>
+			<bytes name="img"/>
+		</list>
 	</packet>
-	<packet name = "CS_ScreenResult">
-		<string name ="id"/>
-		<bytes name ="img"/>
-	</packet>
+	<!--학생 스크린샷 반환-->
 	<packet name = "SP_ScreenResult">
-		<string name ="id"/>
+		<string name ="studentID"/>
 		<bytes name ="img"/>
 	</packet>
-	
+	<!--학생질문 (텍스트)-->
+	<pakcet name ="SP_QustionText">
+		<string name ="qustion"/>
+	</pakcet>
+	<!--학생질문 (이미지)-->
+	<pakcet name ="SP_QustionImg">
+		<bytes name ="img"/>
+	</pakcet>
+	<!--학생질문 (텍스트와 이미지)-->
+	<pakcet name ="SP_Qustion">
+		<string name ="qustion"/>
+		<bytes name ="img"/>
+	</pakcet>
+	<!--퀴즈에대한 학생의 답-->
+	<pakcet name ="SP_QuizResult">
+		<string name ="studentID"/>
+		<string name ="result"/>
+	</pakcet>
+	<!--학생 접속-->
+	<pakcet name ="SP_AddStudent">
+		<string name ="studentID"/>
+	</pakcet>
+	<!--학생 나감-->
+	<pakcet name ="SP_LeaveStudent">
+		<string name ="studentID"/>
+	</pakcet>
+	<!--출석 체크 요청-->
+	<pakcet name ="SP_AddAtd">
+		<string name ="studentID"/>
+	</pakcet>
+	<!-- SS_ = 서버에서 학생클라이언트에게 보내느 패킷-->
+	<!-- Sㄴ_Result = 테스트용 로그인 반환값-->
+	<packet name = "SS_Result">
+		<bool name ="result"/>
+	</packet>
+	<!--학생 로그인 실패-->
+	<packet name = "SS_LoginFailed">
+		<ushort name ="result"/>
+	</packet>
+	<!--학생 로그인성공, 시간표 가져오기-->
+	<packet name = "SS_LoginResult">
+		<list name ="schedule">
+			<string name ="date"/>
+			<string name ="subject"/>
+		</list>
+	</packet>
+	<!--질문에대한 교수의 답변-->
+	<packet name = "SS_QResult">
+		<string name ="result"/>
+	</packet>
+	<!--출석 체크 요청-->
+	<packet name = "SS_AtdRequest">
+		<ushort name ="result"/>
+	</packet>
+	<!--OX 퀴즈-->
+	<packet name = "SS_QuizOX">
+		<ushort name ="quiz"/>
+	</packet>
+	<!--퀴즈-->
+	<packet name = "SS_Quiz">
+		<ushort name ="quiz"/>
+	</packet>
 </PDL>
+	
+

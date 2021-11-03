@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SClient
 {
-    class SessionManager
+    public class SessionManager
     {
-        static SessionManager _session = new SessionManager();
-        public static SessionManager Instance { get { return _session; } }
+        
 
         ServerSession _sessions;
         object _lock = new object();
@@ -25,14 +24,7 @@ namespace SClient
                     ArraySegment<byte> segment = loging_packet.Write();
                     _sessions.Send(segment);
                 
-                /* foreach(ServerSession session in _sessions)
-                 {
-                     //C_Chat chatPacket = new C_Chat();
-                     //chatPacket.chat = $"Hello Server";
-                     //ArraySegment<byte> segment = chatPacket.Write();
-
-                     //session.Send(segment);
-                 }*/
+             
             }
 
         }
@@ -42,20 +34,13 @@ namespace SClient
             {
                 CS_ScreenResult Img_packet = new CS_ScreenResult();
 
-                Img_packet.id = "test";
+                Img_packet.studentID = "test";
 
                 Img_packet.img = img;
                 ArraySegment<byte> segment = Img_packet.Write();
                 _sessions.Send(segment);
 
-                /* foreach(ServerSession session in _sessions)
-                 {
-                     //C_Chat chatPacket = new C_Chat();
-                     //chatPacket.chat = $"Hello Server";
-                     //ArraySegment<byte> segment = chatPacket.Write();
-
-                     //session.Send(segment);
-                 }*/
+              
             }
         }
 

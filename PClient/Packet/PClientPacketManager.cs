@@ -2,17 +2,11 @@ using PClient;
 using System;
 using System.Collections.Generic;
 
-class PacketManager
+public class PacketManager
 {
-    #region Singleton
-    static PacketManager _instance = new PacketManager();
-    public static PacketManager Instance
-    {
-        get{ return _instance; }
-    }
-    #endregion
+    
 
-    PacketManager()
+    public PacketManager()
     {
         Register();
     }
@@ -25,6 +19,15 @@ class PacketManager
         _onRecv.Add((ushort)PacketID.SP_Result, MakePacket<SP_Result>);
         _handler.Add((ushort)PacketID.SP_Result, PacketHandler.SP_ResultHandler);
   
+        _onRecv.Add((ushort)PacketID.SP_LoginFailed, MakePacket<SP_LoginFailed>);
+        _handler.Add((ushort)PacketID.SP_LoginFailed, PacketHandler.SP_LoginFailedHandler);
+  
+        _onRecv.Add((ushort)PacketID.SP_LoginResult, MakePacket<SP_LoginResult>);
+        _handler.Add((ushort)PacketID.SP_LoginResult, PacketHandler.SP_LoginResultHandler);
+  
+        _onRecv.Add((ushort)PacketID.SP_StudentInfo, MakePacket<SP_StudentInfo>);
+        _handler.Add((ushort)PacketID.SP_StudentInfo, PacketHandler.SP_StudentInfoHandler);
+  
         _onRecv.Add((ushort)PacketID.SP_ScreenResult, MakePacket<SP_ScreenResult>);
         _handler.Add((ushort)PacketID.SP_ScreenResult, PacketHandler.SP_ScreenResultHandler);
 
@@ -32,10 +35,10 @@ class PacketManager
 
     public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
     {
-        ushort count = 0;
+        int count = 0;
 
-        ushort size = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
-        count += 2;
+        int size = BitConverter.ToInt32(buffer.Array, buffer.Offset);
+        count += sizeof(int);
         ushort id = BitConverter.ToUInt16(buffer.Array, buffer.Offset + count);
         count += 2;
 

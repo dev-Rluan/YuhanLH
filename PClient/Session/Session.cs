@@ -25,7 +25,7 @@ namespace PClient
                     break;
 
                 // 패킷이 완전체로 도작했는지 확인
-                ushort dataSize = BitConverter.ToUInt16(buffer.Array, buffer.Offset);
+                int dataSize = BitConverter.ToInt32(buffer.Array, buffer.Offset);
                 if (buffer.Count < dataSize)
                     break;
 
@@ -54,7 +54,7 @@ namespace PClient
         Socket _socket;
         int _disconnected = 0;
 
-        RecvBuffer _recvBuffer = new RecvBuffer(65535);
+        RecvBuffer _recvBuffer = new RecvBuffer(65535000);
 
         Queue<ArraySegment<byte>> _sendQueue = new Queue<ArraySegment<byte>>();        
         List<ArraySegment<byte>>    _pendingList = new List<ArraySegment<byte>>();
@@ -238,7 +238,7 @@ namespace PClient
                     }
 
                     //Read 커서 이동
-                    if(_recvBuffer.OnRead(processLen) == false)
+                    if(_recvBuffer.OnRead(processLen) == false)  
                     {
                         Disconnect();
                         return;

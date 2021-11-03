@@ -6,7 +6,7 @@ using System.Text;
 namespace PClient
 {
 	
-	class ServerSession : PacketSession
+	public class ServerSession : PacketSession
     {
 
         /* static unsafe void ToBytes(byte[] array,int offset, ulong value)
@@ -28,7 +28,7 @@ namespace PClient
 
         public override void OnRecvPacket(ArraySegment<byte> buffer)
         {
-            PacketManager.Instance.OnRecvPacket(this, buffer);
+            PClientForm.packetManager.OnRecvPacket(this, buffer);
         }
 
         public override void OnSend(int numOfByteser)
