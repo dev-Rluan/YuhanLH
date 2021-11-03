@@ -19,11 +19,10 @@ namespace Server
         private const int SCHEDULE = 2;
         
 
-        private static string dbIp = "192.168.55.85";
-        private static string dbName = "deskDB";
+        private static string dbIp = "";
+        private static string dbName = "";
         private static string dbId = "C##capstone_admin";
         private static string dbPw = "yuhanunivcapstone1212";
-        private static bool attFlag = false;
         private OracleConnection conn;
         private OracleCommand command;
         private OracleDataAdapter adapter;
@@ -353,16 +352,12 @@ namespace Server
         /// <param name="Week_Code"></param>
         public void PR_Attendance(string Student_Id, string Lecture_code, int Week_Code)
         {
-            if (!attFlag)
-            {
                 string query = $@"
                             insert into attendance_mark
-                            values(att_seq.nextval, '{Student_Id}', {Week_Code}, 0, 0, 0);
+                            values(att_seq.nextval, '{Student_Id}', '{Lecture_code}', {Week_Code}, 0, 0, 0);
                     ";
 
                 Execute(query);
-                attFlag = true;
-            }
         }
 
         /// <summary>
@@ -402,6 +397,34 @@ namespace Server
                         ";
 
             Execute(query);
+        }
+
+        /// <summary>
+        /// 학생이 수강하고 있는 강의들 중 시작시간에 해당하는 강의를 가져오는 함수입니다. <br/>
+        /// 시간은 "HHmm" 형식입니다.
+        /// </summary>
+        /// <param name="time"></param>
+        public List<Schedule> GetScheduleAboutTime(string time)
+        {
+            string lecture_code, lecture_name;
+            List<Schedule> result = new List<Schedule>();
+            Schedule schedule;
+
+            using (data = Select("Lecture_Code, Lecture_Name", "student_lecture", @$"Lecture_Code = (
+                                                                                        select Lecture_Code
+                                                                                        from Lecture
+                                                                                        where Start_Time = '{time}')"))
+            {
+                foreach (DataRow r in data.Tables[0].Rows)
+                {
+                    lecture_code = r["lecture_code"].ToString();
+                    lecture_name = r["lecture_name"].ToString();
+                    schedule = new Schedule(lecture_code, lecture_name);
+                    result.Add(schedule);
+                }
+            }
+
+            return result;
         }
     }
 }

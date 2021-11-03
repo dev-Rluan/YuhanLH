@@ -9,13 +9,29 @@ using System.Threading;
 
 namespace Server
 {
-    
-	class ClientSession : PacketSession
-    {   
+
+    class ClientSession : PacketSession
+    {
+        /// <summary>
+        /// 객체를 구분하는 번호
+        /// </summary>
         public int SessionId { get; set; }
+        /// <summary>
+        /// 이름
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// 객체의 아이디
+        /// </summary>
         public string ID { get; set; }
+        /// <summary>
+        /// 학생이면 현재 수업받는 교수의 아이디, 교수라면 본인의 아이디
+        /// </summary>
         public string Host { get; set; }
+        /// <summary>
+        /// 학생인지 교수인지 구분 0이면 교수, 0제외 학생, 다른
+        /// </summary>
+        public int Flag {get; set;}
         public ClassRoom Room { get; set; }
         public SessionManager _sessionManager = Program.sessionManager;
         public override void OnConnected(EndPoint endPoint)

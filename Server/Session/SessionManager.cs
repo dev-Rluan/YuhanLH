@@ -12,7 +12,15 @@ namespace Server
        
 
         int _sessionId = 0;
-        ClassRoom classRoom;
+        ClassRoom cs = new ClassRoom();
+        /// <summary>
+        /// 교수가 아직 접속 안했을때 대기하는 큐
+        /// </summary>        
+        Queue<string> waitingQueue = new Queue<string>();
+        public void test()
+        {
+            
+        }
         /// <summary>
         /// 전체 유저 리스트
         /// </summary>
@@ -23,6 +31,8 @@ namespace Server
         Dictionary<string, ClientSession> _loginSessions = new Dictionary<string, ClientSession>();
 
         Dictionary<string, ClassRoom> _classRoom = new Dictionary<string, ClassRoom>();
+        
+        
 
         object _lock = new object();
 
@@ -65,6 +75,10 @@ namespace Server
             else
             {
                 // Host 찾아서 세션 호스트에 넣기 
+                List<Schedule> result = null;
+                result = Program.db.GetScheduleAboutTime(DateTime.Now.ToString("HHmm"));
+                
+
                 if(_classRoom[session.Host] == null)
                 {
                     

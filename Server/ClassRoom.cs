@@ -21,18 +21,6 @@ namespace Server
        
         JobQueue _jobQueue = new JobQueue();
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
-        /// <summary>
-        /// 교수가 아직 접속 안했을때 대기하는 큐
-        /// </summary>        
-        Queue<string> waitingQueue = new Queue<string>();
-        /// <summary>
-        /// 수업 하나의 인원큐
-        /// </summary>
-        Queue<string> hostQueue = null;
-        /// <summary>
-        /// 수업의 정보들을 교수자의 이름에 따라서 관리하기 편하도록 분류
-        /// </summary>
-        Dictionary<string, Queue<string>> _classRoom = new Dictionary<string, Queue<string>>();
         
         /// <summary>
         /// 순차적으로 실행
@@ -52,6 +40,7 @@ namespace Server
             //Console.WriteLine($"Flushed {_pendingList.Count} items");
             _pendingList.Clear();
         }*/
+
         // 이미지 전송 
         /// <summary>
         /// 이미지 전송
@@ -82,21 +71,17 @@ namespace Server
 
         public void Enter(ClientSession session)
         {
-          
             _sessions.Add(session);
             session.Room = this;
         }
         public void P_Enter(ClientSession session, CP_Login packet)
         {
 
-            _sessions.Add(session);
-            hostQueue = new Queue<string>();
-            hostQueue.Enqueue(packet.id);
-            _classRoom.Add(packet.id, hostQueue);
-            hostQueue = null;
-            foreach(string id in waitingQueue)
-            {
-                string s_host;
+          
+           
+            //foreach(string id in waitingQueue)
+            //{
+            //    string s_host;
                 // 학생의 호스트 확인 
                 //if( s_host == packet.id)
                 //{
@@ -106,7 +91,7 @@ namespace Server
                 //    action.Enqueue(packet.id);
                 // _classRoom[host] = action;
                 //}
-            }
+            //}
             session.Room = this;
         }
         public void S_Enter(ClientSession session, CS_Login packet)

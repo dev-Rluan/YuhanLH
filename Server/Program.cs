@@ -16,6 +16,7 @@ namespace Server
         public static SessionManager sessionManager = new SessionManager();
         public static JobTimer jobTimer = new JobTimer();
         public static PacketManager packetManager = new PacketManager();
+        public static Database db = new Database();
       /*  static void FlushRoom()
         {
             Room.Push(() => Room.Flush());
@@ -44,7 +45,6 @@ namespace Server
             //int roomTick = 0;
             void DBStart()
             {
-                Database db = new();
                 IInformation information;
 
                 information = db.GetProfessor("test");
