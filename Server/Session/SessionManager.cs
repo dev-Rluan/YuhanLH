@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace Server
 {
     class SessionManager
@@ -20,6 +21,7 @@ namespace Server
         /// 로그인 한 전체 유저 리스트
         /// </summary>
         Dictionary<string, ClientSession> _loginSessions = new Dictionary<string, ClientSession>();
+
         Dictionary<string, ClassRoom> _classRoom = new Dictionary<string, ClassRoom>();
 
         object _lock = new object();
@@ -28,6 +30,7 @@ namespace Server
         {
             lock (_lock)
             {
+
                 int sessionId = ++_sessionId;
                 //큐에 저장해서 날려도됨
                 ClientSession session = new ClientSession();
@@ -61,7 +64,11 @@ namespace Server
             }
             else
             {
-
+                // Host 찾아서 세션 호스트에 넣기 
+                if(_classRoom[session.Host] == null)
+                {
+                    
+                }
             }
         }
         

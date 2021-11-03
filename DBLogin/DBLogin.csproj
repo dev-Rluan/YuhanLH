@@ -9,8 +9,4 @@
     <PackageReference Include="Oracle.ManagedDataAccess" Version="21.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ServerCore\ServerCore.csproj" />
-  </ItemGroup>
-
 </Project>
