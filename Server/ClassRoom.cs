@@ -17,8 +17,8 @@ namespace Server
         /// <summary>
         /// 전체 클라이언트 정보
         /// </summary>
-        List<ClientSession> _sessions = new List<ClientSession>();           
-       
+        List<ClientSession> _sessions = new List<ClientSession>();  
+
         JobQueue _jobQueue = new JobQueue();
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
         

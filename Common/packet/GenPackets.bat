@@ -6,5 +6,3 @@ XCOPY /Y PClientPacketManager.cs "../../PClient/Packet"
 XCOPY /Y SClientPacketManager.cs "../../SClient/Packet"
 XCOPY /Y ServerPacketManager.cs "../../Server/Packet"
 
-pause
-

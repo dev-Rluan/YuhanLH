@@ -90,9 +90,14 @@
 			<string name ="studentName"/>
 			<ushort name ="state"/>
 		</list>
-		<list name ="schedule">
-			<string name ="date"/>
-			<string name ="subject"/>
+		<list name ="Lecture">
+			<string name ="lecture_code"/>
+			<string name ="professor_id"/>
+			<string name ="lecture_name"/>
+			<int name ="credit"/>
+			<string name ="weekday"/>
+			<string name ="strat_time"/>
+			<string name ="end_time"/>			
 		</list>
 	</packet>
 	<!--학생 정보-->
@@ -149,9 +154,14 @@
 	</packet>
 	<!--학생 로그인성공, 시간표 가져오기-->
 	<packet name = "SS_LoginResult">
-		<list name ="schedule">
-			<string name ="date"/>
-			<string name ="subject"/>
+		<list name ="Lecture">
+			<string name ="lecture_code"/>
+			<string name ="professor_id"/>
+			<string name ="lecture_name"/>
+			<int name ="credit"/>
+			<string name ="weekday"/>
+			<string name ="strat_time"/>
+			<string name ="end_time"/>
 		</list>
 	</packet>
 	<!--질문에대한 교수의 답변-->

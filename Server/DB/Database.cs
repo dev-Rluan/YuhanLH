@@ -17,7 +17,6 @@ namespace Server
         private const int STUDENT = 0;
         private const int PROFESSOR = 1;
         private const int SCHEDULE = 2;
-        
 
         private static string dbIp = "";
         private static string dbName = "";
@@ -404,27 +403,122 @@ namespace Server
         /// 시간은 "HHmm" 형식입니다.
         /// </summary>
         /// <param name="time"></param>
-        public List<Schedule> GetScheduleAboutTime(string time)
+        public Schedule GetScheduleAboutTime(string time, string studentID)
         {
             string lecture_code, lecture_name;
-            List<Schedule> result = new List<Schedule>();
-            Schedule schedule;
+            Schedule schedule = null;
 
-            using (data = Select("Lecture_Code, Lecture_Name", "student_lecture", @$"Lecture_Code = (
+            using (data = Select("Lecture_Code, Lecture_Name", "student_lecture", @$"Student_Id = '{studentID}' and
+                                                                                    Lecture_Code = (
                                                                                         select Lecture_Code
                                                                                         from Lecture
-                                                                                        where Start_Time = '{time}')"))
+                                                                                        where Start_Time = '{time}'
+                                                                                        and Week_Day = '{getDay(DateTime.Now)}')"))
             {
-                foreach (DataRow r in data.Tables[0].Rows)
-                {
-                    lecture_code = r["lecture_code"].ToString();
-                    lecture_name = r["lecture_name"].ToString();
-                    schedule = new Schedule(lecture_code, lecture_name);
-                    result.Add(schedule);
-                }
+                DataRow[] row = data.Tables[0].Select();
+
+                lecture_code = row[0].ItemArray[0].ToString();
+                lecture_name = row[0].ItemArray[1].ToString();
+                schedule = new Schedule(lecture_code, lecture_name);
+
+            }
+           
+            return schedule;
+        }
+        public string getDay(DateTime now)
+        {
+            string day;
+
+            switch (now.DayOfWeek)
+            {
+                case DayOfWeek.Monday:
+                    day = "월";
+                    break;
+                case DayOfWeek.Tuesday:
+                    day = "화";
+                    break;
+                case DayOfWeek.Wednesday:
+                    day = "수";
+                    break;
+                case DayOfWeek.Thursday:
+                    day = "목";
+                    break;
+                case DayOfWeek.Friday:
+                    day = "금";
+                    break;
+                case DayOfWeek.Saturday:
+                    day = "토";
+                    break;
+                case DayOfWeek.Sunday:
+                    day = "일";
+                    break;
+                default:
+                    day = "일";
+                    break;
             }
 
-            return result;
+            return day;
         }
+        /// <summary>
+        /// id, pwd로 로그인 체크 _return = 0 : 성공, return = 1  : 비밀번호 불일치, return = 2 : 아이디가 존재하지 않음
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="pwd"></param>
+        /// <param name="flag"></param>
+        /// <returns></returns>
+        public int LoginReturn(string id, string pwd, int flag)
+        {
+            int _return = 0;
+            string Pw;
+            if(flag == 0)
+            {
+                using (data = Select("pw", "professor", $"id = '{id}'"))
+                {
+                    if(data != null)
+                    {
+                        DataRow[] row = data.Tables[0].Select();
+                        Pw = row[0].ItemArray[0].ToString();
+                        if (Pw == pwd)
+                        {
+                            _return = 0;
+                        }
+                        else
+                        {
+                            _return = 1;
+                        }
+                    }
+                    else
+                    {
+                        _return = 2;
+                    }
+                   
+                }               
+            }
+            else
+            {
+                using (data = Select("pw", "student", $"id = '{id}'"))
+                {
+                    if(data != null)
+                    {
+                        DataRow[] row = data.Tables[0].Select();
+                        Pw = row[0].ItemArray[0].ToString();
+                        if (Pw == pwd)
+                        {
+                            _return = 0;
+                        }
+                        else
+                        {
+                            _return = 1;
+                        }
+                    }
+                    else
+                    {
+                        _return = 2;
+                    }                    
+                }
+            }
+            return _return;
+        }
+
     }
 }

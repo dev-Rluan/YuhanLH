@@ -28,7 +28,6 @@ class PacketHandler
                 Console.WriteLine($"{pc_loginPacket.id} 로그인요청 Faild");
                 break;
         }
-
         
         ArraySegment<byte> segment = r_packet.Write();
         clientSession.Send(segment);
@@ -90,7 +89,7 @@ class PacketHandler
             Console.WriteLine($"{sc_loginPacket.id} 로그인요청 Faild");
         }
         SessionManager sm = new SessionManager();
-        sm.Login(clientSession, sc_loginPacket.id, 0);
+        sm.Login(clientSession, sc_loginPacket.id, sc_loginPacket.pwd, 0);
         ArraySegment<byte> segment = r_packet.Write();
         clientSession.Send(segment);
     }

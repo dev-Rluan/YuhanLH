@@ -1061,43 +1061,84 @@ class SP_LoginResult : IPacket
 	}
 	public List<Student> students = new List<Student>();
 	
-	public class Schedule
+	public class Lecture
 	{
-	   public string date;
-		public string subject;
+	   public string lecture_code;
+		public string professor_id;
+		public string lecture_name;
+		public int credit;
+		public string weekday;
+		public string strat_time;
+		public string end_time;
 	
 	    // 데이터 읽어오는 부분
 	    public void Read(ArraySegment<byte> segment, ref int count)
 	    {
-	       ushort dateLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+	       ushort lecture_codeLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
 			count += sizeof(ushort);
-			this.date = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, dateLen);
-			count += dateLen;
-			ushort subjectLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+			this.lecture_code = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, lecture_codeLen);
+			count += lecture_codeLen;
+			ushort professor_idLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
 			count += sizeof(ushort);
-			this.subject = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, subjectLen);
-			count += subjectLen;
+			this.professor_id = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, professor_idLen);
+			count += professor_idLen;
+			ushort lecture_nameLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+			count += sizeof(ushort);
+			this.lecture_name = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, lecture_nameLen);
+			count += lecture_nameLen;
+			this.credit = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+			count += sizeof(int);
+			ushort weekdayLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+			count += sizeof(ushort);
+			this.weekday = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, weekdayLen);
+			count += weekdayLen;
+			ushort strat_timeLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+			count += sizeof(ushort);
+			this.strat_time = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, strat_timeLen);
+			count += strat_timeLen;
+			ushort end_timeLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+			count += sizeof(ushort);
+			this.end_time = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, end_timeLen);
+			count += end_timeLen;
 	    }
 	
 	    // 데이터 쓰는 부분
 	    public bool Write(ArraySegment<byte> segment, ref int count)
 	    {
 	        bool success = true;
-	        ushort dateLen = (ushort)Encoding.Unicode.GetBytes(this.date, 0, this.date.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-			Array.Copy(BitConverter.GetBytes(dateLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+	        ushort lecture_codeLen = (ushort)Encoding.Unicode.GetBytes(this.lecture_code, 0, this.lecture_code.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(lecture_codeLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 			count += sizeof(ushort);
-			count += dateLen;
-			ushort subjectLen = (ushort)Encoding.Unicode.GetBytes(this.subject, 0, this.subject.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-			Array.Copy(BitConverter.GetBytes(subjectLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+			count += lecture_codeLen;
+			ushort professor_idLen = (ushort)Encoding.Unicode.GetBytes(this.professor_id, 0, this.professor_id.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(professor_idLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 			count += sizeof(ushort);
-			count += subjectLen;
+			count += professor_idLen;
+			ushort lecture_nameLen = (ushort)Encoding.Unicode.GetBytes(this.lecture_name, 0, this.lecture_name.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(lecture_nameLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+			count += sizeof(ushort);
+			count += lecture_nameLen;
+			Array.Copy(BitConverter.GetBytes(credit), 0, segment.Array, segment.Offset + count, sizeof(int));
+			count += sizeof(int);
+			ushort weekdayLen = (ushort)Encoding.Unicode.GetBytes(this.weekday, 0, this.weekday.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(weekdayLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+			count += sizeof(ushort);
+			count += weekdayLen;
+			ushort strat_timeLen = (ushort)Encoding.Unicode.GetBytes(this.strat_time, 0, this.strat_time.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(strat_timeLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+			count += sizeof(ushort);
+			count += strat_timeLen;
+			ushort end_timeLen = (ushort)Encoding.Unicode.GetBytes(this.end_time, 0, this.end_time.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(end_timeLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+			count += sizeof(ushort);
+			count += end_timeLen;
 	        return success;
 	    }
 	
 	    
 	
 	}
-	public List<Schedule> schedules = new List<Schedule>();
+	public List<Lecture> lectures = new List<Lecture>();
 	    
     // 프로토콜 구분   
     public ushort Protocol { get { return (ushort)PacketID.SP_LoginResult; } }
@@ -1122,14 +1163,14 @@ class SP_LoginResult : IPacket
 		    student.Read(segment, ref count);
 		    students.Add(student);
 		}
-		this.schedules.Clear();
-		ushort scheduleLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+		this.lectures.Clear();
+		ushort lectureLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
 		count += sizeof(ushort); 
-		for(int i = 0; i < scheduleLen; i++)
+		for(int i = 0; i < lectureLen; i++)
 		{
-		    Schedule schedule = new Schedule();
-		    schedule.Read(segment, ref count);
-		    schedules.Add(schedule);
+		    Lecture lecture = new Lecture();
+		    lecture.Read(segment, ref count);
+		    lectures.Add(lecture);
 		}
        
 
@@ -1152,10 +1193,10 @@ class SP_LoginResult : IPacket
 		count += sizeof(ushort);
 		foreach(Student student in students)
 		    student.Write(segment, ref count);
-		Array.Copy(BitConverter.GetBytes((ushort)this.schedules.Count), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+		Array.Copy(BitConverter.GetBytes((ushort)this.lectures.Count), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
-		foreach(Schedule schedule in schedules)
-		    schedule.Write(segment, ref count);
+		foreach(Lecture lecture in lectures)
+		    lecture.Write(segment, ref count);
         // 전체 데이터사이즈를 배열 처음부터 인트크기만큼 넣어준다.
         Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
@@ -1427,43 +1468,84 @@ class SS_LoginFailed : IPacket
 
 class SS_LoginResult : IPacket
 {
-    public class Schedule
+    public class Lecture
 	{
-	   public string date;
-		public string subject;
+	   public string lecture_code;
+		public string professor_id;
+		public string lecture_name;
+		public int credit;
+		public string weekday;
+		public string strat_time;
+		public string end_time;
 	
 	    // 데이터 읽어오는 부분
 	    public void Read(ArraySegment<byte> segment, ref int count)
 	    {
-	       ushort dateLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+	       ushort lecture_codeLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
 			count += sizeof(ushort);
-			this.date = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, dateLen);
-			count += dateLen;
-			ushort subjectLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+			this.lecture_code = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, lecture_codeLen);
+			count += lecture_codeLen;
+			ushort professor_idLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
 			count += sizeof(ushort);
-			this.subject = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, subjectLen);
-			count += subjectLen;
+			this.professor_id = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, professor_idLen);
+			count += professor_idLen;
+			ushort lecture_nameLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+			count += sizeof(ushort);
+			this.lecture_name = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, lecture_nameLen);
+			count += lecture_nameLen;
+			this.credit = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+			count += sizeof(int);
+			ushort weekdayLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+			count += sizeof(ushort);
+			this.weekday = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, weekdayLen);
+			count += weekdayLen;
+			ushort strat_timeLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+			count += sizeof(ushort);
+			this.strat_time = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, strat_timeLen);
+			count += strat_timeLen;
+			ushort end_timeLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+			count += sizeof(ushort);
+			this.end_time = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, end_timeLen);
+			count += end_timeLen;
 	    }
 	
 	    // 데이터 쓰는 부분
 	    public bool Write(ArraySegment<byte> segment, ref int count)
 	    {
 	        bool success = true;
-	        ushort dateLen = (ushort)Encoding.Unicode.GetBytes(this.date, 0, this.date.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-			Array.Copy(BitConverter.GetBytes(dateLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+	        ushort lecture_codeLen = (ushort)Encoding.Unicode.GetBytes(this.lecture_code, 0, this.lecture_code.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(lecture_codeLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 			count += sizeof(ushort);
-			count += dateLen;
-			ushort subjectLen = (ushort)Encoding.Unicode.GetBytes(this.subject, 0, this.subject.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-			Array.Copy(BitConverter.GetBytes(subjectLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+			count += lecture_codeLen;
+			ushort professor_idLen = (ushort)Encoding.Unicode.GetBytes(this.professor_id, 0, this.professor_id.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(professor_idLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 			count += sizeof(ushort);
-			count += subjectLen;
+			count += professor_idLen;
+			ushort lecture_nameLen = (ushort)Encoding.Unicode.GetBytes(this.lecture_name, 0, this.lecture_name.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(lecture_nameLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+			count += sizeof(ushort);
+			count += lecture_nameLen;
+			Array.Copy(BitConverter.GetBytes(credit), 0, segment.Array, segment.Offset + count, sizeof(int));
+			count += sizeof(int);
+			ushort weekdayLen = (ushort)Encoding.Unicode.GetBytes(this.weekday, 0, this.weekday.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(weekdayLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+			count += sizeof(ushort);
+			count += weekdayLen;
+			ushort strat_timeLen = (ushort)Encoding.Unicode.GetBytes(this.strat_time, 0, this.strat_time.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(strat_timeLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+			count += sizeof(ushort);
+			count += strat_timeLen;
+			ushort end_timeLen = (ushort)Encoding.Unicode.GetBytes(this.end_time, 0, this.end_time.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(end_timeLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+			count += sizeof(ushort);
+			count += end_timeLen;
 	        return success;
 	    }
 	
 	    
 	
 	}
-	public List<Schedule> schedules = new List<Schedule>();
+	public List<Lecture> lectures = new List<Lecture>();
 	    
     // 프로토콜 구분   
     public ushort Protocol { get { return (ushort)PacketID.SS_LoginResult; } }
@@ -1479,14 +1561,14 @@ class SS_LoginResult : IPacket
         // 배열 현재 위치 이동
         count += sizeof(ushort);
         
-        this.schedules.Clear();
-		ushort scheduleLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+        this.lectures.Clear();
+		ushort lectureLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
 		count += sizeof(ushort); 
-		for(int i = 0; i < scheduleLen; i++)
+		for(int i = 0; i < lectureLen; i++)
 		{
-		    Schedule schedule = new Schedule();
-		    schedule.Read(segment, ref count);
-		    schedules.Add(schedule);
+		    Lecture lecture = new Lecture();
+		    lecture.Read(segment, ref count);
+		    lectures.Add(lecture);
 		}
        
 
@@ -1505,10 +1587,10 @@ class SS_LoginResult : IPacket
        // 배열 현재 위치 이동
         count += sizeof(ushort);
 
-        Array.Copy(BitConverter.GetBytes((ushort)this.schedules.Count), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes((ushort)this.lectures.Count), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
-		foreach(Schedule schedule in schedules)
-		    schedule.Write(segment, ref count);
+		foreach(Lecture lecture in lectures)
+		    lecture.Write(segment, ref count);
         // 전체 데이터사이즈를 배열 처음부터 인트크기만큼 넣어준다.
         Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
