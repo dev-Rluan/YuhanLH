@@ -60,8 +60,8 @@ namespace Server
 
             foreach (ClientSession s in _sessions)
             {
-                //if(s.Host == host)
-                s.Send(segment);
+                if(s.ID == ProfessorID)
+                    s.Send(segment);
             }
                
 
@@ -76,9 +76,6 @@ namespace Server
         }
         public void P_Enter(ClientSession session, CP_Login packet)
         {
-
-          
-           
             //foreach(string id in waitingQueue)
             //{
             //    string s_host;
@@ -96,7 +93,6 @@ namespace Server
         }
         public void S_Enter(ClientSession session, CS_Login packet)
         {
-
             _sessions.Add(session);
             // 학생의 현재 시간표 sc = ();
             // 전체 정보 저장 scALL
@@ -114,8 +110,6 @@ namespace Server
         {
            
             _sessions.Remove(session);
-
-            
         }
 
         

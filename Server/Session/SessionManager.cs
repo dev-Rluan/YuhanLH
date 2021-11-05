@@ -29,7 +29,9 @@ namespace Server
         /// 로그인 한 전체 유저 리스트
         /// </summary>
         Dictionary<string, ClientSession> _loginSessions = new Dictionary<string, ClientSession>();
-
+        /// <summary>
+        /// 수업정보를 가지고있는 리스트
+        /// </summary>
         Dictionary<string, ClassRoom> _classRoom = new Dictionary<string, ClassRoom>();
         
         
@@ -72,7 +74,15 @@ namespace Server
                 if (_return == 0)
                 {
                     // 로그인 된 세션 목록에 넣어준다
-                    _loginSessions.Add(id, session);
+                    if (_loginSessions[id] != null)
+                    {
+                        _loginSessions[id] = session;
+                        // 외부로그인으로 연결해제 했다는걸 알려주는 패킷 필요
+                    }
+                    else
+                    {
+                        _loginSessions.Add(id, session);
+                    }
                     // 정상적으로 로그인 되었음을 알려주는 패킷 생성
                     SP_LoginResult pkt = new SP_LoginResult();
                     // 교수의 모든 수업 리스트 가져오기
