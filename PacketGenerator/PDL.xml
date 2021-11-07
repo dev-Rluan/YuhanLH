@@ -85,6 +85,7 @@
 	</packet>
 	<!--교수 로그인 성공-->
 	<packet name = "SP_LoginResult">
+    <int name ="result"/>
 		<list name ="student">
 			<string name ="studentID"/>
 			<string name ="studentName"/>
@@ -153,6 +154,7 @@
 	</packet>
 	<!--학생 로그인성공, 시간표 가져오기-->
 	<packet name = "SS_LoginResult">
+    <int name ="result"/>
 		<list name ="Lecture">
 			<string name ="lecture_code"/>
 			<string name ="professor_id"/>

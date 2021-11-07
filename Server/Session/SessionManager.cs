@@ -85,12 +85,12 @@ namespace Server
                     }
                     // 정상적으로 로그인 되었음을 알려주는 패킷 생성
                     SP_LoginResult pkt = new SP_LoginResult();
-                    // 교수의 모든 수업 리스트 가져오기
+                    // 교수의 모든 수업 리스트 가져오기                                                   ( 수정필요
                     List<IInformation> result = db.GetScheduleList(id);
                     // 패킷에 정의된 리스트 형식대로 객체 생성
-                    List<SS_LoginResult.Lecture> lecureList = null;
+                    List<SP_LoginResult.Lecture> lecureList = null;
                     // 리스트 객체에 넣기위한 빈 Lecture객체
-                    SS_LoginResult.Lecture ss_lc = new SS_LoginResult.Lecture();
+                    SP_LoginResult.Lecture ss_lc = new SP_LoginResult.Lecture();
                     // 데이터베이스에서 수업 정보를 가져오기 위한 객체
                     Lecture lc;
                     // result에 있는 수업번호로 수업정보 가져와서 리스트 객체어 넣어줌
@@ -107,15 +107,22 @@ namespace Server
                         lecureList.Add(ss_lc);
                     }
                     
+                    // 현재 시간에 맞는 수업 정보
                     string lecture_code = db.GetProfessorLectureCodeAboutTime(id); 
+                    // 현재 들어가야하는 방이 생성되어 있지않으면 방을 생성한다.
                     if (_classRoom[lecture_code] == null)
                     {
                         ClassRoom cr = new ClassRoom();
                         cr.LectureCode = lecture_code;
                         cr.Enter(session);
                         lc = db.GetLecture(lecture_code);
-                        cr.CreateRoom(lc);
-                        _classRoom.Add(id, cr);
+                        if(lc != null)
+                        {
+                            cr.CreateRoom(lc);
+                            _classRoom.Add(id, cr);
+                        }
+
+                        
                     }
                     else
                     {
@@ -189,10 +196,6 @@ namespace Server
                 {
                     
                 }
-
-              
-                
-
 
             }
 
