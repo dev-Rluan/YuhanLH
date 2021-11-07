@@ -11,14 +11,14 @@ namespace Server
     /// </summary>
     class ClassRoom : IJobQueue
     {
-        // 호스트 교수자
+        // 수업 이름
+        public string LectureCode { get; set; }
         public string ProfessorID { get; set; }
-
         /// <summary>
         /// 전체 클라이언트 정보
         /// </summary>
-        List<ClientSession> _sessions = new List<ClientSession>();  
-
+        List<ClientSession> _sessions = new List<ClientSession>();
+        Lecture _lecture;
         JobQueue _jobQueue = new JobQueue();
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
         
@@ -58,10 +58,19 @@ namespace Server
 
             //호스트 검색 host
 
+            
             foreach (ClientSession s in _sessions)
             {
-                if(s.ID == ProfessorID)
-                    s.Send(segment);
+                if(_lecture.professor_id != null)
+                {
+                    if (s.ID == _lecture.professor_id)
+                        s.Send(segment);
+                }
+                else
+                {
+                    s
+                }
+                
             }
                
 
@@ -69,12 +78,18 @@ namespace Server
 
         } 
 
+        public void CreateRoom(Lecture lecture)
+        {
+            _lecture = lecture;
+            LectureCode = lecture.lecture_code;
+        }
+
         public void Enter(ClientSession session)
         {
             _sessions.Add(session);
             session.Room = this;
         }
-        public void P_Enter(ClientSession session, CP_Login packet)
+        public void P_Enter(ClientSession session)
         {
             //foreach(string id in waitingQueue)
             //{

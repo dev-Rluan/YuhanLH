@@ -106,14 +106,20 @@ namespace Server
                         ss_lc.end_time = lc.end_time;
                         lecureList.Add(ss_lc);
                     }
-
-
-                    if (_classRoom[id] == null)
+                    
+                    string lecture_code = db.GetProfessorLectureCodeAboutTime(id); 
+                    if (_classRoom[lecture_code] == null)
                     {
                         ClassRoom cr = new ClassRoom();
-                        cr.ProfessorID = id;
+                        cr.LectureCode = lecture_code;
                         cr.Enter(session);
+                        lc = db.GetLecture(lecture_code);
+                        cr.CreateRoom(lc);
                         _classRoom.Add(id, cr);
+                    }
+                    else
+                    {
+                        _classRoom[lecture_code].P_Enter(session);
                     }
                    
                     

@@ -292,6 +292,18 @@ namespace Server
             }
             return lecture;
         }
+        public string GetProfessorLectureCodeAboutTime(string pro_id)
+        {
+            string lecture_code = null;
+
+            using(data = Select ("lecture_code", "lecture", $"Professor_id = {pro_id}"))
+            {
+                DataRow[] row = data.Tables[0].Select();
+                lecture_code = row[0].ItemArray[0].ToString();
+            }
+
+            return lecture_code;
+        }
 
         /// <summary>
         /// 특정 학생의 정보를 가져오는 함수입니다.
@@ -470,11 +482,11 @@ namespace Server
         {
             int _return = 0;
             string Pw;
-            if(flag == 0)
+            if (flag == 0)
             {
                 using (data = Select("pw", "professor", $"id = '{id}'"))
                 {
-                    if(data != null)
+                    if (data.Tables[0].Rows.Count != 0)
                     {
                         DataRow[] row = data.Tables[0].Select();
                         Pw = row[0].ItemArray[0].ToString();
@@ -491,14 +503,14 @@ namespace Server
                     {
                         _return = 2;
                     }
-                   
-                }               
+
+                }
             }
             else
             {
                 using (data = Select("pw", "student", $"id = '{id}'"))
                 {
-                    if(data != null)
+                    if (data.Tables[0].Rows.Count != 0)
                     {
                         DataRow[] row = data.Tables[0].Select();
                         Pw = row[0].ItemArray[0].ToString();
@@ -514,7 +526,7 @@ namespace Server
                     else
                     {
                         _return = 2;
-                    }                    
+                    }
                 }
             }
             return _return;

@@ -88,7 +88,7 @@
 		<list name ="student">
 			<string name ="studentID"/>
 			<string name ="studentName"/>
-			<ushort name ="state"/>
+			<bool name ="state"/>
 		</list>
 		<list name ="Lecture">
 			<string name ="lecture_code"/>
@@ -104,8 +104,7 @@
 	<packet name = "SP_StudentInfo">
 		<list name ="student">
 			<string name ="studentID"/>
-			<ushort name ="state"/>
-			<bytes name="img"/>
+			<bool name ="state"/>
 		</list>
 	</packet>
 	<!--학생 스크린샷 반환-->
@@ -180,6 +179,9 @@
 	<packet name = "SS_Quiz">
 		<ushort name ="quiz"/>
 	</packet>
+  <!--교수가 이미지 요청을해서 보냈으나 교수가 존재하지 않습니다.-->
+  <packet name ="SS_ImgSendFaild">
+  </packet>
 </PDL>
 	
 

@@ -9,16 +9,9 @@ namespace Server
     class StudentInfo
     {
         public bool status { get; set; }
-        Student student = null;
-        StudentInfo(Student s)
-        {
-            this.student = s;
-        }
-        public Student getStudent()
-        {
-            return this.student;
-        }
+        public string Student_Id {get; set;}
+        public string Name { get; set; }    
+      
        
-        ClientSession clientSession;
     }
 }
