@@ -14,11 +14,12 @@ namespace Server
         // 수업 이름
         public string LectureCode { get; set; }
         public string ProfessorID { get; set; }
+        public Lecture _lecture { get; set; }
         /// <summary>
         /// 전체 클라이언트 정보
         /// </summary>
         List<ClientSession> _sessions = new List<ClientSession>();
-        Lecture _lecture;
+        
         JobQueue _jobQueue = new JobQueue();
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
         
@@ -41,6 +42,57 @@ namespace Server
             _pendingList.Clear();
         }*/
 
+        /// <summary>
+        /// 학생리스트로 스크린 샷 요청
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="packet"></param>
+        public void Img_Request(ClientSession session, CP_ScreenRequest packet)
+        {
+            SS_ScreenRequest pkt = new SS_ScreenRequest();
+            foreach(ClientSession s in _sessions)
+            {
+                foreach(CP_ScreenRequest.Student s2 in packet.students)
+                {
+                    if (s.ID == s2.studentId)
+                    {
+                        s.Send(pkt.Write());
+                    }
+                }               
+            }
+        }
+        
+        public void Quiz_OX(CP_QuizOX packet)
+        {
+            SS_QuizOX pkt = new SS_QuizOX();
+            pkt.quiz = packet.quiz;
+            foreach (ClientSession s in _sessions)
+            {
+                foreach (CP_QuizOX.Student s2 in packet.students)
+                {
+                    if (s.ID == s2.studentId)
+                    {
+                        s.Send(pkt.Write());
+                    }
+                }
+            }
+        }
+        public void Quiz(CP_Quiz packet)
+        {
+            SS_Quiz pkt = new SS_Quiz();
+            pkt.quiz = packet.quiz;
+            foreach (ClientSession s in _sessions)
+            {
+                foreach (CP_Quiz.Student s2 in packet.students)
+                {
+                    if (s.ID == s2.studentId)
+                    {
+                        s.Send(pkt.Write());
+                    }
+                }
+            }
+        }
+
         // 이미지 전송 
         /// <summary>
         /// 이미지 전송
@@ -48,40 +100,31 @@ namespace Server
         /// <param name="session"></param>
         /// <param name="img"></param>
         /// <param name="id"></param>
-        public void Img_Broadcast(ClientSession session, byte[] img, string id)
+        public void Img_Send( byte[] img, string id)
         {
             SP_ScreenResult sp_screenPacket = new SP_ScreenResult();
-            sp_screenPacket.studentID = id;
+            sp_screenPacket.studentId = id;
             sp_screenPacket.img = img;
             ArraySegment<byte> segment = sp_screenPacket.Write();
             _pendingList.Add(segment);
 
-            //호스트 검색 host
-
-            
+            // 현재 수업의 교수를 찾아서 이미지 보내기
             foreach (ClientSession s in _sessions)
             {
-                if(_lecture.professor_id != null)
+                if(_lecture.professor_id == null)
                 {
-                    if (s.ID == _lecture.professor_id)
-                        s.Send(segment);
+                    return;
                 }
-                else
-                {
-                    s
-                }
-                
-            }
-               
-
-            Console.WriteLine("이미지전송");            
+                if (s.ID == _lecture.professor_id)
+                    s.Send(segment);
+            }               
+            Console.WriteLine("이미지전송");  
 
         } 
 
         public void CreateRoom(Lecture lecture)
         {
             _lecture = lecture;
-            LectureCode = lecture.lecture_code;
         }
 
         public void Enter(ClientSession session)
@@ -89,38 +132,11 @@ namespace Server
             _sessions.Add(session);
             session.Room = this;
         }
-        public void P_Enter(ClientSession session)
-        {
-            //foreach(string id in waitingQueue)
-            //{
-            //    string s_host;
-                // 학생의 호스트 확인 
-                //if( s_host == packet.id)
-                //{
-                //waitingQueue.Dequeue();
-                //Queue<string> action = null;
-                //if (_classRoom.TryGetValue(host, out action))
-                //    action.Enqueue(packet.id);
-                // _classRoom[host] = action;
-                //}
-            //}
-            session.Room = this;
-        }
-        public void S_Enter(ClientSession session, CS_Login packet)
-        {
-            _sessions.Add(session);
-            // 학생의 현재 시간표 sc = ();
-            // 전체 정보 저장 scALL
-            // 현재 시간표 교수님 host
-            //Queue<string> action = null;
-            //if (_classRoom.TryGetValue(host, out action))
-            //    action.Enqueue(packet.id);
-            //else
-            //  watingQueue.Enqueue(packet.id);
-            // _classRoom[host] = action;
-            session.Room = this;
-            // session.Host = host
-        }
+       
+        /// <summary>
+        ///  로그아웃
+        /// </summary>
+        /// <param name="session"></param>
         public void Leave(ClientSession session)
         {
            

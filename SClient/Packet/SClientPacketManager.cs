@@ -25,6 +25,9 @@ public class PacketManager
         _onRecv.Add((ushort)PacketID.SS_LoginResult, MakePacket<SS_LoginResult>);
         _handler.Add((ushort)PacketID.SS_LoginResult, PacketHandler.SS_LoginResultHandler);
   
+        _onRecv.Add((ushort)PacketID.SS_ScreenRequest, MakePacket<SS_ScreenRequest>);
+        _handler.Add((ushort)PacketID.SS_ScreenRequest, PacketHandler.SS_ScreenRequestHandler);
+  
         _onRecv.Add((ushort)PacketID.SS_QResult, MakePacket<SS_QResult>);
         _handler.Add((ushort)PacketID.SS_QResult, PacketHandler.SS_QResultHandler);
   
@@ -36,6 +39,9 @@ public class PacketManager
   
         _onRecv.Add((ushort)PacketID.SS_Quiz, MakePacket<SS_Quiz>);
         _handler.Add((ushort)PacketID.SS_Quiz, PacketHandler.SS_QuizHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_ImgSendFaild, MakePacket<SS_ImgSendFaild>);
+        _handler.Add((ushort)PacketID.SS_ImgSendFaild, PacketHandler.SS_ImgSendFaildHandler);
 
     }
 

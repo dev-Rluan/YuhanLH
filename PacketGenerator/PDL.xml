@@ -10,7 +10,7 @@
 	<packet name = "CP_ScreenRequest">
 		<string name ="id"/>
     <list name ="student">
-				<string name="studentID"/>
+				<string name="studentId"/>
     </list>
 	</packet>
 	<!--OX 퀴즈 요청-->
@@ -29,7 +29,7 @@
 	</packet>
 	<!--학생의 질문에 대한 답변-->
 	<packet name ="CP_QResult">
-		<string name="studentID"/>
+		<string name="studentId"/>
 		<string name="result"/>
 	</packet>
 	<!--출석 요청-->
@@ -52,7 +52,7 @@
 	</packet>
 	<!--스크린샷 요청에 대한 결과-->
 	<packet name = "CS_ScreenResult">    
-		<string name ="studentID"/>
+		<string name ="studentId"/>
 		<bytes name ="img"/>
 	</packet>
 	<!--학생 질문 (텍스트)-->
@@ -87,7 +87,7 @@
 	<packet name = "SP_LoginResult">
     <int name ="result"/>
 		<list name ="student">
-			<string name ="studentID"/>
+			<string name ="studentId"/>
 			<string name ="studentName"/>
 			<bool name ="state"/>
 		</list>
@@ -104,13 +104,13 @@
 	<!--학생 정보-->
 	<packet name = "SP_StudentInfo">
 		<list name ="student">
-			<string name ="studentID"/>
+			<string name ="studentId"/>
 			<bool name ="state"/>
 		</list>
 	</packet>
 	<!--학생 스크린샷 반환-->
 	<packet name = "SP_ScreenResult">
-		<string name ="studentID"/>
+		<string name ="studentId"/>
 		<bytes name ="img"/>
 	</packet>
 	<!--학생질문 (텍스트)-->
@@ -128,23 +128,24 @@
 	</pakcet>
 	<!--퀴즈에대한 학생의 답-->
 	<pakcet name ="SP_QuizResult">
-		<string name ="studentID"/>
+		<string name ="studentId"/>
 		<string name ="result"/>
 	</pakcet>
 	<!--학생 접속-->
 	<pakcet name ="SP_AddStudent">
-		<string name ="studentID"/>
+		<string name ="studentId"/>
 	</pakcet>
 	<!--학생 나감-->
 	<pakcet name ="SP_LeaveStudent">
-		<string name ="studentID"/>
+		<string name ="studentId"/>
 	</pakcet>
 	<!--출석 체크 요청-->
 	<pakcet name ="SP_AddAtd">
-		<string name ="studentID"/>
+		<string name ="studentId"/>
 	</pakcet>
+	
 	<!-- SS_ = 서버에서 학생클라이언트에게 보내느 패킷-->
-	<!-- Sㄴ_Result = 테스트용 로그인 반환값-->
+	<!-- SS_Result = 테스트용 로그인 반환값-->
 	<packet name = "SS_Result">
 		<bool name ="result"/>
 	</packet>
@@ -165,6 +166,9 @@
 			<string name ="end_time"/>
 		</list>
 	</packet>
+	<!--교수의 스크린샷 요청-->
+	<packet name ="SS_ScreenRequest">
+	</packet>
 	<!--질문에대한 교수의 답변-->
 	<packet name = "SS_QResult">
 		<string name ="result"/>
@@ -175,11 +179,11 @@
 	</packet>
 	<!--OX 퀴즈-->
 	<packet name = "SS_QuizOX">
-		<ushort name ="quiz"/>
+		<string name ="quiz"/>
 	</packet>
 	<!--퀴즈-->
 	<packet name = "SS_Quiz">
-		<ushort name ="quiz"/>
+		<string name ="quiz"/>
 	</packet>
   <!--교수가 이미지 요청을해서 보냈으나 교수가 존재하지 않습니다.-->
   <packet name ="SS_ImgSendFaild">

@@ -33,29 +33,34 @@ class PacketHandler
         clientSession.Send(segment);
 
         ClassRoom room = new ClassRoom();
-        room.P_Enter(clientSession, pc_loginPacket);
+        room.Enter(clientSession);
 
-    }
-
-
-    public static void CP_ChatHandler(PacketSession session, IPacket packet)
-    {
-        
     }
 
     public static void CP_ScreenRequestHandler(PacketSession session, IPacket packet)
     {
+        CP_ScreenRequest pkt = packet as CP_ScreenRequest;
+        ClientSession clientSession = session as ClientSession;
+
+        ClassRoom room = clientSession.Room;
+        room.Push(() => room.Img_Request(clientSession, pkt));
 
     }
-     
+
     public static void CP_QuizOXHandler(PacketSession session, IPacket packet)
     {
-
+        CP_QuizOX pkt = packet as CP_QuizOX;
+        ClientSession clientSession = session as ClientSession;
+        ClassRoom room = clientSession.Room;
+        room.Push(() => room.Quiz_OX(pkt));
     }
      
     public static void CP_QuizHandler(PacketSession session, IPacket packet)
     {
-
+        CP_Quiz pkt = packet as CP_Quiz;
+        ClientSession clientSession = session as ClientSession;
+        ClassRoom room = clientSession.Room;
+        room.Push(() => room.Quiz(pkt));
     }
      
     public static void CP_QResultHandler(PacketSession session, IPacket packet)
@@ -104,7 +109,7 @@ class PacketHandler
         CS_ScreenResult Screen_packet = packet as CS_ScreenResult;
         ClientSession clientSession = session as ClientSession;
         ClassRoom room = clientSession.Room;
-        room.Push(() => room.Img_Broadcast(clientSession, Screen_packet.img, Screen_packet.studentID));
+        room.Push(() => room.Img_Send( Screen_packet.img, Screen_packet.studentId));
 
 
     }

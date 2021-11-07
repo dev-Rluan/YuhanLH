@@ -32,6 +32,10 @@ namespace Server
         /// 학생인지 교수인지 구분 0이면 교수, 0제외 학생, 다른
         /// </summary>
         public int Flag {get; set;}
+        /// <summary>
+        /// 현재 수업중인 과목
+        /// </summary>
+        public string LectureCode { get; set; }
         public ClassRoom Room { get; set; }
         public SessionManager _sessionManager = Program.sessionManager;
         public override void OnConnected(EndPoint endPoint)

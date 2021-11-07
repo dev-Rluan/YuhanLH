@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Oracle.ManagedDataAccess.Client;
 using System.Data;
-using System.Collections;
 
 namespace Server
 {
@@ -18,14 +14,16 @@ namespace Server
         private const int PROFESSOR = 1;
         private const int SCHEDULE = 2;
 
-        private static string dbIp = "";
-        private static string dbName = "";
+
+        private static string dbIp = "192.168.55.85";
+        private static string dbName = "deskDB";
         private static string dbId = "C##capstone_admin";
         private static string dbPw = "yuhanunivcapstone1212";
+        private static bool attFlag = false;
         private OracleConnection conn;
         private OracleCommand command;
         private OracleDataAdapter adapter;
-        private DataSet data;
+        private DataSet data = null;
 
 
         public Database()
@@ -126,7 +124,7 @@ namespace Server
         public bool IsOpen()
         {
             return (!Equals(conn.State, ConnectionState.Closed));
-            
+
         }
 
         /// <summary>
@@ -148,14 +146,15 @@ namespace Server
                     using (adapter = new OracleDataAdapter(query, conn))
                     {
                         adapter.Fill(ds);
+                        return ds;
                     }
                 }
                 else
                 {
                     Console.WriteLine("ERROR : 데이터 베이스 연결이 실패했습니다.");
                 }
-                return ds;
             }
+            return null;
         }
 
         /// <summary>
@@ -169,20 +168,29 @@ namespace Server
         public DataSet Select(string col, string table, string where)
         {
             DataSet ds = new DataSet();
-            string query = $"select {col} from {table} where {where}";
+            string query = @$"select {col}
+                               from {table}
+                               where {where}";
 
-            if (IsOpen())
+            //using (data = Select("s.id, s.pw, s.name, s.student_id", "student s, student_lecture sl", @$"s.student_id = sl.student_id
+            //                                                                                                 sl.lecture_code = {Lecture_Code}"))
+
+            using (ds = new DataSet())
             {
-                using (adapter = new OracleDataAdapter(query, conn))
+                if (IsOpen())
                 {
-                    adapter.Fill(ds);
+                    using (adapter = new OracleDataAdapter(query, conn))
+                    {
+                        adapter.Fill(ds);
+                        return ds;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("ERROR : 데이터 베이스 연결이 실패했습니다.");
                 }
             }
-            else
-            {
-                Console.WriteLine("ERROR : 데이터 베이스 연결에 실패했습니다.");
-            }
-            return ds;
+            return null;
         }
 
         /// <summary>
@@ -292,18 +300,6 @@ namespace Server
             }
             return lecture;
         }
-        public string GetProfessorLectureCodeAboutTime(string pro_id)
-        {
-            string lecture_code = null;
-
-            using(data = Select ("lecture_code", "lecture", $"Professor_id = {pro_id}"))
-            {
-                DataRow[] row = data.Tables[0].Select();
-                lecture_code = row[0].ItemArray[0].ToString();
-            }
-
-            return lecture_code;
-        }
 
         /// <summary>
         /// 특정 학생의 정보를 가져오는 함수입니다.
@@ -363,12 +359,16 @@ namespace Server
         /// <param name="Week_Code"></param>
         public void PR_Attendance(string Student_Id, string Lecture_code, int Week_Code)
         {
+            if (!attFlag)
+            {
                 string query = $@"
                             insert into attendance_mark
-                            values(att_seq.nextval, '{Student_Id}', '{Lecture_code}', {Week_Code}, 0, 0, 0);
+                            values(att_seq.nextval, '{Student_Id}', {Week_Code}, 0, 0, 0);
                     ";
 
                 Execute(query);
+                attFlag = true;
+            }
         }
 
         /// <summary>
@@ -383,8 +383,8 @@ namespace Server
         {
             string query;
             string strClass = "";
-            
-            switch(Class)
+
+            switch (Class)
             {
                 case 1:
                     strClass = "first_class";
@@ -415,10 +415,10 @@ namespace Server
         /// 시간은 "HHmm" 형식입니다.
         /// </summary>
         /// <param name="time"></param>
-        public Schedule GetScheduleAboutTime(string time, string studentID)
+        public Schedule GetScheduleExistTime(string time, string studentID)
         {
             string lecture_code, lecture_name;
-            Schedule schedule = null;
+            Schedule schedule;
 
             using (data = Select("Lecture_Code, Lecture_Name", "student_lecture", @$"Student_Id = '{studentID}' and
                                                                                     Lecture_Code = (
@@ -427,17 +427,98 @@ namespace Server
                                                                                         where Start_Time = '{time}'
                                                                                         and Week_Day = '{getDay(DateTime.Now)}')"))
             {
-                DataRow[] row = data.Tables[0].Select();
-
-                lecture_code = row[0].ItemArray[0].ToString();
-                lecture_name = row[0].ItemArray[1].ToString();
+                DataRow[] r = data.Tables[0].Select();
+                lecture_code = r[0].ItemArray[0].ToString();
+                lecture_name = r[0].ItemArray[1].ToString();
                 schedule = new Schedule(lecture_code, lecture_name);
-
             }
-           
+
             return schedule;
         }
-        public string getDay(DateTime now)
+
+        /// <summary>
+        /// 특정 강의를 수강하고 있는 학생들의 리스트를 반환받는 함수입니다.
+        /// </summary>
+        /// <param name="Lecture_Code"></param>
+        public List<Student> GetStudentsExistLecture(string Lecture_Code)
+        {
+            List<Student> Students = new List<Student>();
+            Student student;
+            string id, pw, name, studentId;
+
+            using (data = Select("s.id, s.pw, s.name, s.student_id",
+                                 "student s, student_lecture sl",
+                                 @$"s.student_id = sl.student_id
+                                 AND sl.lecture_code = '{Lecture_Code}'"))
+            {
+                foreach (DataRow r in data.Tables[0].Rows)
+                {
+                    id = r["id"].ToString();
+                    pw = r["pw"].ToString();
+                    name = r["name"].ToString();
+                    studentId = r["student_id"].ToString();
+                    student = new Student(id, pw, studentId, name);
+                    Students.Add(student);
+                }
+            }
+
+            return Students;
+        }
+
+        /// <summary>
+        /// 교수가 강의하고 있는 강의목록을 반환받는 함수입니다.
+        /// </summary>
+        /// <param name="Professor_Id"></param>
+        public List<Lecture> GetLectureExistProfessor(string Professor_Id)
+        {
+            List<Lecture> lectures = new List<Lecture>();
+            Lecture lecture;
+
+            using (data = Select("*", "Lecture", $"Professor_Id = '{Professor_Id}'"))
+            {
+                foreach (DataRow r in data.Tables[0].Rows)
+                {
+                    lecture = new Lecture(r["lecture_code"].ToString(),
+                                            r["professor_id"].ToString(),
+                                            r["lecture_name"].ToString(),
+                                            int.Parse(r["credit"].ToString()),
+                                            r["week_day"].ToString(),
+                                            r["start_time"].ToString(),
+                                            r["end_time"].ToString());
+                    lectures.Add(lecture);
+                }
+            }
+
+            return lectures;
+        }
+
+        /// <summary>
+        /// 교수가 강의하고 있는 강의들 중 특정 시간의 강의를 반환받는 함수입니다.
+        /// </summary>
+        /// <param name="Professor_Id"></param>
+        /// <param name="Start_Time"></param>
+        public Lecture GetLectureExistProfessorTime(string Professor_Id, string Start_Time)
+        {
+            Lecture lecture;
+
+            using (data = Select("*", "Lecture", @$"Professor_Id = '{Professor_Id}' AND
+                                                    Start_Time = '{Start_Time}' AND
+                                                    Week_Day = '{getDay(DateTime.Now)}'"))
+            {
+                DataRow[] row = data.Tables[0].Select();
+                lecture = new Lecture(row[0].ItemArray[0].ToString(),
+                                        row[0].ItemArray[1].ToString(),
+                                        row[0].ItemArray[2].ToString(),
+                                        int.Parse(row[0].ItemArray[3].ToString()),
+                                        row[0].ItemArray[4].ToString(),
+                                        row[0].ItemArray[5].ToString(),
+                                        row[0].ItemArray[6].ToString());
+            }
+
+            return lecture;
+        }
+
+        private string getDay(DateTime now)
         {
             string day;
 
@@ -471,6 +552,7 @@ namespace Server
 
             return day;
         }
+
         /// <summary>
         /// id, pwd로 로그인 체크 _return = 0 : 성공, return = 1  : 비밀번호 불일치, return = 2 : 아이디가 존재하지 않음
         /// </summary>
@@ -531,6 +613,5 @@ namespace Server
             }
             return _return;
         }
-
     }
 }

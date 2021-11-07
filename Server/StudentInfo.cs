@@ -6,12 +6,10 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    class StudentInfo
+    class StudentInfo : Student
     {
         public bool status { get; set; }
-        public string Student_Id {get; set;}
-        public string Name { get; set; }    
-      
+
        
     }
 }

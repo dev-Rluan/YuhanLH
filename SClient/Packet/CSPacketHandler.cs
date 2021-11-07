@@ -62,6 +62,13 @@ class PacketHandler
         {
 
         }
-    
+        public static void SS_ImgSendFaildHandler(PacketSession session, IPacket packet)
+        {
+
+        }
+        public static void SS_ScreenRequestHandler(PacketSession session, IPacket packet)
+        {
+
+        }
 
 }
