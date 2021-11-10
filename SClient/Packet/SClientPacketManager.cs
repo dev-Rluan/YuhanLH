@@ -22,6 +22,9 @@ public class PacketManager
         _onRecv.Add((ushort)PacketID.SS_LoginFailed, MakePacket<SS_LoginFailed>);
         _handler.Add((ushort)PacketID.SS_LoginFailed, PacketHandler.SS_LoginFailedHandler);
   
+        _onRecv.Add((ushort)PacketID.SS_Logout, MakePacket<SS_Logout>);
+        _handler.Add((ushort)PacketID.SS_Logout, PacketHandler.SS_LogoutHandler);
+  
         _onRecv.Add((ushort)PacketID.SS_LoginResult, MakePacket<SS_LoginResult>);
         _handler.Add((ushort)PacketID.SS_LoginResult, PacketHandler.SS_LoginResultHandler);
   
@@ -42,6 +45,9 @@ public class PacketManager
   
         _onRecv.Add((ushort)PacketID.SS_ImgSendFaild, MakePacket<SS_ImgSendFaild>);
         _handler.Add((ushort)PacketID.SS_ImgSendFaild, PacketHandler.SS_ImgSendFaildHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_EndClass, MakePacket<SS_EndClass>);
+        _handler.Add((ushort)PacketID.SS_EndClass, PacketHandler.SS_EndClassHandler);
 
     }
 

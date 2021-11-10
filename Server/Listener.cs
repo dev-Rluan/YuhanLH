@@ -15,7 +15,7 @@ namespace Server
         Func<Session> _sessionFactory;
          
         // 초기화
-        public void Init(IPEndPoint endPoint, Func<Session> sessionFactory, int register = 10, int backlog = 100)
+        public void Init(IPEndPoint endPoint, Func<Session> sessionFactory,  int backlog = 100)
         {
                         
             listen_socket = new Socket(endPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
@@ -25,13 +25,12 @@ namespace Server
             listen_socket.Bind(endPoint);
 
             listen_socket.Listen(backlog);
-            for(int i = 0; i < register; i++)
-            {
-                SocketAsyncEventArgs args = new SocketAsyncEventArgs();
-                args.Completed += new EventHandler<SocketAsyncEventArgs>(onAcceptCompleted);
+            
+            SocketAsyncEventArgs args = new SocketAsyncEventArgs();
+            args.Completed += new EventHandler<SocketAsyncEventArgs>(onAcceptCompleted);
 
-                RegisterAccept(args);
-            }
+            RegisterAccept(args);
+            
  
         }
         

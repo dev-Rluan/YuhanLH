@@ -11,9 +11,7 @@ namespace Server
     /// </summary>
     class ClassRoom : IJobQueue
     {
-        // 수업 이름
-        public string LectureCode { get; set; }
-        public string ProfessorID { get; set; }
+        // 수업 정보
         public Lecture _lecture { get; set; }
         /// <summary>
         /// 전체 클라이언트 정보
@@ -41,6 +39,15 @@ namespace Server
             //Console.WriteLine($"Flushed {_pendingList.Count} items");
             _pendingList.Clear();
         }*/
+
+        /// <summary>
+        /// 수업코드 반환
+        /// </summary>
+        /// <returns></returns>
+        public string Get_LectureCode()
+        {
+            return _lecture.lecture_code;
+        }
 
         /// <summary>
         /// 학생리스트로 스크린 샷 요청
@@ -77,6 +84,10 @@ namespace Server
                 }
             }
         }
+        /// <summary>
+        /// 퀴즈정보를 리스트에 있는 학생들에게 뿌려주는 패킷
+        /// </summary>
+        /// <param name="packet"></param>
         public void Quiz(CP_Quiz packet)
         {
             SS_Quiz pkt = new SS_Quiz();
@@ -89,6 +100,31 @@ namespace Server
                     {
                         s.Send(pkt.Write());
                     }
+                }
+            }
+        }
+
+        public void Send_Of_One(string id)
+        {
+            foreach(ClientSession s in _sessions)
+            {
+                if(s.ID == id)
+                {
+
+                }
+            }
+        }
+
+        public void BroadCast_EndClass()
+        {
+            SS_EndClass pkt = new SS_EndClass();
+            foreach (ClientSession s in _sessions)
+            {
+                if (s.ID != _lecture.professor_id)
+                {
+                    s.Send(pkt.Write());
+                    s.Room = null;
+                    Leave(s);
                 }
             }
         }

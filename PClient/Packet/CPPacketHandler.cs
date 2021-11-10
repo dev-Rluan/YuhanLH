@@ -69,13 +69,13 @@ class PacketHandler
         {
             PClientForm.pclientform.txtBox.Invoke((MethodInvoker)delegate
             {
-                PClientForm.pclientform.txtBox.Text += sp_screenPacket.studentID;
+                PClientForm.pclientform.txtBox.Text += sp_screenPacket.studentId;
                 PClientForm.pclientform.txtBox.Text += "\n ¼º°ø";
             });
         }
         else
         {
-            PClientForm.pclientform.txtBox.Text = sp_screenPacket.studentID;
+            PClientForm.pclientform.txtBox.Text = sp_screenPacket.studentId;
         }
 
         if (PClientForm.pclientform.ptBox.InvokeRequired == true)
@@ -89,8 +89,11 @@ class PacketHandler
         {
             PClientForm.pclientform.ptBox.Image = bmp;
         }
-
-
     }
+        public static void SP_EndClassHandler(PacketSession session, IPacket packet)
+        {
+
+        }
+    
 
 }

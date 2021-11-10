@@ -70,5 +70,13 @@ class PacketHandler
         {
 
         }
+    public static void SS_LogoutHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void SS_EndClassHandler(PacketSession session, IPacket packet)
+    {
+
+    }
 
 }

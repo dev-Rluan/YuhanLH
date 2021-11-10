@@ -30,6 +30,9 @@ public class PacketManager
   
         _onRecv.Add((ushort)PacketID.SP_ScreenResult, MakePacket<SP_ScreenResult>);
         _handler.Add((ushort)PacketID.SP_ScreenResult, PacketHandler.SP_ScreenResultHandler);
+  
+        _onRecv.Add((ushort)PacketID.SP_EndClass, MakePacket<SP_EndClass>);
+        _handler.Add((ushort)PacketID.SP_EndClass, PacketHandler.SP_EndClassHandler);
 
     }
 

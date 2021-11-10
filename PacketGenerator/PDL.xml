@@ -34,6 +34,7 @@
 	</packet>
 	<!--출석 요청-->
 	<packet name ="CP_Atd">
+    <int name ="classTime"/>
 	</packet>
 	<!--학생 리스트 최신화 요청-->
 	<packet name ="CP_StudentList">
@@ -141,8 +142,11 @@
 	</pakcet>
 	<!--출석 체크 요청-->
 	<pakcet name ="SP_AddAtd">
-		<string name ="studentId"/>
+    <int name ="classTime"/>
 	</pakcet>
+  <!--수업 종료-->
+    <packet name ="SP_EndClass">
+    </packet>
 	
 	<!-- SS_ = 서버에서 학생클라이언트에게 보내느 패킷-->
 	<!-- SS_Result = 테스트용 로그인 반환값-->
@@ -153,6 +157,9 @@
 	<packet name = "SS_LoginFailed">
 		<ushort name ="result"/>
 	</packet>
+  <!--로그아웃 성공적으로 실행됨-->
+  <packet name ="SS_Logout">
+  </packet>
 	<!--학생 로그인성공, 시간표 가져오기-->
 	<packet name = "SS_LoginResult">
     <int name ="result"/>
@@ -175,7 +182,7 @@
 	</packet>
 	<!--출석 체크 요청-->
 	<packet name = "SS_AtdRequest">
-		<ushort name ="result"/>
+		<int name ="classTime"/>
 	</packet>
 	<!--OX 퀴즈-->
 	<packet name = "SS_QuizOX">
@@ -188,6 +195,9 @@
   <!--교수가 이미지 요청을해서 보냈으나 교수가 존재하지 않습니다.-->
   <packet name ="SS_ImgSendFaild">
   </packet>
+	<!--수업 종료-->
+	<packet name ="SS_EndClass">    
+  </packet>
 </PDL>
-	
+
 
