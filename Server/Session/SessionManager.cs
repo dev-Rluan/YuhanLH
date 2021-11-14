@@ -292,8 +292,11 @@ namespace Server
             {
                 _sessions.Remove(session.SessionId);
                 ClientSession s = null;
-                if(_loginSessions.TryGetValue(session.ID, out s))
-                    _loginSessions.Remove(session.ID);
+                if (session.ID != null)
+                {
+                    if (_loginSessions.TryGetValue(session.ID, out s))
+                        _loginSessions.Remove(session.ID);
+                }               
                 _classRoom[session.Room._lecture.lecture_code].Leave(session);
             }
         }
