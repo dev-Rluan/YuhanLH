@@ -5,10 +5,6 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Server", "Server\Server.csproj", "{323401A7-1E95-4DAF-91A1-A4795E0B8C22}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerCore", "ServerCore\ServerCore.csproj", "{64A0BE0A-6480-4FA5-9C14-26C7B528D810}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DummyClient", "DummyClient\DummyClient.csproj", "{FF114282-CC26-4C6E-9D4B-8374AC2675E8}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PacketGenerator", "PacketGenerator\PacketGenerator.csproj", "{16A4A5A2-FD8C-418F-92B1-67A0181A2697}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tool", "Tool", "{70449383-77A1-4602-9D17-F26ED73F0329}"
@@ -21,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestImgSend", "TestImgSend\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestImgRecv", "TestImgRecv\TestImgRecv.csproj", "{9FB5D190-D578-4DC7-879A-59FB52E6CC54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBLogin", "DBLogin\DBLogin.csproj", "{9C2E3B06-9D40-425D-8B07-A41F6710F472}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBLogin", "DBLogin\DBLogin.csproj", "{9C2E3B06-9D40-425D-8B07-A41F6710F472}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,14 +29,6 @@ Global
 		{323401A7-1E95-4DAF-91A1-A4795E0B8C22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{323401A7-1E95-4DAF-91A1-A4795E0B8C22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{323401A7-1E95-4DAF-91A1-A4795E0B8C22}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64A0BE0A-6480-4FA5-9C14-26C7B528D810}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64A0BE0A-6480-4FA5-9C14-26C7B528D810}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64A0BE0A-6480-4FA5-9C14-26C7B528D810}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64A0BE0A-6480-4FA5-9C14-26C7B528D810}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF114282-CC26-4C6E-9D4B-8374AC2675E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF114282-CC26-4C6E-9D4B-8374AC2675E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF114282-CC26-4C6E-9D4B-8374AC2675E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF114282-CC26-4C6E-9D4B-8374AC2675E8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{16A4A5A2-FD8C-418F-92B1-67A0181A2697}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{16A4A5A2-FD8C-418F-92B1-67A0181A2697}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16A4A5A2-FD8C-418F-92B1-67A0181A2697}.Release|Any CPU.ActiveCfg = Release|Any CPU

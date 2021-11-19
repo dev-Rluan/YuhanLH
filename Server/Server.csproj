@@ -15,8 +15,4 @@
     <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.4" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\ServerCore\ServerCore.csproj" />
-  </ItemGroup>
-
 </Project>
