@@ -17,7 +17,7 @@ namespace Server
         /// 전체 클라이언트 정보
         /// </summary>
         List<ClientSession> _sessions = new List<ClientSession>();
-        
+        public string Host { get; set; }
         JobQueue _jobQueue = new JobQueue();
         List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
         
@@ -47,6 +47,22 @@ namespace Server
         public string Get_LectureCode()
         {
             return _lecture.lecture_code;
+        }
+        /// <summary>
+        ///  교수가 처음 방을 만들었을 때
+        /// </summary>
+        /// <param name="session"></param>
+        public void CreateClassRoom(ClientSession session)
+        {
+            Host = session.ID;
+        }
+
+        /// <summary>
+        /// 교수자가 방을 나갔거나, 접속을 종료하였을때 호출됩니다.
+        /// </summary>
+        public void ClearRoom()
+        {
+
         }
 
         /// <summary>

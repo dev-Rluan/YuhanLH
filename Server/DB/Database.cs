@@ -33,6 +33,7 @@ namespace Server
             try
             {
                 conn.Open();
+                Console.WriteLine("db연결됨");
             }
             catch (Exception e)
             {

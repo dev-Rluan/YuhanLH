@@ -53,6 +53,51 @@ namespace Server
 
             }
         }
+        public void P_Login(ClientSession session, string id, string pwd)
+        {
+            int _return = 1;
+            lock (_lock)
+            {
+                _return = (ushort)db.LoginReturn(id, pwd, 0);
+                // 리턴 값 확인( 0 = 성공, 1 = 비밀번호 불일치, 2 = 아이디 존재하지않음, 3 = 다른 곳에서 로그인된 유저가 있습니다.)
+                if (_return == 0)
+                {
+                    // 이미 로그인 된 유저가 있으면
+                    if (_loginSessions.TryGetValue(id, out ClientSession s))
+                    {
+                        SP_LoginFailed lgFail_packet = new SP_LoginFailed();
+                        lgFail_packet.result = 3;
+                        //  패킷 전송
+                        session.Send(lgFail_packet.Write());                        
+                        return;
+                    }
+                    else
+                    {
+                        _loginSessions.Add(id, session);
+                        // 새로운 방 생성
+                        ClassRoom room = new ClassRoom();
+                        Lecture lecture = new Lecture();
+                        db.GetLectureExistProfessorTime(id, DateTime.Now.ToString("HHmm"));
+
+                    }
+                }
+                // 비밀번호 불일치
+                else if(_return == 1)
+                {
+                    SP_LoginFailed lgFail_packet = new SP_LoginFailed();
+                    lgFail_packet.result = 1;
+                    session.Send(lgFail_packet.Write());
+                }
+                // 아이디 없음
+                else if(_return == 2)
+                {
+                    SP_LoginFailed lgFail_packet = new SP_LoginFailed();
+                    lgFail_packet.result = 2;
+                    session.Send(lgFail_packet.Write());
+                }
+            }
+        }
+
 
         /// <summary>
         /// 
@@ -64,7 +109,6 @@ namespace Server
         {
             lock(_lock){            
             ushort _return = 1;
-
                 if (Flag == 0)
                 {   // 로그인 시도
                     _return = (ushort)db.LoginReturn(id, pwd, Flag);

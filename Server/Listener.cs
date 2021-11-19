@@ -14,6 +14,7 @@ namespace Server
         //어떤 세션을 만들지
         Func<Session> _sessionFactory;
          
+       
         // 초기화
         public void Init(IPEndPoint endPoint, Func<Session> sessionFactory,  int backlog = 100)
         {
