@@ -11,9 +11,9 @@ namespace DBLogin
             Database db = new();
             IInformation information;
 
-            information = db.GetProfessor("test");
+            //information = db.GetProfessor("test");
 
-            information.Print();
+            //information.Print();
 
             //db.insert("stu", "'test0', 'test0', 'badman', '201507000'");
             //db.update("stu", "id = 'test5'", "stu_no = '201507000'");

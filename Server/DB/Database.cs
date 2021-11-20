@@ -15,7 +15,7 @@ namespace Server
         private const int SCHEDULE = 2;
 
 
-        private static string dbIp = "222.239.64.185";
+        private static string dbIp = "localhost";
         private static string dbName = "deskDB";
         private static string dbId = "C##capstone_admin";
         private static string dbPw = "yuhanunivcapstone1212";

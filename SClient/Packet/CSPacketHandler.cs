@@ -48,7 +48,7 @@ class PacketHandler
         }     
         public static void SS_QResultHandler(PacketSession session, IPacket packet)
         {
-
+            
         }     
         public static void SS_AtdRequestHandler(PacketSession session, IPacket packet)
         {
