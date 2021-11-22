@@ -24,18 +24,7 @@ namespace Server
         /// 객체의 아이디
         /// </summary>
         public string ID { get; set; }
-        /// <summary>
-        /// 학생이면 현재 수업받는 교수의 아이디, 교수라면 본인의 아이디
-        /// </summary>
-        public string Host { get; set; }
-        /// <summary>
-        /// 학생인지 교수인지 구분 0이면 교수, 0제외 학생, 다른
-        /// </summary>
-        public int Flag {get; set;}
-        /// <summary>
-        /// 현재 수업중인 과목
-        /// </summary>
-        public string LectureCode { get; set; }
+
         public ClassRoom Room { get; set; }
         public SessionManager _sessionManager = Program.sessionManager;
         public override void OnConnected(EndPoint endPoint)
@@ -43,7 +32,7 @@ namespace Server
             Console.WriteLine($"OnConnected : {endPoint}");
 
             // 서버에 접속했을때
-            Program.Room.Push(() => Program.Room.Enter(this));
+            //Program.Room.Push(() => Program.Room.Enter(this));
 
         }
 

@@ -16,7 +16,7 @@ namespace Server
         /// <summary>
         /// 교수가 아직 접속 안했을때 대기하는 큐
         /// </summary>        
-        Queue<string> waitingQueue = new Queue<string>();       
+        Queue<ClientSession> waitingQueue = new Queue<ClientSession>();       
         /// <summary>
         /// 서버에 접속한 전체 유저 딕셔너리
         /// </summary>
@@ -53,6 +53,12 @@ namespace Server
 
             }
         }
+        /// <summary>
+        /// 교수의 로그인 요청
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="id"></param>
+        /// <param name="pwd"></param>
         public void P_Login(ClientSession session, string id, string pwd)
         {
             int _return = 1;
@@ -76,9 +82,50 @@ namespace Server
                         _loginSessions.Add(id, session);
                         // 새로운 방 생성
                         ClassRoom room = new ClassRoom();
-                        Lecture lecture = new Lecture();
-                        db.GetLectureExistProfessorTime(id, DateTime.Now.ToString("HHmm"));
+                        // 교수 로그인 성공 패킷 전체 수업정보, 
+                        SP_LoginResult pkt = new SP_LoginResult();
+                        // 교수의 모든 수업 리스트 가져오기                                                   
+                        List<Lecture> _lecture = db.GetLectureExistProfessor(id);
+                        // 리스트 객체에 넣기위한 빈 Lecture객체
+                        SP_LoginResult.Lecture sp_lc = new SP_LoginResult.Lecture();
+                        // result에 있는 수업번호로 수업정보 가져와서 리스트 객체에 넣어줌
 
+                        foreach (Lecture lc in _lecture)
+                        {                            
+                            List<Student> studentList = db.GetStudentsExistLecture(lc.lecture_code);
+                            foreach(Student studentInfo in studentList)
+                            {
+                                SP_LoginResult.Student stu = new SP_LoginResult.Student();
+                                stu.studentId = studentInfo.Id;
+                                stu.studentName = studentInfo.Name;
+                                stu.lectureCode = lc.lecture_code;
+                                pkt.students.Add(stu);
+                            }
+                            sp_lc.lecture_code = lc.lecture_code;
+                            sp_lc.professor_id = lc.professor_id;
+                            sp_lc.lecture_name = lc.lecture_name;
+                            sp_lc.credit = lc.credit;
+                            sp_lc.weekday = lc.week_day;
+                            sp_lc.strat_time = lc.start_time;
+                            sp_lc.end_time = lc.end_time;
+                            pkt.lectures.Add(sp_lc);
+                        }
+                        room.CreateClassRoom(session);
+
+                        // 대기 큐에서 검사해서 가져올 것
+                        foreach (ClientSession cSession in waitingQueue)
+                        {
+                            Lecture lecture = new Lecture();
+                            Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), cSession.ID);
+                            lecture = db.GetLecture(schedule.LectureCode);
+                            if(lecture.professor_id == session.ID)
+                            {
+                                room.Enter(cSession);
+                            }
+                        }
+
+                        // 패킷 돌려주기
+                        session.Send(pkt.Write());
                     }
                 }
                 // 비밀번호 불일치
@@ -98,7 +145,64 @@ namespace Server
             }
         }
 
+        public void S_Login(ClientSession session, string id, string pwd)
+        {
+            int _return = 1;
+            lock (_lock)
+            {
+                _return = (ushort)db.LoginReturn(id, pwd, 0);
+                // 리턴 값 확인( 0 = 성공, 1 = 비밀번호 불일치, 2 = 아이디 존재하지않음, 3 = 다른 곳에서 로그인된 유저가 있습니다.)
+                if (_return == 0)
+                {
+                    // 이미 로그인 된 유저가 있으면
+                    if (_loginSessions.TryGetValue(id, out ClientSession s))
+                    {
+                        SS_LoginFailed lgFail_packet = new SS_LoginFailed();
+                        lgFail_packet.result = 3;
+                        //  패킷 전송
+                        session.Send(lgFail_packet.Write());
+                        return;
+                    }
+                    else
+                    {
+                        _loginSessions.Add(id, session);
+                        Lecture lecture = new Lecture();
+                        Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), session.ID);
+                        lecture = db.GetLecture(schedule.LectureCode);
+                        if (_classRoom.TryGetValue(lecture.professor_id, out ClassRoom room))
+                        {
+                            room.Enter(session);
+                        }
+                        else
+                        {
+                            waitingQueue.Enqueue(session);
+                        }
 
+                        SS_LoginResult pkt = new SS_LoginResult();
+                        List<IInformation> lectures = db.GetScheduleList(session.ID);
+                        foreach(Lecture l in lectures)
+                        {
+                            SS_LoginResult.Lecture lectureResult = new SS_LoginResult.Lecture();
+                            lectureResult.credit = l.credit;
+                            lectureResult.end_time = l.end_time;
+                            lectureResult.lecture_code = l.lecture_code;
+                            lectureResult.lecture_name = l.lecture_name;
+                            lectureResult.professor_id = l.professor_id;
+                            lectureResult.weekday = l.week_day;
+                            lectureResult.strat_time = l.start_time;
+                            pkt.lectures.Add(lectureResult);
+                        }
+                        session.Send(pkt.Write());
+                    }
+                }
+
+            }
+        }
+
+        public void P_Logout(ClientSession session)
+        {
+
+        }
         /// <summary>
         /// 
         /// </summary>

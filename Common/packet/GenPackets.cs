@@ -1030,7 +1030,7 @@ class SP_LoginResult : IPacket
 	{
 	   public string studentId;
 		public string studentName;
-		public bool state;
+		public string lectureCode;
 	
 	    // 데이터 읽어오는 부분
 	    public void Read(ArraySegment<byte> segment, ref int count)
@@ -1043,8 +1043,10 @@ class SP_LoginResult : IPacket
 			count += sizeof(ushort);
 			this.studentName = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, studentNameLen);
 			count += studentNameLen;
-			this.state = BitConverter.ToBoolean(segment.Array, segment.Offset + count);
-			count += sizeof(bool);
+			ushort lectureCodeLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+			count += sizeof(ushort);
+			this.lectureCode = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, lectureCodeLen);
+			count += lectureCodeLen;
 	    }
 	
 	    // 데이터 쓰는 부분
@@ -1059,8 +1061,10 @@ class SP_LoginResult : IPacket
 			Array.Copy(BitConverter.GetBytes(studentNameLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 			count += sizeof(ushort);
 			count += studentNameLen;
-			Array.Copy(BitConverter.GetBytes(state), 0, segment.Array, segment.Offset + count, sizeof(bool));
-			count += sizeof(bool);
+			ushort lectureCodeLen = (ushort)Encoding.Unicode.GetBytes(this.lectureCode, 0, this.lectureCode.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+			Array.Copy(BitConverter.GetBytes(lectureCodeLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+			count += sizeof(ushort);
+			count += lectureCodeLen;
 	        return success;
 	    }
 	
