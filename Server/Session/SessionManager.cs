@@ -429,7 +429,11 @@ namespace Server
                 }
             }           
         }
-
+        /// <summary>
+        /// 학생의 출석 요청
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="packet"></param>
         public void AtdResult(ClientSession session, CS_AtdCheck packet)
         {
             lock (_lock)
