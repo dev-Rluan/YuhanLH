@@ -28,10 +28,7 @@ namespace SClient
 
         private void SClientForm_Load(object sender, EventArgs e)
         {
-            String host = Dns.GetHostName();
-            IPHostEntry ipHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = ipHost.AddressList[0];
-            IPAddress ip = IPAddress.Parse("49.170.231.107");
+            IPAddress ip = IPAddress.Parse("49.247.149.125");
             IPEndPoint endPoint = new IPEndPoint(ip, 7777);
             Connector connector = new Connector();
             connector.Connect(endPoint, () => { return sessionManager.Generate(); });

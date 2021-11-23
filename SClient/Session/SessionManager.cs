@@ -23,8 +23,6 @@ namespace SClient
                     loging_packet.pwd = "test03401";
                     ArraySegment<byte> segment = loging_packet.Write();
                     _sessions.Send(segment);
-                
-             
             }
 
         }
@@ -33,14 +31,9 @@ namespace SClient
             lock (_lock)
             {
                 CS_ScreenResult Img_packet = new CS_ScreenResult();
-
                 Img_packet.studentId = "test";
-
                 Img_packet.img = img;
-                ArraySegment<byte> segment = Img_packet.Write();
-                _sessions.Send(segment);
-
-              
+                _sessions.Send(Img_packet.Write());              
             }
         }
 
