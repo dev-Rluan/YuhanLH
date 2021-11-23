@@ -4,7 +4,6 @@ using System.Net;
 using System.Text;
 using PClient;
 
-
 public enum PacketID
 {
     CP_Login = 1,

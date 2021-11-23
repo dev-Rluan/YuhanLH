@@ -9,9 +9,19 @@ using System.Threading;
 
 namespace Server
 {
-	class ClientSession : PacketSession
-    {   
+    class ClientSession : PacketSession
+    {
+        /// <summary>
+        /// 객체를 구분하는 번호
+        /// </summary>
         public int SessionId { get; set; }
+        /// <summary>
+        /// 이름
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 객체의 아이디
+        /// </summary>
         public string ID { get; set; }
         public string Host { get; set; }
         public ClassRoom Room { get; set; }
