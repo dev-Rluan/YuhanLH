@@ -17,9 +17,15 @@ namespace Server
         /// 전체 클라이언트 정보
         /// </summary>
         List<ClientSession> _sessions = new List<ClientSession>();
+        /// <summary>
+        /// 교수 클라이언트
+        /// </summary>
+        ClientSession ProfessorClient;
+        /// <summary>
+        /// 교수 아이디
+        /// </summary>
         public string Host { get; set; }
         JobQueue _jobQueue = new JobQueue();
-        List<ArraySegment<byte>> _pendingList = new List<ArraySegment<byte>>();
         
         /// <summary>
         /// 순차적으로 실행
@@ -30,15 +36,6 @@ namespace Server
             _jobQueue.Push(job);
         }
 
-      /*  public void Flush()
-        {
-            // N ^ 2
-            foreach (ClientSession s in _sessions)
-                s.Send(_pendingList);
-
-            //Console.WriteLine($"Flushed {_pendingList.Count} items");
-            _pendingList.Clear();
-        }*/
 
         /// <summary>
         /// 수업코드 반환
@@ -55,16 +52,31 @@ namespace Server
         public void CreateClassRoom(ClientSession session)
         {
             Host = session.ID;
+            ProfessorClient = session;
+;        }
+        public void ShowStudentList()
+        {
+            SP_StudentInfo pkt = new SP_StudentInfo();
+            SP_StudentInfo.Student students = new SP_StudentInfo.Student();
+            foreach(ClientSession s in _sessions)
+            {
+
+            }
         }
+
 
         /// <summary>
-        /// 교수자가 방을 나갔거나, 접속을 종료하였을때 호출됩니다.
+        /// 교수자가 수업를 종료 하였을때 호출 됩니다. 학생 리스트 삭제
         /// </summary>
-        public void ClearRoom()
-        {
-
+        public void ClearRoom(ClientSession session)
+        {            
+            BroadCast_EndClass();
         }
 
+        public List<ClientSession> GetStudentList()
+        {
+            return _sessions;
+        }
         /// <summary>
         /// 학생리스트로 스크린 샷 요청
         /// </summary>
@@ -85,26 +97,11 @@ namespace Server
             }
         }
         
-        public void Quiz_OX(CP_QuizOX packet)
-        {
-            SS_QuizOX pkt = new SS_QuizOX();
-            pkt.quiz = packet.quiz;
-            foreach (ClientSession s in _sessions)
-            {
-                foreach (CP_QuizOX.Student s2 in packet.students)
-                {
-                    if (s.ID == s2.studentId)
-                    {
-                        s.Send(pkt.Write());
-                    }
-                }
-            }
-        }
         /// <summary>
-        /// 퀴즈정보를 리스트에 있는 학생들에게 뿌려주는 패킷
+        /// 퀴즈 보내기
         /// </summary>
         /// <param name="packet"></param>
-        public void Quiz(CP_Quiz packet)
+        public void Quiz_Request( CP_Quiz packet)
         {
             SS_Quiz pkt = new SS_Quiz();
             pkt.quiz = packet.quiz;
@@ -120,6 +117,27 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// OX 퀴즈보내기
+        /// </summary>
+        /// <param name="packet"></param>
+        public void QuizOX_Request(CP_QuizOX packet)
+        {
+            SS_QuizOX pkt = new SS_QuizOX();
+            pkt.quiz = packet.quiz;
+            foreach (ClientSession s in _sessions)
+            {
+                foreach (CP_QuizOX.Student s2 in packet.students)
+                {
+                    if (s.ID == s2.studentId)
+                    {
+                        s.Send(pkt.Write());
+                    }
+                }
+            }
+        }
+
+      
         public void Send_Of_One(string id)
         {
             foreach(ClientSession s in _sessions)
@@ -131,12 +149,15 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// 수업종료를 학생들에게 알려주고 룸에서 비워준다.
+        /// </summary>
         public void BroadCast_EndClass()
         {
-            SS_EndClass pkt = new SS_EndClass();
+            SS_EndOfClass pkt = new SS_EndOfClass();
             foreach (ClientSession s in _sessions)
             {
-                if (s.ID != _lecture.professor_id)
+                if (s.ID != Host)
                 {
                     s.Send(pkt.Write());
                     s.Room = null;
@@ -157,27 +178,10 @@ namespace Server
             SP_ScreenResult sp_screenPacket = new SP_ScreenResult();
             sp_screenPacket.studentId = id;
             sp_screenPacket.img = img;
-            ArraySegment<byte> segment = sp_screenPacket.Write();
-            _pendingList.Add(segment);
-
-            // 현재 수업의 교수를 찾아서 이미지 보내기
-            foreach (ClientSession s in _sessions)
-            {
-                if(_lecture.professor_id == null)
-                {
-                    return;
-                }
-                if (s.ID == _lecture.professor_id)
-                    s.Send(segment);
-            }               
+            ProfessorClient.Send(sp_screenPacket.Write());         
             Console.WriteLine("이미지전송");  
-
         } 
-
-        public void CreateRoom(Lecture lecture)
-        {
-            _lecture = lecture;
-        }
+   
 
         public void Enter(ClientSession session)
         {
@@ -191,10 +195,10 @@ namespace Server
         /// <param name="session"></param>
         public void Leave(ClientSession session)
         {
-           
             _sessions.Remove(session);
         }
-
+        
+       
         
     }
 }

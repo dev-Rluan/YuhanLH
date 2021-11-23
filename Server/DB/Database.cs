@@ -28,18 +28,18 @@ namespace Server
 
         public Database()
         {
-            string strConn = string.Format($"Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={dbIp})(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME={dbName})));User ID={dbId};Password={dbPw};Connection Timeout=30;");
-            conn = new OracleConnection(strConn);
-            try
-            {
-                conn.Open();
-                Console.WriteLine("db연결됨");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                return;
-            }
+            //string strConn = string.Format($"Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={dbIp})(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME={dbName})));User ID={dbId};Password={dbPw};Connection Timeout=30;");
+            //conn = new OracleConnection(strConn);
+            //try
+            //{
+            //    conn.Open();
+            //    Console.WriteLine("db연결됨");
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //    return;
+            //}
         }
 
         ~Database()

@@ -45,8 +45,12 @@ class PacketHandler
         public static void SS_LoginResultHandler(PacketSession session, IPacket packet)
         {
 
-        }     
-        public static void SS_QResultHandler(PacketSession session, IPacket packet)
+        }
+    public static void SS_EnterRoomHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void SS_QResultHandler(PacketSession session, IPacket packet)
         {
             
         }     
@@ -74,7 +78,7 @@ class PacketHandler
     {
 
     }
-    public static void SS_EndClassHandler(PacketSession session, IPacket packet)
+    public static void SS_EndOfClassHandler(PacketSession session, IPacket packet)
     {
 
     }

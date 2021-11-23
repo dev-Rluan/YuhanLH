@@ -39,6 +39,8 @@
 	<!--학생 리스트 최신화 요청-->
 	<packet name ="CP_StudentList">
 	</packet>
+	<packet name ="CP_EndOfClass">
+	</packet>
 	
 
 	<!-- CS_ = 학생클라이언트에서 보내는 패킷 -->
@@ -201,7 +203,7 @@
   <packet name ="SS_ImgSendFaild">
   </packet>
 	<!--수업 종료-->
-	<packet name ="SS_EndClass">    
+	<packet name ="SS_EndOfClass">    
   </packet>
 </PDL>
 

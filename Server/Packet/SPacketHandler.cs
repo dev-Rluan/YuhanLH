@@ -2,7 +2,6 @@ using Server;
 using System;
 class PacketHandler
 {
-
     public static void CP_LoginHandler(PacketSession session, IPacket packet)
     {
         CP_Login pc_loginPacket = packet as CP_Login;
@@ -42,8 +41,12 @@ class PacketHandler
         CP_ScreenRequest pkt = packet as CP_ScreenRequest;
         ClientSession clientSession = session as ClientSession;
 
-        ClassRoom room = clientSession.Room;
-        room.Push(() => room.Img_Request(clientSession, pkt));
+        Program.sessionManager.ScreenRequest(clientSession, pkt);
+
+    }
+    public static void CP_EndOfClassHandler(PacketSession session, IPacket packet)
+    {
+      
 
     }
 
@@ -51,16 +54,14 @@ class PacketHandler
     {
         CP_QuizOX pkt = packet as CP_QuizOX;
         ClientSession clientSession = session as ClientSession;
-        ClassRoom room = clientSession.Room;
-        room.Push(() => room.Quiz_OX(pkt));
+        Program.sessionManager.QuizOXRequest(clientSession, pkt);
     }
      
     public static void CP_QuizHandler(PacketSession session, IPacket packet)
     {
         CP_Quiz pkt = packet as CP_Quiz;
         ClientSession clientSession = session as ClientSession;
-        ClassRoom room = clientSession.Room;
-        room.Push(() => room.Quiz(pkt));
+        Program.sessionManager.QuizRequest(clientSession, pkt);
     }
      
     public static void CP_QResultHandler(PacketSession session, IPacket packet)
@@ -75,6 +76,7 @@ class PacketHandler
      
     public static void CP_StudentListHandler(PacketSession session, IPacket packet)
     {
+        ClientSession clientSession = session as ClientSession;
 
     }
 

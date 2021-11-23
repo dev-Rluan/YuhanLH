@@ -8,8 +8,7 @@
     ".NETCoreApp,Version=v5.0": {
       "Server/1.0.0": {
         "dependencies": {
-          "Oracle.ManagedDataAccess.Core": "3.21.4",
-          "ServerCore": "1.0.0"
+          "Oracle.ManagedDataAccess.Core": "3.21.4"
         },
         "runtime": {
           "Server.dll": {}
@@ -227,11 +226,6 @@
             "fileVersion": "5.0.20.51904"
           }
         }
-      },
-      "ServerCore/1.0.0": {
-        "runtime": {
-          "ServerCore.dll": {}
-        }
       }
     }
   },
@@ -345,11 +339,6 @@
       "sha512": "sha512-c1ho9WU9ZxMZawML+ssPKZfdnrg/OjR3pe0m9v8230z3acqphwvPJqzAkH54xRYm5ntZHGG1EPP3sux9H3qSPg==",
       "path": "system.windows.extensions/5.0.0",
       "hashPath": "system.windows.extensions.5.0.0.nupkg.sha512"
-    },
-    "ServerCore/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
     }
   }
 }
