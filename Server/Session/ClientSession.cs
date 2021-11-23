@@ -9,7 +9,6 @@ using System.Threading;
 
 namespace Server
 {
-
     class ClientSession : PacketSession
     {
         /// <summary>
@@ -24,7 +23,7 @@ namespace Server
         /// 객체의 아이디
         /// </summary>
         public string ID { get; set; }
-
+        public string Host { get; set; }
         public ClassRoom Room { get; set; }
         public SessionManager _sessionManager = Program.sessionManager;
         public override void OnConnected(EndPoint endPoint)

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class PacketManager
 {
     
+
     public PacketManager()
     {
         Register();
@@ -44,6 +45,9 @@ public class PacketManager
   
         _onRecv.Add((ushort)PacketID.CS_Quiz, MakePacket<CS_Quiz>);
         _handler.Add((ushort)PacketID.CS_Quiz, PacketHandler.CS_QuizHandler);
+  
+        _onRecv.Add((ushort)PacketID.CS_QuizOX, MakePacket<CS_QuizOX>);
+        _handler.Add((ushort)PacketID.CS_QuizOX, PacketHandler.CS_QuizOXHandler);
   
         _onRecv.Add((ushort)PacketID.CS_ScreenResult, MakePacket<CS_ScreenResult>);
         _handler.Add((ushort)PacketID.CS_ScreenResult, PacketHandler.CS_ScreenResultHandler);

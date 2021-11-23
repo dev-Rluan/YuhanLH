@@ -90,7 +90,39 @@ class PacketHandler
             PClientForm.pclientform.ptBox.Image = bmp;
         }
     }
-        public static void SP_EndClassHandler(PacketSession session, IPacket packet)
+    public static void SP_QustionTextHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void SP_QustionImgHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void SP_QustionHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void SP_QuizResultHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void SP_EndClassHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void SP_QuizOXResultHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void SP_AddStudentHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void SP_LeaveStudentHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void SP_AddAtdHandler(PacketSession session, IPacket packet)
         {
 
         }

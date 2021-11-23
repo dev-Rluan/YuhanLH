@@ -54,16 +54,54 @@ namespace Server
             Host = session.ID;
             ProfessorClient = session;
 ;        }
+        /// <summary>
+        /// 전체 접속중인 학생 리스트 보내기
+        /// </summary>
         public void ShowStudentList()
         {
             SP_StudentInfo pkt = new SP_StudentInfo();
-            SP_StudentInfo.Student students = new SP_StudentInfo.Student();
+            SP_StudentInfo.Student student = new SP_StudentInfo.Student();
             foreach(ClientSession s in _sessions)
             {
-
+                student.studentId = s.ID;
+                pkt.students.Add(student);
+            }
+            ProfessorClient.Send(pkt.Write());
+        }
+        /// <summary>
+        /// 교수의 답변 보내기
+        /// </summary>
+        /// <param name="packet"></param>
+        public void QResult(CP_QResult packet)
+        {
+            SS_QResult pkt = new SS_QResult();
+            pkt.result = packet.result;
+            ForStudent(packet.studentId, pkt.Write());
+        }
+        /// <summary>
+        /// 학생 한명에게 패킷 보내기
+        /// </summary>
+        /// <param name="studentID"></param>
+        /// <param name="buffer"></param>
+        public void ForStudent(string studentID, ArraySegment<byte> buffer)
+        {
+            foreach(ClientSession s in _sessions)
+            {
+                if(s.ID == studentID)
+                {
+                    s.Send(buffer);
+                }
             }
         }
 
+        public void AtdResult(ClientSession session, CS_AtdCheck packet)
+        {
+            SP_AddAtd pkt = new SP_AddAtd();
+            pkt.studentId = session.ID;
+            pkt.classTime = packet.classTime;
+            pkt.attr = packet.Attr;
+            ProfessorClient.Send(pkt.Write());
+        }
 
         /// <summary>
         /// 교수자가 수업를 종료 하였을때 호출 됩니다. 학생 리스트 삭제
@@ -136,18 +174,53 @@ namespace Server
                 }
             }
         }
-
-      
-        public void Send_Of_One(string id)
+        /// <summary>
+        /// 퀴즈 답변 보내기
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="packet"></param>
+        public void Quiz_Result(ClientSession session, CS_Quiz packet)
         {
-            foreach(ClientSession s in _sessions)
-            {
-                if(s.ID == id)
-                {
-
-                }
-            }
+            SP_QuizResult pkt = new SP_QuizResult();
+            pkt.studentId = session.ID;
+            pkt.result = packet.result;
+            ProfessorClient.Send(pkt.Write());
         }
+        /// <summary>
+        /// OX 퀴즈 답변 보내기
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="packet"></param>
+        public void QuizOX_Result(ClientSession session, CS_QuizOX packet)
+        {
+            SP_QuizOXResult pkt = new SP_QuizOXResult();
+            pkt.studentId = session.ID;
+            pkt.result = packet.result;
+            ProfessorClient.Send(pkt.Write());
+        }
+
+        public void QustionText(ClientSession session, CS_QustionText packet)
+        {
+            SP_QustionText pkt = new SP_QustionText();
+            pkt.qustion = packet.qustion;
+            pkt.studentId = session.ID;
+            ProfessorClient.Send(pkt.Write());            
+        }
+        public void QustionImg(ClientSession session, CS_QustionImg packet)
+        {
+            SP_QustionImg pkt = new SP_QustionImg();
+            pkt.studentId = session.ID;
+            ProfessorClient.Send(pkt.Write());
+        }
+        public void Qustion(ClientSession session, CS_Qustion packet)
+        {
+            SP_Qustion pkt = new SP_Qustion();
+            pkt.qustion = packet.qustion;
+            pkt.img = packet.img;
+            pkt.studentId = session.ID;
+            ProfessorClient.Send(pkt.Write());
+        }
+
 
         /// <summary>
         /// 수업종료를 학생들에게 알려주고 룸에서 비워준다.
@@ -160,7 +233,6 @@ namespace Server
                 if (s.ID != Host)
                 {
                     s.Send(pkt.Write());
-                    s.Room = null;
                     Leave(s);
                 }
             }
@@ -183,12 +255,39 @@ namespace Server
         } 
    
 
+
         public void Enter(ClientSession session)
         {
             _sessions.Add(session);
-            session.Room = this;
+
+            SP_AddStudent pkt = new SP_AddStudent();
+            pkt.studentId = session.ID;
+            ProfessorClient.Send(pkt.Write());
+        }
+
+        public void AttRequest(CP_Atd packet)
+        {
+            SS_AtdRequest pkt = new SS_AtdRequest();
+            pkt.classTime = packet.classTime;            
+            BroadCast(pkt.Write());
         }
        
+        public void BroadCast(ArraySegment<byte> buffer)
+        {
+            foreach(ClientSession s in _sessions)
+            {
+                s.Send(buffer);
+            }
+        }
+
+        public void LeaveRoom(ClientSession session)
+        {
+            _sessions.Remove(session);
+            SP_LeaveStudent pkt = new SP_LeaveStudent();
+            pkt.studentId = session.ID;
+            ProfessorClient.Send(pkt.Write());
+        }
+
         /// <summary>
         ///  로그아웃
         /// </summary>
@@ -196,6 +295,7 @@ namespace Server
         public void Leave(ClientSession session)
         {
             _sessions.Remove(session);
+            
         }
         
        

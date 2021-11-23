@@ -34,7 +34,8 @@
 	</packet>
 	<!--출석 요청-->
 	<packet name ="CP_Atd">
-    <int name ="classTime"/>
+		<int name ="classTime"/>
+		<int name ="week"/>	
 	</packet>
 	<!--학생 리스트 최신화 요청-->
 	<packet name ="CP_StudentList">
@@ -52,6 +53,9 @@
 	<!--퀴즈 답변-->
 	<packet name = "CS_Quiz">
 		<string name ="result"/>
+	</packet>
+	<packet name = "CS_QuizOX">
+		<bool name ="result"/>
 	</packet>
 	<!--스크린샷 요청에 대한 결과-->
 	<packet name = "CS_ScreenResult">    
@@ -73,6 +77,9 @@
 	</packet>
 	<!--출석 체크-->
 	<packet name = "CS_AtdCheck">
+		<int name ="classTime"/>
+		<int name ="week"/>
+		<int name ="Attr"/>
 	</packet>
 
 
@@ -109,7 +116,6 @@
 	<packet name = "SP_StudentInfo">
 		<list name ="student">
 			<string name ="studentId"/>
-			<bool name ="state"/>
 		</list>
 	</packet>
 	<!--학생 스크린샷 반환-->
@@ -118,35 +124,45 @@
 		<bytes name ="img"/>
 	</packet>
 	<!--학생질문 (텍스트)-->
-	<pakcet name ="SP_QustionText">
+	<packet name ="SP_QustionText">
+		<string name="studentId"/>
 		<string name ="qustion"/>
-	</pakcet>
+	</packet>
 	<!--학생질문 (이미지)-->
-	<pakcet name ="SP_QustionImg">
+	<packet name ="SP_QustionImg">
+		<string name="studentId"/>
 		<bytes name ="img"/>
-	</pakcet>
+	</packet>
 	<!--학생질문 (텍스트와 이미지)-->
-	<pakcet name ="SP_Qustion">
+	<packet name ="SP_Qustion">
+		<string name="studentId"/>
 		<string name ="qustion"/>
 		<bytes name ="img"/>
-	</pakcet>
+	</packet>
 	<!--퀴즈에대한 학생의 답-->
-	<pakcet name ="SP_QuizResult">
+	<packet name ="SP_QuizResult">
 		<string name ="studentId"/>
 		<string name ="result"/>
-	</pakcet>
+	</packet>
+	<!--OX퀴즈에대한 학생의 답-->
+	<packet name ="SP_QuizOXResult">
+		<string name ="studentId"/>
+		<bool name ="result"/>
+	</packet>
 	<!--학생 접속-->
-	<pakcet name ="SP_AddStudent">
+	<packet name ="SP_AddStudent">
 		<string name ="studentId"/>
-	</pakcet>
+	</packet>
 	<!--학생 나감-->
-	<pakcet name ="SP_LeaveStudent">
+	<packet name ="SP_LeaveStudent">
 		<string name ="studentId"/>
-	</pakcet>
+	</packet>
 	<!--출석 체크 요청-->
-	<pakcet name ="SP_AddAtd">
-    <int name ="classTime"/>
-	</pakcet>
+	<packet name ="SP_AddAtd">
+		<string name ="studentId"/>
+		<int name ="classTime"/>
+		<int name ="attr"/>
+	</packet>
   <!--수업 종료-->
     <packet name ="SP_EndClass">
     </packet>
@@ -205,6 +221,8 @@
 	<!--수업 종료-->
 	<packet name ="SS_EndOfClass">    
   </packet>
+
+
 </PDL>
 
 
