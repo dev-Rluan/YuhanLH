@@ -200,7 +200,6 @@ namespace Server
                         session.Send(pkt.Write());
                     }
                 }
-
             }
         }
         /// <summary>
