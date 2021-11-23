@@ -5,9 +5,9 @@ using System.Windows.Forms;
 
 class PacketHandler
 {
-
-    public static void SP_ResultHandler(PacketSession session, IPacket packet)
-    {
+         
+        public static void SP_ResultHandler(PacketSession session, IPacket packet)
+        {
         SP_Result result = packet as SP_Result;
         ServerSession serverSession = session as ServerSession;
         if (result.result == true)
@@ -38,33 +38,19 @@ class PacketHandler
                 PClientForm.pclientform.lbLogin.Text = "로그인 : Faild";
             }
         }
-    }
-    
-    public static void SP_LoginFailedHandler(PacketSession session, IPacket packet)
-    {
-
     }     
-    public static void SP_LoginResultHandler(PacketSession session, IPacket packet)
-    {
-
-    }     
-    public static void SP_StudentInfoHandler(PacketSession session, IPacket packet)
-    {
-
-    }
-
-    public static void SP_ScreenResultHandler(PacketSession session, IPacket packet)
-    {
+        public static void SP_ScreenResultHandler(PacketSession session, IPacket packet)
+        {
         SP_ScreenResult sp_screenPacket = packet as SP_ScreenResult;
-        ServerSession serverSession = session as ServerSession;
+        ServerSession serverSession = session as ServerSession;        
         Bitmap bmp;
         bmp = ScreenCopy.GetBitmap(sp_screenPacket.img);
+        
 
-
-        PClientForm.pclientform.lbImg.Invoke((MethodInvoker)delegate
-        {
-            PClientForm.pclientform.lbImg.Text = "\n 성공";
-        });
+         PClientForm.pclientform.lbImg.Invoke((MethodInvoker)delegate
+         {
+             PClientForm.pclientform.lbImg.Text = "\n 성공";
+         });
         if (PClientForm.pclientform.txtBox.InvokeRequired == true)
         {
             PClientForm.pclientform.txtBox.Invoke((MethodInvoker)delegate
@@ -89,6 +75,20 @@ class PacketHandler
         {
             PClientForm.pclientform.ptBox.Image = bmp;
         }
+
+
+    }
+    public static void SP_LoginResultHandler(PacketSession session, IPacket packet)
+    {
+     
+    }
+    public static void SP_LoginFailedHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+    public static void SP_StudentInfoHandler(PacketSession session, IPacket packet)
+    {
+
     }
     public static void SP_QustionTextHandler(PacketSession session, IPacket packet)
     {
@@ -106,10 +106,6 @@ class PacketHandler
     {
 
     }
-    public static void SP_EndClassHandler(PacketSession session, IPacket packet)
-    {
-
-    }
     public static void SP_QuizOXResultHandler(PacketSession session, IPacket packet)
     {
 
@@ -123,9 +119,13 @@ class PacketHandler
 
     }
     public static void SP_AddAtdHandler(PacketSession session, IPacket packet)
-        {
+    {
 
-        }
-    
+    }
+    public static void SP_EndClassHandler(PacketSession session, IPacket packet)
+    {
+
+    }
+
 
 }

@@ -19,8 +19,8 @@ namespace SClient
             {
                 CS_Login loging_packet = new CS_Login();
                 
-                    loging_packet.id = "test01010";
-                    loging_packet.pwd = "test03401";
+                    loging_packet.id = "test";
+                    loging_packet.pwd = "1234";
                     ArraySegment<byte> segment = loging_packet.Write();
                     _sessions.Send(segment);
                 
