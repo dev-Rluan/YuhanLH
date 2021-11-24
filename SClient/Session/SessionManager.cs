@@ -15,14 +15,14 @@ namespace SClient
         {
             lock (_lock)
             {
-                CS_Login loging_packet = new CS_Login();
-                
-                    loging_packet.id = "test01010";
-                    loging_packet.pwd = "test03401";
-                    ArraySegment<byte> segment = loging_packet.Write();
-                    _sessions.Send(segment);
+                CS_Login loging_packet = new CS_Login();                
+                loging_packet.id = "tjdals0231";
+                loging_packet.pwd = "alfl02@!";
+                ArraySegment<byte> segment = loging_packet.Write();
+                _sessions.Send(segment);
             }
         }
+
         public void ImgSend(byte[] img )
         {
             lock (_lock)

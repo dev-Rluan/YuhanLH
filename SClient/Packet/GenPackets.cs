@@ -1187,15 +1187,12 @@ class SP_LoginResult : IPacket
 			count += lectureCodeLen;
 	        return success;
 	    }
-	
-	    
-	
 	}
 	public List<Student> students = new List<Student>();
 	
 	public class Lecture
 	{
-	   public string lecture_code;
+	    public string lecture_code;
 		public string professor_id;
 		public string lecture_name;
 		public int credit;

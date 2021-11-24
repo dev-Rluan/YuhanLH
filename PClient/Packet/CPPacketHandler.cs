@@ -59,6 +59,8 @@ class PacketHandler
     public static void SP_LoginResultHandler(PacketSession session, IPacket packet)
     {
         SP_LoginResult pkt = packet as SP_LoginResult;
+        ServerSession serverSession = session as ServerSession; 
+
 
         if (PClientForm.pclientform.lbLogin.InvokeRequired == true)
         {
@@ -72,10 +74,41 @@ class PacketHandler
             PClientForm.pclientform.lbLogin.Text = "·Î±×ÀÎ : success";
         }
 
+        foreach (SP_LoginResult.Student s in pkt.students)
+        {
+            if (PClientForm.pclientform.lbLogin.InvokeRequired == true)
+            {
+                PClientForm.pclientform.lbLogin.Invoke((MethodInvoker)delegate
+                {
+                    PClientForm.pclientform.txtBox.Text += s.studentId + ", " + s.studentName + " ";
+                });
+            }
+            else
+            {
+                PClientForm.pclientform.txtBox.Text += s.studentId + ", " + s.studentName + " ";
+            }
+        }
+        CP_StudentList student_pkt = new CP_StudentList();
+        serverSession.Send(student_pkt.Write());
+
     }
     public static void SP_StudentInfoHandler(PacketSession session, IPacket packet)
     {
-
+        SP_StudentInfo pkt = packet as SP_StudentInfo;
+        foreach (SP_StudentInfo.Student s in pkt.students)
+        {
+            if (PClientForm.pclientform.lbLogin.InvokeRequired == true)
+            {
+                PClientForm.pclientform.lbLogin.Invoke((MethodInvoker)delegate
+                {
+                    PClientForm.pclientform.txtBox.Text += s.studentId + ", " + s.studentId + " 0 ";
+                });
+            }
+            else
+            {
+                PClientForm.pclientform.txtBox.Text += s.studentId + ", " + s.studentId + " 0 ";
+            }
+        }
     }
 
     public static void SP_ScreenResultHandler(PacketSession session, IPacket packet)

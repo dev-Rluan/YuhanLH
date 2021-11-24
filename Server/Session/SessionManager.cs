@@ -115,7 +115,7 @@ namespace Server
                             foreach(Student studentInfo in studentList)
                             {
                                 SP_LoginResult.Student stu = new SP_LoginResult.Student();
-                                stu.studentId = studentInfo.Id;
+                                stu.studentId = studentInfo.StudentId;
                                 stu.studentName = studentInfo.Name;
                                 stu.lectureCode = lc.lecture_code;
                                 pkt.students.Add(stu);
@@ -197,8 +197,9 @@ namespace Server
                             session.Host = lecture.professor_id;
                             _loginSessions.Add(id, session);
                             // 현재 시간에 해당하는 교수가 접속해서 방을 만들었으면 (수정 요구
-                            if (_classRoom.TryGetValue(lecture.professor_id, out ClassRoom room))
+                            if (_classRoom.ContainsKey(lecture.professor_id))
                             {
+                                if(_classRoom.TryGetValue(lecture.professor_id, out ClassRoom room))
                                 // 방에 넣어주고
                                 room.Enter(session);
                             }
@@ -209,11 +210,16 @@ namespace Server
                                 Console.WriteLine(session.ID, session.Name);
                                 _waitingList.Add(session);
                             }
-                        }                      
-                       
+                        }  
 
                         SS_LoginResult pkt = new SS_LoginResult();
-                        List<IInformation> lectures = db.GetScheduleList(student.StudentId);
+                        List<IInformation> schedules = db.GetScheduleList(student.StudentId);
+                        List<Lecture> lectures = new List<Lecture>();
+                        foreach(Schedule scheduleL in schedules)
+                        {
+                            Lecture lec = db.GetLecture(scheduleL.LectureCode);
+                            lectures.Add(lec);
+                        }
                         foreach(Lecture l in lectures)
                         {
                             SS_LoginResult.Lecture lectureResult = new SS_LoginResult.Lecture();
@@ -252,6 +258,7 @@ namespace Server
                 LeaveRoom(session);
             }
         }
+
         /// <summary>
         /// 접속한 학생들 불러오기
         /// </summary>
@@ -261,8 +268,10 @@ namespace Server
             if(_classRoom.TryGetValue(session.ID, out ClassRoom room))
             {
                 room.Push(() => room.ShowStudentList());
+                Console.WriteLine("접속한 학생들 보내기 성공");
             }
         }
+        
 
         /// <summary>
         /// 학생의 로그아웃 요청
@@ -422,6 +431,7 @@ namespace Server
                 }
             }
         }
+
         /// <summary>
         /// 학생의 질문(Text)
         /// </summary>
@@ -708,11 +718,22 @@ namespace Server
             Console.WriteLine("StudentPush");
             for (int i = _waitingList.Count - 1; i >= 0; i--)
             {
-                Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), _waitingList[i].ID);
-                Lecture lecture = db.GetLecture(schedule.LectureCode);
-                if (_classRoom.ContainsKey(lecture.professor_id))
+                Student student = db.GetStudent(_waitingList[i].ID);
+                //Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
+                Schedule schedule = db.GetScheduleExistTime("1205", student.StudentId);
+                Console.WriteLine(schedule.LectureCode);
+                if (schedule == null)
                 {
-                    if (_classRoom.TryGetValue(lecture.professor_id, out ClassRoom room))
+                    return;
+                }
+                Lecture lecture = db.GetLecture(schedule.LectureCode);
+                Console.WriteLine(lecture.professor_id);
+                string professorID = db.GetProfessorID(lecture.professor_id);
+                Console.WriteLine(professorID);
+                if (_classRoom.ContainsKey(professorID))
+                {
+                    Console.WriteLine("교수 있음");
+                    if (_classRoom.TryGetValue(professorID, out ClassRoom room))
                     {
                         _waitingList[i].Host = lecture.professor_id;
                         room.Push(() => room.Enter(_waitingList[i]));

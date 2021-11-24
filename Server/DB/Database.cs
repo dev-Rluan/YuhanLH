@@ -359,6 +359,24 @@ namespace Server
 
             return professor;
         }
+        /// <summary>
+        /// 특정 교수의 아이디를 가져오는 함수입니다.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string GetProfessorID(string professor_id)
+        {
+            
+            string Id = null;
+
+            using (data = Select("id", "professor", $"professor_id = '{professor_id}'"))
+            {
+                DataRow[] row = data.Tables[0].Select();
+                Id = row[0].ItemArray[0].ToString();               
+            }
+
+            return Id;
+        }
 
         /// <summary>
         /// 특정 강의의 출석표를 생성합니다.
@@ -436,6 +454,8 @@ namespace Server
                                                                                         where Start_Time <= '{time}'
                                                                                         AND End_Time >= '{time}'
                                                                                         and Week_Day = '{getDay(DateTime.Now)}')"))
+            
+
             {
                 if (data.Tables[0].Rows.Count == 0)
                 {

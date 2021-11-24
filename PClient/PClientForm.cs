@@ -17,6 +17,9 @@ namespace PClient
         public static SessionManager sessionManager;
         public static PacketManager packetManager;
 
+
+       
+
         public PClientForm()
         {
             InitializeComponent();

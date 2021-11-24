@@ -60,15 +60,20 @@ namespace Server
         /// </summary>
         public void ShowStudentList()
         {
+            Database db = new Database();
             SP_StudentInfo pkt = new SP_StudentInfo();
             SP_StudentInfo.Student student = new SP_StudentInfo.Student();
             foreach(ClientSession s in _sessions)
             {
-                student.studentId = s.ID;
+
+                Student _student = db.GetStudent(s.ID);
+                student.studentId = _student.StudentId;
+                Console.WriteLine(student.studentId);
                 pkt.students.Add(student);
             }
             Console.WriteLine($"학생 리스트 {ProfessorClient.ID} 에게 보냄");
             ProfessorClient.Send(pkt.Write());
+            Console.WriteLine("2");
         }
         /// <summary>
         /// 교수의 답변 보내기
@@ -264,6 +269,7 @@ namespace Server
 
         public void Enter(ClientSession session)
         {
+            Console.WriteLine("학생 수업방 접속");
             _sessions.Add(session);
 
             SP_AddStudent pkt = new SP_AddStudent();
