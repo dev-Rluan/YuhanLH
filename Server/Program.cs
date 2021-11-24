@@ -57,7 +57,7 @@ namespace Server
                 String s = Console.ReadLine();
                 if (s == "getList")
                 {
-                    sessionManager.GetClassRoom();
+                    sessionManager.GetWatingList();
                 }
             }
 

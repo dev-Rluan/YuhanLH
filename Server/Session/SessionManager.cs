@@ -756,28 +756,41 @@ namespace Server
             // 본인의 아이디로된 방이 있으면 방안의 학생들 대기큐로 넘기고 룸 삭제
             if (_classRoom.ContainsKey(session.ID))
             {
-
-            }
-            if (_classRoom.TryGetValue(session.ID, out ClassRoom room))
-            {
-                _waitingList.AddRange(room.GetStudentList());
-
-                foreach (ClientSession s in _waitingList)
+                Console.WriteLine("방 아이디와 유저의 아이디가 같습니다. : 교수 접속 종료");
+                if (_classRoom.TryGetValue(session.ID, out ClassRoom room))
                 {
-                    s.Host = null;
-                }                
-                room.Push(()=>room.ClearRoom(session));
-                _classRoom.Remove(session.ID);
+                    Console.WriteLine("학생 리스트 watingList 로 넘기기");
+                    _waitingList.AddRange(room.GetStudentList());
+
+                    foreach (ClientSession s in _waitingList)
+                    {
+                        s.Host = null;
+                    }
+                    Console.WriteLine("학생들의 현재 수업중인 교수 이름 삭제");
+                    room.Push(() => room.ClearRoom(session));
+                    Console.WriteLine("학생들에 교수 수업 종료 패킷 보내주기");
+                    _classRoom.Remove(session.ID);
+                    Console.WriteLine("룸 삭제");
+                }           
             }
             else
             {
-                Console.WriteLine("1");
-                if (_classRoom.TryGetValue(session.Host, out ClassRoom room2))
+                Console.WriteLine("학생 접속 종료");
+                if(session.Host != null)
                 {
-                    room2.Push(() => room.LeaveRoom(session));
-                    Console.WriteLine("2");
-                }
-                Console.WriteLine("3");
+                    Console.WriteLine("학생이 접속한 방의 교수 : " + session.Host);
+                    if (_classRoom.ContainsKey(session.Host))
+                    {
+                        Console.WriteLine("학생이 접속한 방 있음");
+                        if (_classRoom.TryGetValue(session.Host, out ClassRoom room2))
+                        {
+                            room2.Push(() => room2.LeaveRoom(session));
+                            Console.WriteLine("방 나가기");
+                        }
+                    }
+                }           
+              
+                Console.WriteLine("학생 방 나가기 요청 끝");
             }
         }
 
