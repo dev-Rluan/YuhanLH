@@ -30,6 +30,13 @@ namespace Server
         /// </summary>
         Dictionary<string, ClassRoom> _classRoom = new Dictionary<string, ClassRoom>();      
         
+        public void GetWatingList()
+        {
+            foreach(ClientSession watingList in _waitingList)
+            {
+                Console.WriteLine($"WatingList : {watingList.ID}");
+            }
+        }
 
         object _lock = new object();
         /// <summary>
@@ -67,6 +74,7 @@ namespace Server
                 // 리턴 값 확인( 0 = 성공, 1 = 비밀번호 불일치, 2 = 아이디 존재하지않음, 3 = 다른 곳에서 로그인된 유저가 있습니다.)
                 if (_return == 0)
                 {
+                    Console.WriteLine("교수 아이디, 비밀번호 일치 : " + id);
                     // 이미 로그인 된 유저가 있으면
                     if (_loginSessions.TryGetValue(id, out ClientSession s))
                     {
@@ -79,9 +87,9 @@ namespace Server
                     else
                     {                       
                         _loginSessions.Add(id, session);                        
-                        if(_classRoom.TryGetValue(session.ID,out ClassRoom r))
+                        if(_classRoom.ContainsKey(id))
                         {
-                            _classRoom.Remove(session.ID);
+                            _classRoom.Remove(id);
                             SelectPullClass(session);
                         }
                         session.ID = id;
@@ -95,6 +103,8 @@ namespace Server
                         // 교수의 모든 수업 리스트 가져오기                          
                         Professor professor = db.GetProfessor(id);
                         List<Lecture> _lecture = db.GetLectureExistProfessor(professor.ProfessorId);
+
+                        Console.WriteLine("교수의 모든 수업 리스트 가져오기");
                         // 리스트 객체에 넣기위한 빈 Lecture객체
                         SP_LoginResult.Lecture sp_lc = new SP_LoginResult.Lecture();
                         // result에 있는 수업번호로 수업정보 가져와서 리스트 객체에 넣어줌
@@ -119,14 +129,16 @@ namespace Server
                             sp_lc.end_time = lc.end_time;
                             pkt.lectures.Add(sp_lc);
                         }                        
-                        SelectPushClass();      
+                        SelectPushClass();
                         // 패킷 돌려주기
+                        Console.WriteLine("교수에게 정보 보내주기");
                         session.Send(pkt.Write());
                     }
                 }
                 // 비밀번호 불일치
                 else if(_return == 1)
                 {
+                    Console.WriteLine("교수 로그인 시도 (비밀번호 불일치) : " + id);
                     SP_LoginFailed lgFail_packet = new SP_LoginFailed();
                     lgFail_packet.result = 1;
                     session.Send(lgFail_packet.Write());
@@ -134,6 +146,7 @@ namespace Server
                 // 아이디 없음
                 else if(_return == 2)
                 {
+                    Console.WriteLine("교수 로그인 시도 (아이디 불일치) : " + id);
                     SP_LoginFailed lgFail_packet = new SP_LoginFailed();
                     lgFail_packet.result = 2;
                     session.Send(lgFail_packet.Write());
@@ -168,6 +181,8 @@ namespace Server
                     {
                         Console.WriteLine("아이디 있음");
                         Student student = db.GetStudent(id);
+                        session.ID = id;
+                        session.Name = student.Name;
                         Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
                         if(schedule == null)
                         {
@@ -178,8 +193,7 @@ namespace Server
                         {
                             Console.WriteLine("현재 시간에 해당하는 수업 있음");
                             Lecture lecture = db.GetLecture(schedule.LectureCode);
-                            Console.WriteLine("lecture 검색 성공");
-                            session.ID = id;
+                            Console.WriteLine("lecture 검색 성공");                            
                             session.Host = lecture.professor_id;
                             _loginSessions.Add(id, session);
                             // 현재 시간에 해당하는 교수가 접속해서 방을 만들었으면 (수정 요구
@@ -190,7 +204,9 @@ namespace Server
                             }
                             else
                             {
+                                Console.WriteLine("현재 시간에 해당하는 교수 없음");
                                 // 없으면 대기 리스트에 넣어준다.
+                                Console.WriteLine(session.ID, session.Name);
                                 _waitingList.Add(session);
                             }
                         }                      
@@ -689,16 +705,20 @@ namespace Server
         /// </summary>
         public void SelectPushClass()
         {
+            Console.WriteLine("StudentPush");
             for (int i = _waitingList.Count - 1; i >= 0; i--)
             {
                 Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), _waitingList[i].ID);
                 Lecture lecture = db.GetLecture(schedule.LectureCode);
-                if (_classRoom.TryGetValue(lecture.professor_id, out ClassRoom room))
+                if (_classRoom.ContainsKey(lecture.professor_id))
                 {
-                    _waitingList[i].Host = lecture.professor_id;
-                    room.Push(() => room.Enter(_waitingList[i]));
-                    _waitingList.RemoveAt(i);
-                }
+                    if (_classRoom.TryGetValue(lecture.professor_id, out ClassRoom room))
+                    {
+                        _waitingList[i].Host = lecture.professor_id;
+                        room.Push(() => room.Enter(_waitingList[i]));
+                        _waitingList.RemoveAt(i);
+                    }
+                }              
             }
         }
         /// <summary>
@@ -734,6 +754,10 @@ namespace Server
         public void LeaveRoom(ClientSession session)
         {
             // 본인의 아이디로된 방이 있으면 방안의 학생들 대기큐로 넘기고 룸 삭제
+            if (_classRoom.ContainsKey(session.ID))
+            {
+
+            }
             if (_classRoom.TryGetValue(session.ID, out ClassRoom room))
             {
                 _waitingList.AddRange(room.GetStudentList());
@@ -765,22 +789,17 @@ namespace Server
         {
             lock (_lock)
             {
-                Console.WriteLine("-1");
                 if (session.ID != null)
                 {
                     LeaveRoom(session);
-                    Console.WriteLine("-2");
-                    if (_loginSessions.TryGetValue(session.ID, out ClientSession s))
+                    if (_loginSessions.ContainsKey(session.ID))
                     {
                         _loginSessions.Remove(session.ID);
-                        Console.WriteLine("-10");
+                        Console.WriteLine(session.ID + "로그아웃");
                     }
-                    Console.WriteLine("-3");
-                }
-                
-                Console.WriteLine("-4");
+                }                
                 _sessions.Remove(session.SessionId);
-                Console.WriteLine("-5");
+                Console.WriteLine(session.SessionId + "접속 종료");
             }
         }
 

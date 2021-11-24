@@ -16,8 +16,8 @@ namespace PClient
             {
                 CP_Login loging_packet = new CP_Login();
 
-                loging_packet.id = "Ptest";
-                loging_packet.pwd = "1234";
+                loging_packet.id = "test";
+                loging_packet.pwd = "test1234";
                 ArraySegment<byte> segment = loging_packet.Write();
                 _sessions.Send(segment);
 

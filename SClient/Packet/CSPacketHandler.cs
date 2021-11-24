@@ -39,13 +39,55 @@ class PacketHandler
         }
     }
     public static void SS_LoginFailedHandler(PacketSession session, IPacket packet)
+    {
+        SS_LoginFailed pkt = packet as SS_LoginFailed;
+        if (pkt.result == 1)
         {
-
-        }     
-        public static void SS_LoginResultHandler(PacketSession session, IPacket packet)
-        {
-
+            if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
+            {
+                SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
+                {
+                    SClientForm.sclientform.lbLogin.Text = "로그인 : 실패";
+                });
+            }
+            else
+            {
+                SClientForm.sclientform.lbLogin.Text = "로그인 : 실패";
+            }
         }
+        else
+        {
+            if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
+            {
+                SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
+                {
+                    SClientForm.sclientform.lbLogin.Text = "로그인 : 실패";
+                });
+            }
+            else
+            {
+                SClientForm.sclientform.lbLogin.Text = "로그인 : 실패";
+            }
+        }
+    }     
+    public static void SS_LoginResultHandler(PacketSession session, IPacket packet)
+    {
+        SS_LoginResult pkt = packet as SS_LoginResult;
+      
+            if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
+            {
+                SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
+                {
+                    SClientForm.sclientform.lbLogin.Text = "로그인 : success";
+                });
+            }
+            else
+            {
+                SClientForm.sclientform.lbLogin.Text = "로그인 : success";
+            }
+        
+        
+    }
     public static void SS_EnterRoomHandler(PacketSession session, IPacket packet)
     {
 

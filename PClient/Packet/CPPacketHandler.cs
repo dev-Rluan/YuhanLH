@@ -43,12 +43,36 @@ class PacketHandler
     public static void SP_LoginFailedHandler(PacketSession session, IPacket packet)
     {
         SP_LoginFailed pkt = packet as SP_LoginFailed;
-       
+        if (PClientForm.pclientform.lbLogin.InvokeRequired == true)
+        {
+            PClientForm.pclientform.lbLogin.Invoke((MethodInvoker)delegate
+            {
+                PClientForm.pclientform.lbLogin.Text = "로그인 : Fail";
+            });
+        }
+        else
+        {
+            PClientForm.pclientform.lbLogin.Text = "로그인 : Fail";
+        }
+
     }     
     public static void SP_LoginResultHandler(PacketSession session, IPacket packet)
     {
+        SP_LoginResult pkt = packet as SP_LoginResult;
 
-    }     
+        if (PClientForm.pclientform.lbLogin.InvokeRequired == true)
+        {
+            PClientForm.pclientform.lbLogin.Invoke((MethodInvoker)delegate
+            {
+                PClientForm.pclientform.lbLogin.Text = "로그인 : success";
+            });
+        }
+        else
+        {
+            PClientForm.pclientform.lbLogin.Text = "로그인 : success";
+        }
+
+    }
     public static void SP_StudentInfoHandler(PacketSession session, IPacket packet)
     {
 

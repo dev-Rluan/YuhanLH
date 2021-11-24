@@ -199,7 +199,6 @@ namespace Server
                     Console.WriteLine("ERROR : 데이터 베이스 연결이 실패했습니다.");
                 }
             }
-            Console.WriteLine("SELECT......");
             return null;
         }
 

@@ -53,6 +53,7 @@ namespace Server
         {
             Host = session.ID;
             ProfessorClient = session;
+            Console.WriteLine($"방생성 : {Host}");
 ;        }
         /// <summary>
         /// 전체 접속중인 학생 리스트 보내기
@@ -66,6 +67,7 @@ namespace Server
                 student.studentId = s.ID;
                 pkt.students.Add(student);
             }
+            Console.WriteLine($"학생 리스트 {ProfessorClient.ID} 에게 보냄");
             ProfessorClient.Send(pkt.Write());
         }
         /// <summary>

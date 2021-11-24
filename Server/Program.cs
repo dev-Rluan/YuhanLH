@@ -54,6 +54,11 @@ namespace Server
                 //}
                 //jobTimer.Flush();
 
+                String s = Console.ReadLine();
+                if (s == "getList")
+                {
+                    sessionManager.GetClassRoom();
+                }
             }
 
         }
