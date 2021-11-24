@@ -15,7 +15,7 @@ namespace Server
         private const int SCHEDULE = 2;
 
 
-        private static string dbIp = "localhost";
+        private static string dbIp = "10.102.0.14";
         private static string dbName = "deskDB";
         private static string dbId = "C##capstone_admin";
         private static string dbPw = "yuhanunivcapstone1212";
@@ -28,18 +28,18 @@ namespace Server
 
         public Database()
         {
-            //string strConn = string.Format($"Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={dbIp})(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME={dbName})));User ID={dbId};Password={dbPw};Connection Timeout=30;");
-            //conn = new OracleConnection(strConn);
-            //try
-            //{
-            //    conn.Open();
-            //    Console.WriteLine("db연결됨");
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e);
-            //    return;
-            //}
+            string strConn = string.Format($"Data Source=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(HOST={dbIp})(PORT=1521)))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME={dbName})));User ID={dbId};Password={dbPw};Connection Timeout=30;");
+            conn = new OracleConnection(strConn);
+            try
+            {
+                conn.Open();
+                Console.WriteLine("db연결됨");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return;
+            }
         }
 
         ~Database()
@@ -180,10 +180,18 @@ namespace Server
             {
                 if (IsOpen())
                 {
-                    using (adapter = new OracleDataAdapter(query, conn))
+                    try
                     {
-                        adapter.Fill(ds);
-                        return ds;
+                        using (adapter = new OracleDataAdapter(query, conn))
+                        {
+                            Console.WriteLine("SELECT......");
+                            adapter.Fill(ds);
+                            return ds;
+                        }
+                    }
+                    catch (Exception e )
+                    {
+                        Console.WriteLine(e.StackTrace);
                     }
                 }
                 else
@@ -191,6 +199,7 @@ namespace Server
                     Console.WriteLine("ERROR : 데이터 베이스 연결이 실패했습니다.");
                 }
             }
+            Console.WriteLine("SELECT......");
             return null;
         }
 
@@ -425,9 +434,15 @@ namespace Server
                                                                                     Lecture_Code = (
                                                                                         select Lecture_Code
                                                                                         from Lecture
-                                                                                        where Start_Time = '{time}'
+                                                                                        where Start_Time <= '{time}'
+                                                                                        AND End_Time >= '{time}'
                                                                                         and Week_Day = '{getDay(DateTime.Now)}')"))
             {
+                if (data.Tables[0].Rows.Count == 0)
+                {
+                    Console.WriteLine("없음");
+                    return null;
+                }
                 DataRow[] r = data.Tables[0].Select();
                 lecture_code = r[0].ItemArray[0].ToString();
                 lecture_name = r[0].ItemArray[1].ToString();

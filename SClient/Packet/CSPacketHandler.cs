@@ -58,10 +58,11 @@ class PacketHandler
         {
 
         }     
-        public static void SS_QuizOXHandler(PacketSession session, IPacket packet)
-        {
-
-        }     
+    public static void SS_QuizOXHandler(PacketSession session, IPacket packet)
+    {
+        SS_Quiz pkt = packet as SS_Quiz;
+        
+    }     
         public static void SS_QuizHandler(PacketSession session, IPacket packet)
         {
 

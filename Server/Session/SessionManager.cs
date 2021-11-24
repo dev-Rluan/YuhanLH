@@ -92,8 +92,9 @@ namespace Server
                         _classRoom.Add(session.ID, room);
                         // 교수 로그인 성공 패킷 전체 수업정보, 
                         SP_LoginResult pkt = new SP_LoginResult();
-                        // 교수의 모든 수업 리스트 가져오기                                                   
-                        List<Lecture> _lecture = db.GetLectureExistProfessor(id);
+                        // 교수의 모든 수업 리스트 가져오기                          
+                        Professor professor = db.GetProfessor(id);
+                        List<Lecture> _lecture = db.GetLectureExistProfessor(professor.ProfessorId);
                         // 리스트 객체에 넣기위한 빈 Lecture객체
                         SP_LoginResult.Lecture sp_lc = new SP_LoginResult.Lecture();
                         // result에 있는 수업번호로 수업정보 가져와서 리스트 객체에 넣어줌
@@ -150,7 +151,7 @@ namespace Server
             int _return = 1;
             lock (_lock)
             {
-                _return = (ushort)db.LoginReturn(id, pwd, 0);
+                _return = (ushort)db.LoginReturn(id, pwd, 1);
                 // 리턴 값 확인( 0 = 성공, 1 = 비밀번호 불일치, 2 = 아이디 존재하지않음, 3 = 다른 곳에서 로그인된 유저가 있습니다.)
                 if (_return == 0)
                 {
@@ -165,26 +166,38 @@ namespace Server
                     }
                     else
                     {
-                        
-                        Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), session.ID);
-                        Lecture lecture = db.GetLecture(schedule.LectureCode);
-                        session.ID = id;
-                        session.Host = lecture.professor_id;
-                        _loginSessions.Add(id, session);
-                        // 현재 시간에 해당하는 교수가 접속해서 방을 만들었으면
-                        if (_classRoom.TryGetValue(lecture.professor_id, out ClassRoom room))
+                        Console.WriteLine("아이디 있음");
+                        Student student = db.GetStudent(id);
+                        Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
+                        if(schedule == null)
                         {
-                            // 방에 넣어주고
-                            room.Enter(session);
+                            Console.WriteLine("현재시간에 해당하는 수업 없음");
+                            _waitingList.Add(session);
                         }
                         else
                         {
-                            // 없으면 대기 리스트에 넣어준다.
-                            _waitingList.Add(session);
-                        }
+                            Console.WriteLine("현재 시간에 해당하는 수업 있음");
+                            Lecture lecture = db.GetLecture(schedule.LectureCode);
+                            Console.WriteLine("lecture 검색 성공");
+                            session.ID = id;
+                            session.Host = lecture.professor_id;
+                            _loginSessions.Add(id, session);
+                            // 현재 시간에 해당하는 교수가 접속해서 방을 만들었으면 (수정 요구
+                            if (_classRoom.TryGetValue(lecture.professor_id, out ClassRoom room))
+                            {
+                                // 방에 넣어주고
+                                room.Enter(session);
+                            }
+                            else
+                            {
+                                // 없으면 대기 리스트에 넣어준다.
+                                _waitingList.Add(session);
+                            }
+                        }                      
+                       
 
                         SS_LoginResult pkt = new SS_LoginResult();
-                        List<IInformation> lectures = db.GetScheduleList(session.ID);
+                        List<IInformation> lectures = db.GetScheduleList(student.StudentId);
                         foreach(Lecture l in lectures)
                         {
                             SS_LoginResult.Lecture lectureResult = new SS_LoginResult.Lecture();
@@ -199,6 +212,16 @@ namespace Server
                         }
                         session.Send(pkt.Write());
                     }
+                    Console.WriteLine("로그인 성공 패킷 전송 완료");
+                }
+                else
+                {
+                    Console.WriteLine("아이디없음");
+                    SS_LoginFailed lgFail_packet = new SS_LoginFailed();
+                    lgFail_packet.result = 2;
+                    //  패킷 전송
+                    session.Send(lgFail_packet.Write());
+                    return;
                 }
             }
         }
@@ -714,6 +737,7 @@ namespace Server
             if (_classRoom.TryGetValue(session.ID, out ClassRoom room))
             {
                 _waitingList.AddRange(room.GetStudentList());
+
                 foreach (ClientSession s in _waitingList)
                 {
                     s.Host = null;
@@ -723,10 +747,13 @@ namespace Server
             }
             else
             {
+                Console.WriteLine("1");
                 if (_classRoom.TryGetValue(session.Host, out ClassRoom room2))
                 {
                     room2.Push(() => room.LeaveRoom(session));
+                    Console.WriteLine("2");
                 }
+                Console.WriteLine("3");
             }
         }
 
@@ -738,13 +765,22 @@ namespace Server
         {
             lock (_lock)
             {
+                Console.WriteLine("-1");
                 if (session.ID != null)
                 {
+                    LeaveRoom(session);
+                    Console.WriteLine("-2");
                     if (_loginSessions.TryGetValue(session.ID, out ClientSession s))
+                    {
                         _loginSessions.Remove(session.ID);
+                        Console.WriteLine("-10");
+                    }
+                    Console.WriteLine("-3");
                 }
-                LeaveRoom(session);
+                
+                Console.WriteLine("-4");
                 _sessions.Remove(session.SessionId);
+                Console.WriteLine("-5");
             }
         }
 

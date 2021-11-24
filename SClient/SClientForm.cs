@@ -18,6 +18,7 @@ namespace SClient
         public static SClientForm sclientform;
         public static SessionManager sessionManager;
         public static PacketManager packetManager;
+
         public SClientForm()
         {
             InitializeComponent();

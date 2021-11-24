@@ -8,8 +8,6 @@ namespace SClient
 {
     public class SessionManager
     {
-        
-
         ServerSession _sessions;
         object _lock = new object();
 
@@ -24,7 +22,6 @@ namespace SClient
                     ArraySegment<byte> segment = loging_packet.Write();
                     _sessions.Send(segment);
             }
-
         }
         public void ImgSend(byte[] img )
         {
@@ -36,6 +33,7 @@ namespace SClient
                 _sessions.Send(Img_packet.Write());              
             }
         }
+      
 
         public ServerSession Generate()
         {

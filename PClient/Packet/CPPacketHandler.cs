@@ -42,7 +42,8 @@ class PacketHandler
     
     public static void SP_LoginFailedHandler(PacketSession session, IPacket packet)
     {
-
+        SP_LoginFailed pkt = packet as SP_LoginFailed;
+       
     }     
     public static void SP_LoginResultHandler(PacketSession session, IPacket packet)
     {
