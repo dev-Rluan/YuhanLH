@@ -180,7 +180,9 @@
   </packet>
 	<!--학생 로그인성공, 시간표 가져오기-->
 	<packet name = "SS_LoginResult">
-    <int name ="result"/>
+    <int name ="result"/>		
+		<string name ="studentID"/>
+		<string name ="name"/>
 		<list name ="Lecture">
 			<string name ="lecture_code"/>
 			<string name ="professor_id"/>

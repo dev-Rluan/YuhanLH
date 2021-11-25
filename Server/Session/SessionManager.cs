@@ -219,6 +219,8 @@ namespace Server
                         }  
 
                         SS_LoginResult pkt = new SS_LoginResult();
+                        pkt.name = student.Name;
+                        pkt.studentID = student.StudentId;
                         List<IInformation> schedules = db.GetScheduleList(student.StudentId);
                         List<Lecture> lectures = new List<Lecture>();
                         foreach(Schedule scheduleL in schedules)

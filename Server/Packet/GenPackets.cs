@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using Server; 
+using Server;
 
 public enum PacketID
 {
@@ -122,8 +122,7 @@ public class CP_Login : IPacket
 
 public class CP_ScreenRequest : IPacket
 {
-    public string id;
-	public class Student
+    public class Student
 	{
 	   public string studentId;
 	
@@ -166,11 +165,7 @@ public class CP_ScreenRequest : IPacket
         // 배열 현재 위치 이동
         count += sizeof(ushort);
         
-        ushort idLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
-		count += sizeof(ushort);
-		this.id = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, idLen);
-		count += idLen;
-		this.students.Clear();
+        this.students.Clear();
 		ushort studentLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
 		count += sizeof(ushort); 
 		for(int i = 0; i < studentLen; i++)
@@ -196,11 +191,7 @@ public class CP_ScreenRequest : IPacket
        // 배열 현재 위치 이동
         count += sizeof(ushort);
 
-        ushort idLen = (ushort)Encoding.Unicode.GetBytes(this.id, 0, this.id.Length, segment.Array, segment.Offset + count + sizeof(ushort));
-		Array.Copy(BitConverter.GetBytes(idLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
-		count += sizeof(ushort);
-		count += idLen;
-		Array.Copy(BitConverter.GetBytes((ushort)this.students.Count), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+        Array.Copy(BitConverter.GetBytes((ushort)this.students.Count), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
 		foreach(Student student in students)
 		    student.Write(segment, ref count);
@@ -2154,6 +2145,8 @@ public class SS_Logout : IPacket
 public class SS_LoginResult : IPacket
 {
     public int result;
+	public string studentID;
+	public string name;
 	public class Lecture
 	{
 	   public string lecture_code;
@@ -2249,6 +2242,14 @@ public class SS_LoginResult : IPacket
         
         this.result = BitConverter.ToInt32(segment.Array, segment.Offset + count);
 		count += sizeof(int);
+		ushort studentIDLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+		count += sizeof(ushort);
+		this.studentID = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, studentIDLen);
+		count += studentIDLen;
+		ushort nameLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+		count += sizeof(ushort);
+		this.name = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, nameLen);
+		count += nameLen;
 		this.lectures.Clear();
 		ushort lectureLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
 		count += sizeof(ushort); 
@@ -2277,6 +2278,14 @@ public class SS_LoginResult : IPacket
 
         Array.Copy(BitConverter.GetBytes(result), 0, segment.Array, segment.Offset + count, sizeof(int));
 		count += sizeof(int);
+		ushort studentIDLen = (ushort)Encoding.Unicode.GetBytes(this.studentID, 0, this.studentID.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+		Array.Copy(BitConverter.GetBytes(studentIDLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+		count += sizeof(ushort);
+		count += studentIDLen;
+		ushort nameLen = (ushort)Encoding.Unicode.GetBytes(this.name, 0, this.name.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+		Array.Copy(BitConverter.GetBytes(nameLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+		count += sizeof(ushort);
+		count += nameLen;
 		Array.Copy(BitConverter.GetBytes((ushort)this.lectures.Count), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
 		foreach(Lecture lecture in lectures)

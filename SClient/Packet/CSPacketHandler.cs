@@ -136,7 +136,7 @@ class PacketHandler
         }
         public static void SS_ScreenRequestHandler(PacketSession session, IPacket packet)
         {
-
+            Program.
         }
     public static void SS_LogoutHandler(PacketSession session, IPacket packet)
     {
