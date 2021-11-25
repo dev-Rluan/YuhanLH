@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace SClient
 {
@@ -23,14 +24,28 @@ namespace SClient
             }
         }
 
-        public void ImgSend(byte[] img )
+        public void ImgSend( )
         {
-            lock (_lock)
+            lock (_lock) 
             {
+                if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
+                {
+                    SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
+                    {
+                        SClientForm.sclientform.textBox1.Text += "스크린샷 찍기";
+                    });
+                }
+                else
+                {
+                    SClientForm.sclientform.textBox1.Text += "스크린샷 찍기";
+                }
+                byte[] img = ScreenCopy.Copy();
+                SClientForm.sclientform.textBox1.Text = "스크린샷 찍기";
                 CS_ScreenResult Img_packet = new CS_ScreenResult();
                 Img_packet.studentId = "test";
                 Img_packet.img = img;
-                _sessions.Send(Img_packet.Write());              
+                _sessions.Send(Img_packet.Write());
+                SClientForm.sclientform.textBox1.Text = "스크린샷 보내기";
             }
         }
       

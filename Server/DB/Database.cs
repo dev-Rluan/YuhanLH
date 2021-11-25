@@ -171,7 +171,7 @@ namespace Server
             DataSet ds = new DataSet();
             string query = @$"select {col}
                                from {table}
-                               where {where}";
+                               where {where}  ";
 
             //using (data = Select("s.id, s.pw, s.name, s.student_id", "student s, student_lecture sl", @$"s.student_id = sl.student_id
             //                                                                                                 sl.lecture_code = {Lecture_Code}"))
@@ -320,7 +320,7 @@ namespace Server
             Student student;
             string Id, Pw, student_id, name;
 
-            using (data = Select("*", "student", $"id = '{id}'"))
+            using (data = Select("*", "student", $"id = '{id}' order by student_id"))
             {
                 DataRow[] row = data.Tables[0].Select();
 
@@ -334,7 +334,24 @@ namespace Server
 
             return student;
         }
+        /// <summary>
+        /// 특정 학생의 아이디를 가져오는 함수입니다.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public string GetStudentID(string student_id)
+        {
 
+            string Id = null;
+
+            using (data = Select("id", "student", $"student_id = '{student_id}'"))
+            {
+                DataRow[] row = data.Tables[0].Select();
+                Id = row[0].ItemArray[0].ToString();
+            }
+
+            return Id;
+        }
         /// <summary>
         /// 특정 교수의 정보를 가져오는 함수입니다.
         /// </summary>

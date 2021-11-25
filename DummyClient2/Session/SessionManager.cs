@@ -16,8 +16,8 @@ namespace DummyClient2
             {
                 CP_Login loging_packet = new CP_Login();
 
-                loging_packet.id = "test";
-                loging_packet.pwd = "test1234";
+                loging_packet.id = "dnjsdlf";
+                loging_packet.pwd = "rladnjsdlf";
                 ArraySegment<byte> segment = loging_packet.Write();
                 _sessions.Send(segment);
                 
@@ -43,6 +43,31 @@ namespace DummyClient2
                 s.studentId = studentID;
                 quiz_packet.students.Add(s);
                 _sessions.Send(quiz_packet.Write());
+            }
+        }
+        public void QuizOX(string quiz, string studentID)
+        {
+            lock (_lock)
+            {
+                Console.WriteLine("퀴즈 보내기");
+                CP_QuizOX quiz_packet = new CP_QuizOX();
+                quiz_packet.quiz = quiz;
+                CP_QuizOX.Student s = new CP_QuizOX.Student();
+                s.studentId = studentID;
+                quiz_packet.students.Add(s);
+                _sessions.Send(quiz_packet.Write());
+            }
+        }
+
+        public void ScreenRequest(string studentID)
+        {
+            lock (_lock)
+            {
+                CP_ScreenRequest sc_request_pkt = new CP_ScreenRequest();
+                CP_ScreenRequest.Student s = new CP_ScreenRequest.Student();
+                s.studentId = studentID;
+                sc_request_pkt.students.Add(s);
+                _sessions.Send(sc_request_pkt.Write());
             }
         }
 

@@ -46,7 +46,7 @@ namespace SClient
         private void btnSend_Click(object sender, EventArgs e)
         {
             byte[] img = ScreenCopy.Copy();
-            sessionManager.ImgSend(img);
+            sessionManager.ImgSend();
             Bitmap bmp;
             bmp = ScreenCopy.GetBitmap(img);
             ptBox.Image = bmp;

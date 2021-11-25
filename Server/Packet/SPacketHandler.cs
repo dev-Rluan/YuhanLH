@@ -94,6 +94,7 @@ class PacketHandler
         CS_ScreenResult Screen_packet = packet as CS_ScreenResult;
         ClientSession clientSession = session as ClientSession;
 
+        Console.WriteLine("스크린 result 넘어옴");
         Program.sessionManager.ScreenResult(clientSession, Screen_packet);
     }
 

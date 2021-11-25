@@ -127,12 +127,17 @@ namespace Server
         public void Img_Request(ClientSession session, CP_ScreenRequest packet)
         {
             SS_ScreenRequest pkt = new SS_ScreenRequest();
-            foreach(ClientSession s in _sessions)
+            Database db = new Database();
+            foreach (ClientSession s in _sessions)
             {
+                Console.WriteLine("s 학생 있음 : " + s.ID);
                 foreach(CP_ScreenRequest.Student s2 in packet.students)
                 {
-                    if (s.ID == s2.studentId)
+                    Console.WriteLine("s2 학생있음 : " + s2.studentId);
+                    Student student = db.GetStudent(s.ID);
+                    if (student.StudentId == s2.studentId)
                     {
+                        Console.WriteLine("이미지 요청 보내기 : " + s2.studentId);
                         s.Send(pkt.Write());
                     }
                 }               
@@ -269,7 +274,11 @@ namespace Server
             ProfessorClient.Send(sp_screenPacket.Write());         
             Console.WriteLine("이미지전송");  
         } 
-   
+        public string GetID(string studentID)
+        {
+            Database db = new Database();
+            return db.GetStudentID(studentID);
+        }
         public string GetStudentID(ClientSession session)
         {
             Database db = new Database();
@@ -349,13 +358,14 @@ namespace Server
                     Console.WriteLine("세션 - 나가기" + session.ID + " :  삭제");
                     _sessions.RemoveAt(i);
                 }
-            }            
-           
+            }
+            Database db = new Database();
+            Student student = db.GetStudent(session.ID);
             SP_LeaveStudent pkt = new SP_LeaveStudent();
-            pkt.studentId = session.ID;
+            pkt.studentId = student.StudentId;
             ProfessorClient.Send(pkt.Write());
         }
-
+        
         /// <summary>
         ///  로그아웃
         /// </summary>

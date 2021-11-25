@@ -32,6 +32,9 @@ namespace DummyClient2
                     case "QuizOX":
                         break;
                     case "Screen":
+                        Console.WriteLine("스크린 요청할 학생의 학번을 입력해 주세요");
+                        string s4 = Console.ReadLine();
+                        sessionManager.ScreenRequest(s4);
                         break;
                     case "Student":
                         sessionManager.StudentListRequest();

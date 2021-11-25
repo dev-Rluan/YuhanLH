@@ -130,9 +130,10 @@ namespace Server
                             pkt.lectures.Add(sp_lc);
                         } 
                         // 패킷 돌려주기
-                        Console.WriteLine("교수에게 정보 보내주기");
+                        Console.WriteLine("교수에게 정보 보내주기");                             
                         session.Send(pkt.Write());
                         SelectPushClass();
+
                     }
                 }
                 // 비밀번호 불일치
@@ -190,15 +191,17 @@ namespace Server
                         {
                             Console.WriteLine("현재시간에 해당하는 수업 없음");
                             _waitingList.Add(session);
+                            SS_Result result_packet = new SS_Result();
+                            result_packet.result = false;
+                            session.Send(result_packet.Write());
                         }
                         else
                         {
                             Console.WriteLine("현재 시간에 해당하는 수업 있음");
                             Lecture lecture = db.GetLecture(schedule.LectureCode);
-                            Console.WriteLine("lecture 검색 성공");                            
-                            session.Host = lecture.professor_id;
-                            _loginSessions.Add(id, session);
+                            Console.WriteLine("lecture 검색 성공");         
                             String professorID = db.GetProfessorID(lecture.professor_id);
+                            session.Host = professorID;
                             // 현재 시간에 해당하는 교수가 접속해서 방을 만들었으면 (수정 요구
                             if (_classRoom.ContainsKey(professorID))
                             {
@@ -207,7 +210,31 @@ namespace Server
                                     // 방에 넣어주고
                                     Console.WriteLine("학생 방접속");
                                     room.Push(()=>room.Enter(session));
-                                }                                    
+                                }
+                                SS_LoginResult pkt = new SS_LoginResult();
+                                pkt.name = student.Name;
+                                pkt.studentID = student.StudentId;
+                                List<IInformation> schedules = db.GetScheduleList(student.StudentId);
+                                List<Lecture> lectures = new List<Lecture>();
+                                foreach (Schedule scheduleL in schedules)
+                                {
+                                    Lecture lec = db.GetLecture(scheduleL.LectureCode);
+                                    lectures.Add(lec);
+                                }
+                                foreach (Lecture l in lectures)
+                                {
+                                    SS_LoginResult.Lecture lectureResult = new SS_LoginResult.Lecture();
+                                    lectureResult.credit = l.credit;
+                                    lectureResult.end_time = l.end_time;
+                                    lectureResult.lecture_code = l.lecture_code;
+                                    lectureResult.lecture_name = l.lecture_name;
+                                    lectureResult.professor_id = l.professor_id;
+                                    lectureResult.weekday = l.week_day;
+                                    lectureResult.strat_time = l.start_time;
+                                    pkt.lectures.Add(lectureResult);
+                                }
+                                _loginSessions.Add(id, session);
+                                session.Send(pkt.Write());
                             }
                             else
                             {
@@ -215,32 +242,11 @@ namespace Server
                                 // 없으면 대기 리스트에 넣어준다.
                                 Console.WriteLine(session.ID, session.Name);
                                 _waitingList.Add(session);
-                            }
-                        }  
-
-                        SS_LoginResult pkt = new SS_LoginResult();
-                        pkt.name = student.Name;
-                        pkt.studentID = student.StudentId;
-                        List<IInformation> schedules = db.GetScheduleList(student.StudentId);
-                        List<Lecture> lectures = new List<Lecture>();
-                        foreach(Schedule scheduleL in schedules)
-                        {
-                            Lecture lec = db.GetLecture(scheduleL.LectureCode);
-                            lectures.Add(lec);
-                        }
-                        foreach(Lecture l in lectures)
-                        {
-                            SS_LoginResult.Lecture lectureResult = new SS_LoginResult.Lecture();
-                            lectureResult.credit = l.credit;
-                            lectureResult.end_time = l.end_time;
-                            lectureResult.lecture_code = l.lecture_code;
-                            lectureResult.lecture_name = l.lecture_name;
-                            lectureResult.professor_id = l.professor_id;
-                            lectureResult.weekday = l.week_day;
-                            lectureResult.strat_time = l.start_time;
-                            pkt.lectures.Add(lectureResult);
-                        }
-                        session.Send(pkt.Write());
+                                SS_Result result_packet = new SS_Result();
+                                result_packet.result = false;
+                                session.Send(result_packet.Write());
+                            }                          
+                        }                          
                     }
                     Console.WriteLine("로그인 성공 패킷 전송 완료");
                 }
@@ -307,6 +313,7 @@ namespace Server
             {
                 if (_classRoom.TryGetValue(session.ID, out ClassRoom room))
                 {
+                    Console.WriteLine("스크린 요청 들어옴");
                     room.Push(() => room.Img_Request(session, packet));
                 }
             }            
@@ -793,8 +800,9 @@ namespace Server
         public string GetLectureCode(ClientSession session)
         {
             Student student = db.GetStudent(session.ID);
-            Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
-            if(schedule != null)
+            //Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
+            Schedule schedule = db.GetScheduleExistTime("1205", student.StudentId);
+            if (schedule != null)
             {
                 return schedule.LectureCode;
             }
@@ -848,15 +856,18 @@ namespace Server
                     Console.WriteLine(lecture.professor_id);
                     string professorID = db.GetProfessorID(lecture.professor_id);
                     Console.WriteLine(professorID);
+
                     if (_classRoom.ContainsKey(professorID))
                     {
                         Console.WriteLine("교수 있음");
-                        if (_classRoom.TryGetValue(professorID, out ClassRoom room))
-                        {
-                            _waitingList[i].Host = professorID;
-                            room.Push(() => room.Enter(_waitingList[i]));
-                            _waitingList.RemoveAt(i);
-                        }
+                        SS_EnterRoom enter_packet = new SS_EnterRoom();
+                        _waitingList[i].Send(enter_packet.Write());
+                        //if (_classRoom.TryGetValue(professorID, out ClassRoom room))
+                        //{
+                        //    _waitingList[i].Host = professorID;
+                        //    room.Push(() => room.Enter(_waitingList[i]));
+                        //    _waitingList.RemoveAt(i);
+                        //}
                     }
                 }
             }          
@@ -972,6 +983,5 @@ namespace Server
                 Console.WriteLine(session.SessionId + "접속 종료");
             }
         }
-
     }
 }

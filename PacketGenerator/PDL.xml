@@ -108,7 +108,7 @@
 			<string name ="weekday"/>
 			<string name ="strat_time"/>
 			<string name ="end_time"/>			
-		</list>
+		</list>	
 	</packet>
   
 	<!--학생 정보-->
@@ -194,8 +194,7 @@
 		</list>
 	</packet>
   <!--수업 입장-->
-  <packet name="SS_EnterRoom">
-    
+  <packet name="SS_EnterRoom">    
   </packet>
 	<!--교수의 스크린샷 요청-->
 	<packet name ="SS_ScreenRequest">

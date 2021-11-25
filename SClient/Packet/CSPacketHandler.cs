@@ -90,7 +90,7 @@ class PacketHandler
     }
     public static void SS_EnterRoomHandler(PacketSession session, IPacket packet)
     {
-
+        SClientForm.sessionManager.LoginSend();
     }
     public static void SS_QResultHandler(PacketSession session, IPacket packet)
         {
@@ -134,10 +134,24 @@ class PacketHandler
         {
 
         }
-        public static void SS_ScreenRequestHandler(PacketSession session, IPacket packet)
+    public static void SS_ScreenRequestHandler(PacketSession session, IPacket packet)
+    {
+         
+        if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
         {
-            Program.
+            SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
+            {
+                SClientForm.sclientform.textBox1.Text += "스크린샷 요청";
+            });
         }
+        else
+        {
+            SClientForm.sclientform.textBox1.Text += "스크린샷 요청";
+        }
+        SClientForm.sessionManager.ImgSend();
+
+
+    }
     public static void SS_LogoutHandler(PacketSession session, IPacket packet)
     {
 

@@ -48,7 +48,10 @@ class PacketHandler
     {
         SP_ScreenResult sp_screenPacket = packet as SP_ScreenResult;
         ServerSession serverSession = session as ServerSession;
-       
+
+        Console.WriteLine("이미지 받기");
+        Console.WriteLine(sp_screenPacket.studentId);
+        Console.WriteLine(sp_screenPacket.img);
     
     }
     public static void SP_QustionTextHandler(PacketSession session, IPacket packet)
@@ -83,7 +86,8 @@ class PacketHandler
     }
     public static void SP_LeaveStudentHandler(PacketSession session, IPacket packet)
     {
-
+        SP_LeaveStudent pkt = packet as SP_LeaveStudent;
+        Console.WriteLine(pkt.studentId + "나감");
     }
     public static void SP_AddAtdHandler(PacketSession session, IPacket packet)
         {
