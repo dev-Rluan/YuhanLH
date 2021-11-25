@@ -483,7 +483,8 @@ namespace Server
             string lecture_code, lecture_name;
             Schedule schedule;
 
-            using (data = SelectInnerJoin($"stu_lec.student_id = {studentID}", time, getDay(DateTime.Now)))
+            //using (data = SelectInnerJoin($"stu_lec.student_id = {studentID}", time, getDay(DateTime.Now))
+            using (data = SelectInnerJoin($"stu_lec.student_id = {studentID}", time, "수"))
             {
                 if (data.Tables[0].Rows.Count == 0)
                 {
@@ -567,7 +568,8 @@ namespace Server
 
             using (data = Select("*", "Lecture", @$"Professor_Id = '{Professor_Id}' AND
                                                     Start_Time = '{Start_Time}' AND
-                                                    Week_Day = '{getDay(DateTime.Now)}'"))
+                                                    Week_Day = '수'"))
+                //Week_Day = '{getDay(DateTime.Now)}'"))
             {
                 DataRow[] row = data.Tables[0].Select();
                 lecture = new Lecture(row[0].ItemArray[0].ToString(),

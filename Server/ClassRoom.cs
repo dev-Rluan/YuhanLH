@@ -63,8 +63,7 @@ namespace Server
             Database db = new Database();
             SP_StudentInfo pkt = new SP_StudentInfo();
             SP_StudentInfo.Student student = new SP_StudentInfo.Student();
-            foreach(ClientSession s in _sessions)
-            {
+            foreach(ClientSession s in _sessions)           {
 
                 Student _student = db.GetStudent(s.ID);
                 student.studentId = _student.StudentId;
@@ -148,31 +147,23 @@ namespace Server
         {
             SS_Quiz pkt = new SS_Quiz();
             pkt.quiz = packet.quiz;
-            Database db = new Database();
-            if (_sessions == null)
+            
+            if (_sessions.Count < 1l)
             {
                 Console.WriteLine("퀴즈 요청이 들어왔지만 방에 학생이없습니다.");
                 return;
             }
             else
             {
-                foreach (ClientSession s in _sessions)
+                Console.WriteLine("여기까지는 옴");                
+                foreach (CP_Quiz.Student s2 in packet.students)
                 {
-                    Console.WriteLine("학생 검색");
-                    Student student = db.GetStudent(s.ID);
-                    foreach (CP_Quiz.Student s2 in packet.students)
-                    {
-                        Console.WriteLine(student.StudentId + " : " + s2.studentId);
-                        if (student.StudentId == s2.studentId)
-                        {
-                            Console.WriteLine(s2.studentId + "퀴즈 보내기");
-                            s.Send(pkt.Write());
-                        }
-                    }
-                }
+                    QuizSend(s2.studentId, packet.quiz);
+                }               
             }             
         }
 
+       
         /// <summary>
         /// OX 퀴즈보내기
         /// </summary>
@@ -181,16 +172,17 @@ namespace Server
         {
             SS_QuizOX pkt = new SS_QuizOX();
             pkt.quiz = packet.quiz;
-            Database db = new Database();
-            foreach (ClientSession s in _sessions)
+            if (_sessions.Count < 1l)
             {
-                Student student = db.GetStudent(s.ID);
+                Console.WriteLine("퀴즈 요청이 들어왔지만 방에 학생이없습니다.");
+                return;
+            }
+            else
+            {
+                Console.WriteLine("여기까지는 옴");
                 foreach (CP_QuizOX.Student s2 in packet.students)
                 {
-                    if (student.StudentId == s2.studentId)
-                    {
-                        s.Send(pkt.Write());
-                    }
+                    QuizOXSend(s2.studentId, packet.quiz);
                 }
             }
         }
@@ -258,9 +250,8 @@ namespace Server
                 SS_EndOfClass pkt = new SS_EndOfClass();
                 BroadCast(pkt.Write());
                 _sessions.Clear();
+                
             }
-           
-          
         }
 
         // 이미지 전송 
@@ -279,15 +270,22 @@ namespace Server
             Console.WriteLine("이미지전송");  
         } 
    
-
+        public string GetStudentID(ClientSession session)
+        {
+            Database db = new Database();
+            return db.GetStudent(session.ID).StudentId;
+        }
 
         public void Enter(ClientSession session)
         {
-            Console.WriteLine("학생 수업방 접속");
+            Console.WriteLine(ProfessorClient.ID + " : 학생 수업방 접속");
             _sessions.Add(session);
-
+            Console.WriteLine("접속한 학생" + session.ID);
+            
             SP_AddStudent pkt = new SP_AddStudent();
-            pkt.studentId = session.ID;
+            Console.WriteLine("교수에세 접속한 학생 보내기1");
+            pkt.studentId = GetStudentID(session);
+            Console.WriteLine("교수에세 접속한 학생 보내기2");
             ProfessorClient.Send(pkt.Write());
         }
 
@@ -305,11 +303,54 @@ namespace Server
                 s.Send(buffer);
             }
         }
-
+        public void QuizSend(string studentID, string quiz)
+        {
+            Database db = new Database();
+            SS_Quiz pkt = new SS_Quiz();
+            pkt.quiz = quiz;
+            Console.WriteLine("들어옴");
+            foreach (ClientSession s in _sessions)
+            {
+                Console.WriteLine(s.ID + "검색");
+                Student student = db.GetStudent(s.ID);
+                Console.WriteLine(student.StudentId + " : " + studentID);
+                if (studentID == student.StudentId)
+                {
+                    Console.WriteLine(studentID + "에게 퀴즈 보냄");
+                    s.Send(pkt.Write());
+                }
+            }
+        }
+        public void QuizOXSend(string studentID, string quiz)
+        {
+            Database db = new Database();
+            SS_QuizOX pkt = new SS_QuizOX();
+            pkt.quiz = quiz;
+            Console.WriteLine("들어옴");
+            foreach (ClientSession s in _sessions)
+            {
+                Console.WriteLine(s.ID + "검색");
+                Student student = db.GetStudent(s.ID);
+                Console.WriteLine(student.StudentId + " : " + studentID);
+                if (studentID == student.StudentId)
+                {
+                    Console.WriteLine(studentID + "에게 퀴즈 보냄");
+                    s.Send(pkt.Write());
+                }
+            }
+        }
 
         public void LeaveRoom(ClientSession session)
         {
-            _sessions.Remove(session);
+            for(int i = _sessions.Count -1; i >= 0; i--)
+            {
+                if(_sessions[i].SessionId == session.SessionId)
+                {
+                    Console.WriteLine("세션 - 나가기" + session.ID + " :  삭제");
+                    _sessions.RemoveAt(i);
+                }
+            }            
+           
             SP_LeaveStudent pkt = new SP_LeaveStudent();
             pkt.studentId = session.ID;
             ProfessorClient.Send(pkt.Write());

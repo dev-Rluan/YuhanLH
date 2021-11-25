@@ -33,6 +33,9 @@ namespace DummyClient2
                         break;
                     case "Screen":
                         break;
+                    case "Student":
+                        sessionManager.StudentListRequest();
+                        break;
                 }
             }
         }

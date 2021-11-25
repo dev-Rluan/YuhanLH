@@ -24,7 +24,14 @@ namespace DummyClient2
             }
 
         }
-
+        public void StudentListRequest()
+        {
+            lock (_lock)
+            {
+                CP_StudentList pkt = new CP_StudentList();
+                _sessions.Send(pkt.Write());
+            }
+        }
         public void Quiz(string quiz, string studentID)
         {
             lock (_lock)

@@ -128,11 +128,11 @@ namespace Server
                             sp_lc.strat_time = lc.start_time;
                             sp_lc.end_time = lc.end_time;
                             pkt.lectures.Add(sp_lc);
-                        }                        
-                        SelectPushClass();
+                        } 
                         // 패킷 돌려주기
                         Console.WriteLine("교수에게 정보 보내주기");
                         session.Send(pkt.Write());
+                        SelectPushClass();
                     }
                 }
                 // 비밀번호 불일치
@@ -184,8 +184,9 @@ namespace Server
                         Student student = db.GetStudent(id);
                         session.ID = id;
                         session.Name = student.Name;
-                        Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
-                        if(schedule == null)
+                        Schedule schedule = db.GetScheduleExistTime("1205", student.StudentId);
+                        //Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
+                        if (schedule == null)
                         {
                             Console.WriteLine("현재시간에 해당하는 수업 없음");
                             _waitingList.Add(session);
@@ -197,12 +198,16 @@ namespace Server
                             Console.WriteLine("lecture 검색 성공");                            
                             session.Host = lecture.professor_id;
                             _loginSessions.Add(id, session);
+                            String professorID = db.GetProfessorID(lecture.professor_id);
                             // 현재 시간에 해당하는 교수가 접속해서 방을 만들었으면 (수정 요구
-                            if (_classRoom.ContainsKey(lecture.professor_id))
+                            if (_classRoom.ContainsKey(professorID))
                             {
-                                if(_classRoom.TryGetValue(lecture.professor_id, out ClassRoom room))
-                                // 방에 넣어주고
-                                room.Enter(session);
+                                if(_classRoom.TryGetValue(professorID, out ClassRoom room))
+                                {
+                                    // 방에 넣어주고
+                                    Console.WriteLine("학생 방접속");
+                                    room.Push(()=>room.Enter(session));
+                                }                                    
                             }
                             else
                             {
@@ -846,7 +851,7 @@ namespace Server
                         Console.WriteLine("교수 있음");
                         if (_classRoom.TryGetValue(professorID, out ClassRoom room))
                         {
-                            _waitingList[i].Host = lecture.professor_id;
+                            _waitingList[i].Host = professorID;
                             room.Push(() => room.Enter(_waitingList[i]));
                             _waitingList.RemoveAt(i);
                         }
@@ -920,13 +925,30 @@ namespace Server
                             room2.Push(() => room2.LeaveRoom(session));
                             Console.WriteLine("방 나가기");
                         }
-                    }
-                }           
-              
+                    }                    
+                }
+
+                WatingListRemove(session);
+
                 Console.WriteLine("학생 방 나가기 요청 끝");
             }
         }
 
+        public void WatingListRemove(ClientSession session)
+        {
+            lock (_lock)
+            {
+                for(int i = _waitingList.Count -1; i >= 0; i--)
+                {
+                    Console.WriteLine("watingList : " + _waitingList[i].ID);
+                    if(_waitingList[i].SessionId == session.SessionId)
+                    {
+                        Console.WriteLine("watingList 삭제 : " +  _waitingList[i].ID);
+                        _waitingList.RemoveAt(i);
+                    }
+                }
+            }
+        }
         /// <summary>
         /// 연결이 해제 되었을 때 호출되는 함수
         /// </summary>

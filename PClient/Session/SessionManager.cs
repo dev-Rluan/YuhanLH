@@ -19,8 +19,7 @@ namespace PClient
                 loging_packet.id = "test";
                 loging_packet.pwd = "test1234";
                 ArraySegment<byte> segment = loging_packet.Write();
-                _sessions.Send(segment);
-                
+                _sessions.Send(segment);                
             }
 
         }

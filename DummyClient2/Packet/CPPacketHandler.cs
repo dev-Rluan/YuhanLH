@@ -38,7 +38,10 @@ class PacketHandler
     public static void SP_StudentInfoHandler(PacketSession session, IPacket packet)
     {
         SP_StudentInfo pkt = packet as SP_StudentInfo;
-     
+        foreach (SP_StudentInfo.Student s in pkt.students)
+        {
+            Console.WriteLine(s.studentId);
+        } 
     }
 
     public static void SP_ScreenResultHandler(PacketSession session, IPacket packet)
@@ -75,6 +78,7 @@ class PacketHandler
     public static void SP_AddStudentHandler(PacketSession session, IPacket packet)
     {
         SP_AddStudent pkt = packet as SP_AddStudent;
+        Console.WriteLine("立加");
         Console.WriteLine($"{pkt.studentId} : 立加" );
     }
     public static void SP_LeaveStudentHandler(PacketSession session, IPacket packet)
