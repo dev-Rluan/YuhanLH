@@ -102,13 +102,34 @@ class PacketHandler
         }     
     public static void SS_QuizOXHandler(PacketSession session, IPacket packet)
     {
-        SS_Quiz pkt = packet as SS_Quiz;
-        
+        SS_QuizOX pkt = packet as SS_QuizOX;
+        if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
+        {
+            SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
+            {
+                SClientForm.sclientform.textBox1.Text += pkt.quiz;
+            });
+        }
+        else
+        {
+            SClientForm.sclientform.textBox1.Text += pkt.quiz;
+        }
     }     
         public static void SS_QuizHandler(PacketSession session, IPacket packet)
         {
-
+        SS_Quiz pkt = packet as SS_Quiz;
+        if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
+        {
+            SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
+            {
+                SClientForm.sclientform.textBox1.Text += pkt.quiz;
+            });
         }
+        else
+        {
+            SClientForm.sclientform.textBox1.Text += pkt.quiz;
+        }
+    }
         public static void SS_ImgSendFaildHandler(PacketSession session, IPacket packet)
         {
 
@@ -124,6 +145,10 @@ class PacketHandler
     public static void SS_EndOfClassHandler(PacketSession session, IPacket packet)
     {
 
+    }
+    public static void SS_QustionFaildHandler(PacketSession session, IPacket packet)
+    {
+        
     }
 
 }

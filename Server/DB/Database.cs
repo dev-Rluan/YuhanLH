@@ -438,6 +438,42 @@ namespace Server
         }
 
         /// <summary>
+        /// 셀렉트 조인
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="time"></param>
+        /// <param name="day"></param>
+        /// <returns></returns>
+        private DataSet SelectInnerJoin(string where, string time, string day)
+        {
+            DataSet ds = new DataSet();
+            string query = @$"select stu_lec.lecture_code, stu_lec.lecture_name
+                                from student_lecture stu_lec
+                                INNER JOIN lecture lec on (stu_lec.lecture_code = lec.lecture_code AND 
+                                                            lec.start_time <= '{time}' AND 
+                                                            lec.end_time >= '{time}' AND 
+                                                            lec.week_day = '{day}')
+                                where {where}";
+
+            using (ds = new DataSet())
+            {
+                if (IsOpen())
+                {
+                    using (adapter = new OracleDataAdapter(query, conn))
+                    {
+                        adapter.Fill(ds);
+                        return ds;
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("ERROR : 데이터 베이스 연결이 실패했습니다.");
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// 학생이 수강하고 있는 강의들 중 시작시간에 해당하는 강의를 가져오는 함수입니다. <br/>
         /// 시간은 "HHmm" 형식입니다.
         /// </summary>
@@ -447,21 +483,14 @@ namespace Server
             string lecture_code, lecture_name;
             Schedule schedule;
 
-            using (data = Select("Lecture_Code, Lecture_Name", "student_lecture", @$"Student_Id = '{studentID}' and
-                                                                                    Lecture_Code = (
-                                                                                        select Lecture_Code
-                                                                                        from Lecture
-                                                                                        where Start_Time <= '{time}'
-                                                                                        AND End_Time >= '{time}'
-                                                                                        and Week_Day = '{getDay(DateTime.Now)}')"))
-            
-
+            using (data = SelectInnerJoin($"stu_lec.student_id = {studentID}", time, getDay(DateTime.Now)))
             {
                 if (data.Tables[0].Rows.Count == 0)
                 {
                     Console.WriteLine("없음");
                     return null;
                 }
+
                 DataRow[] r = data.Tables[0].Select();
                 lecture_code = r[0].ItemArray[0].ToString();
                 lecture_name = r[0].ItemArray[1].ToString();

@@ -114,13 +114,7 @@ namespace Server
             ProfessorClient.Send(pkt.Write());
         }
 
-        /// <summary>
-        /// 교수자가 수업를 종료 하였을때 호출 됩니다. 학생 리스트 삭제
-        /// </summary>
-        public void ClearRoom(ClientSession session)
-        {            
-            BroadCast_EndClass();
-        }
+       
 
         public List<ClientSession> GetStudentList()
         {
@@ -154,16 +148,29 @@ namespace Server
         {
             SS_Quiz pkt = new SS_Quiz();
             pkt.quiz = packet.quiz;
-            foreach (ClientSession s in _sessions)
+            Database db = new Database();
+            if (_sessions == null)
             {
-                foreach (CP_Quiz.Student s2 in packet.students)
+                Console.WriteLine("퀴즈 요청이 들어왔지만 방에 학생이없습니다.");
+                return;
+            }
+            else
+            {
+                foreach (ClientSession s in _sessions)
                 {
-                    if (s.ID == s2.studentId)
+                    Console.WriteLine("학생 검색");
+                    Student student = db.GetStudent(s.ID);
+                    foreach (CP_Quiz.Student s2 in packet.students)
                     {
-                        s.Send(pkt.Write());
+                        Console.WriteLine(student.StudentId + " : " + s2.studentId);
+                        if (student.StudentId == s2.studentId)
+                        {
+                            Console.WriteLine(s2.studentId + "퀴즈 보내기");
+                            s.Send(pkt.Write());
+                        }
                     }
                 }
-            }
+            }             
         }
 
         /// <summary>
@@ -174,11 +181,13 @@ namespace Server
         {
             SS_QuizOX pkt = new SS_QuizOX();
             pkt.quiz = packet.quiz;
+            Database db = new Database();
             foreach (ClientSession s in _sessions)
             {
+                Student student = db.GetStudent(s.ID);
                 foreach (CP_QuizOX.Student s2 in packet.students)
                 {
-                    if (s.ID == s2.studentId)
+                    if (student.StudentId == s2.studentId)
                     {
                         s.Send(pkt.Write());
                     }
@@ -238,15 +247,20 @@ namespace Server
         /// </summary>
         public void BroadCast_EndClass()
         {
-            SS_EndOfClass pkt = new SS_EndOfClass();
-            foreach (ClientSession s in _sessions)
+            if (_sessions.Count < 1)
             {
-                if (s.ID != Host)
-                {
-                    s.Send(pkt.Write());
-                    Leave(s);
-                }
+                Console.WriteLine("룸에 접속한 학생 없음");
+                return;
+            }               
+            else
+            {
+                Console.WriteLine("룸에 접속한 학생 있음");
+                SS_EndOfClass pkt = new SS_EndOfClass();
+                BroadCast(pkt.Write());
+                _sessions.Clear();
             }
+           
+          
         }
 
         // 이미지 전송 
@@ -291,6 +305,7 @@ namespace Server
                 s.Send(buffer);
             }
         }
+
 
         public void LeaveRoom(ClientSession session)
         {

@@ -51,6 +51,9 @@ public class PacketManager
   
         _onRecv.Add((ushort)PacketID.SS_EndOfClass, MakePacket<SS_EndOfClass>);
         _handler.Add((ushort)PacketID.SS_EndOfClass, PacketHandler.SS_EndOfClassHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_QustionFaild, MakePacket<SS_QustionFaild>);
+        _handler.Add((ushort)PacketID.SS_QustionFaild, PacketHandler.SS_QustionFaildHandler);
 
     }
 

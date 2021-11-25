@@ -8,10 +8,9 @@
 	</packet>
 	<!--학생 캡처화면 요청-->
 	<packet name = "CP_ScreenRequest">
-		<string name ="id"/>
-    <list name ="student">
+		<list name ="student">
 				<string name="studentId"/>
-    </list>
+	 </list>
 	</packet>
 	<!--OX 퀴즈 요청-->
 	<packet name ="CP_QuizOX">
@@ -221,6 +220,9 @@
 	<!--수업 종료-->
 	<packet name ="SS_EndOfClass">    
   </packet>
+	<packet name ="SS_QustionFaild">
+		<int name ="result"/>
+	</packet>
 
 
 </PDL>

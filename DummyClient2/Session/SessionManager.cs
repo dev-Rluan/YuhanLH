@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PClient
+namespace DummyClient2
 {
     public class SessionManager
     {
@@ -23,6 +23,20 @@ namespace PClient
                 
             }
 
+        }
+
+        public void Quiz(string quiz, string studentID)
+        {
+            lock (_lock)
+            {
+                Console.WriteLine("퀴즈 보내기");
+                CP_Quiz quiz_packet = new CP_Quiz();
+                quiz_packet.quiz = quiz;
+                CP_Quiz.Student s = new CP_Quiz.Student();
+                s.studentId = studentID;
+                quiz_packet.students.Add(s);
+                _sessions.Send(quiz_packet.Write());
+            }
         }
 
         public ServerSession Generate()

@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestImgRecv", "TestImgRecv\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBLogin", "DBLogin\DBLogin.csproj", "{9C2E3B06-9D40-425D-8B07-A41F6710F472}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DummyClient2", "DummyClient2\DummyClient2.csproj", "{1F86376D-8D1D-4C71-AEF0-FA120AB189EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{9C2E3B06-9D40-425D-8B07-A41F6710F472}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C2E3B06-9D40-425D-8B07-A41F6710F472}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C2E3B06-9D40-425D-8B07-A41F6710F472}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F86376D-8D1D-4C71-AEF0-FA120AB189EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F86376D-8D1D-4C71-AEF0-FA120AB189EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F86376D-8D1D-4C71-AEF0-FA120AB189EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F86376D-8D1D-4C71-AEF0-FA120AB189EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

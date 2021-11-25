@@ -116,7 +116,7 @@ interface IPacket
 
         public static string packetFormat =
 @"
-class {0} : IPacket
+public class {0} : IPacket
 {{
     {1}    
     // 프로토콜 구분   

@@ -48,6 +48,7 @@ public enum PacketID
 	SS_Quiz = 40,
 	SS_ImgSendFaild = 41,
 	SS_EndOfClass = 42,
+	SS_QustionFaild = 43,
 	
 }
 
@@ -59,7 +60,7 @@ interface IPacket
 }
 
 
-class CP_Login : IPacket
+public class CP_Login : IPacket
 {
     public string id;
 	public string pwd;    
@@ -119,7 +120,7 @@ class CP_Login : IPacket
     }
 }
 
-class CP_ScreenRequest : IPacket
+public class CP_ScreenRequest : IPacket
 {
     public string id;
 	public class Student
@@ -212,7 +213,7 @@ class CP_ScreenRequest : IPacket
     }
 }
 
-class CP_QuizOX : IPacket
+public class CP_QuizOX : IPacket
 {
     public string quiz;
 	public class Student
@@ -305,7 +306,7 @@ class CP_QuizOX : IPacket
     }
 }
 
-class CP_Quiz : IPacket
+public class CP_Quiz : IPacket
 {
     public string quiz;
 	public class Student
@@ -398,7 +399,7 @@ class CP_Quiz : IPacket
     }
 }
 
-class CP_QResult : IPacket
+public class CP_QResult : IPacket
 {
     public string studentId;
 	public string result;    
@@ -458,7 +459,7 @@ class CP_QResult : IPacket
     }
 }
 
-class CP_Atd : IPacket
+public class CP_Atd : IPacket
 {
     public int classTime;
 	public int week;    
@@ -510,7 +511,7 @@ class CP_Atd : IPacket
     }
 }
 
-class CP_StudentList : IPacket
+public class CP_StudentList : IPacket
 {
         
     // 프로토콜 구분   
@@ -555,7 +556,7 @@ class CP_StudentList : IPacket
     }
 }
 
-class CP_EndOfClass : IPacket
+public class CP_EndOfClass : IPacket
 {
         
     // 프로토콜 구분   
@@ -600,7 +601,7 @@ class CP_EndOfClass : IPacket
     }
 }
 
-class CS_Login : IPacket
+public class CS_Login : IPacket
 {
     public string id;
 	public string pwd;    
@@ -660,7 +661,7 @@ class CS_Login : IPacket
     }
 }
 
-class CS_Quiz : IPacket
+public class CS_Quiz : IPacket
 {
     public string result;    
     // 프로토콜 구분   
@@ -711,7 +712,7 @@ class CS_Quiz : IPacket
     }
 }
 
-class CS_QuizOX : IPacket
+public class CS_QuizOX : IPacket
 {
     public bool result;    
     // 프로토콜 구분   
@@ -758,7 +759,7 @@ class CS_QuizOX : IPacket
     }
 }
 
-class CS_ScreenResult : IPacket
+public class CS_ScreenResult : IPacket
 {
     public string studentId;
 	public byte[] img;    
@@ -822,7 +823,7 @@ class CS_ScreenResult : IPacket
     }
 }
 
-class CS_QustionText : IPacket
+public class CS_QustionText : IPacket
 {
     public string qustion;    
     // 프로토콜 구분   
@@ -873,7 +874,7 @@ class CS_QustionText : IPacket
     }
 }
 
-class CS_QustionImg : IPacket
+public class CS_QustionImg : IPacket
 {
     public byte[] img;    
     // 프로토콜 구분   
@@ -928,7 +929,7 @@ class CS_QustionImg : IPacket
     }
 }
 
-class CS_Qustion : IPacket
+public class CS_Qustion : IPacket
 {
     public string qustion;
 	public byte[] img;    
@@ -992,7 +993,7 @@ class CS_Qustion : IPacket
     }
 }
 
-class CS_AtdCheck : IPacket
+public class CS_AtdCheck : IPacket
 {
     public int classTime;
 	public int week;
@@ -1049,7 +1050,7 @@ class CS_AtdCheck : IPacket
     }
 }
 
-class SP_Result : IPacket
+public class SP_Result : IPacket
 {
     public bool result;    
     // 프로토콜 구분   
@@ -1096,7 +1097,7 @@ class SP_Result : IPacket
     }
 }
 
-class SP_LoginFailed : IPacket
+public class SP_LoginFailed : IPacket
 {
     public ushort result;    
     // 프로토콜 구분   
@@ -1143,7 +1144,7 @@ class SP_LoginFailed : IPacket
     }
 }
 
-class SP_LoginResult : IPacket
+public class SP_LoginResult : IPacket
 {
     public int result;
 	public class Student
@@ -1342,7 +1343,7 @@ class SP_LoginResult : IPacket
     }
 }
 
-class SP_StudentInfo : IPacket
+public class SP_StudentInfo : IPacket
 {
     public class Student
 	{
@@ -1426,7 +1427,7 @@ class SP_StudentInfo : IPacket
     }
 }
 
-class SP_ScreenResult : IPacket
+public class SP_ScreenResult : IPacket
 {
     public string studentId;
 	public byte[] img;    
@@ -1490,7 +1491,7 @@ class SP_ScreenResult : IPacket
     }
 }
 
-class SP_QustionText : IPacket
+public class SP_QustionText : IPacket
 {
     public string studentId;
 	public string qustion;    
@@ -1550,7 +1551,7 @@ class SP_QustionText : IPacket
     }
 }
 
-class SP_QustionImg : IPacket
+public class SP_QustionImg : IPacket
 {
     public string studentId;
 	public byte[] img;    
@@ -1614,7 +1615,7 @@ class SP_QustionImg : IPacket
     }
 }
 
-class SP_Qustion : IPacket
+public class SP_Qustion : IPacket
 {
     public string studentId;
 	public string qustion;
@@ -1687,7 +1688,7 @@ class SP_Qustion : IPacket
     }
 }
 
-class SP_QuizResult : IPacket
+public class SP_QuizResult : IPacket
 {
     public string studentId;
 	public string result;    
@@ -1747,7 +1748,7 @@ class SP_QuizResult : IPacket
     }
 }
 
-class SP_QuizOXResult : IPacket
+public class SP_QuizOXResult : IPacket
 {
     public string studentId;
 	public bool result;    
@@ -1803,7 +1804,7 @@ class SP_QuizOXResult : IPacket
     }
 }
 
-class SP_AddStudent : IPacket
+public class SP_AddStudent : IPacket
 {
     public string studentId;    
     // 프로토콜 구분   
@@ -1854,7 +1855,7 @@ class SP_AddStudent : IPacket
     }
 }
 
-class SP_LeaveStudent : IPacket
+public class SP_LeaveStudent : IPacket
 {
     public string studentId;    
     // 프로토콜 구분   
@@ -1905,7 +1906,7 @@ class SP_LeaveStudent : IPacket
     }
 }
 
-class SP_AddAtd : IPacket
+public class SP_AddAtd : IPacket
 {
     public string studentId;
 	public int classTime;
@@ -1966,7 +1967,7 @@ class SP_AddAtd : IPacket
     }
 }
 
-class SP_EndClass : IPacket
+public class SP_EndClass : IPacket
 {
         
     // 프로토콜 구분   
@@ -2011,7 +2012,7 @@ class SP_EndClass : IPacket
     }
 }
 
-class SS_Result : IPacket
+public class SS_Result : IPacket
 {
     public bool result;    
     // 프로토콜 구분   
@@ -2058,7 +2059,7 @@ class SS_Result : IPacket
     }
 }
 
-class SS_LoginFailed : IPacket
+public class SS_LoginFailed : IPacket
 {
     public ushort result;    
     // 프로토콜 구분   
@@ -2105,7 +2106,7 @@ class SS_LoginFailed : IPacket
     }
 }
 
-class SS_Logout : IPacket
+public class SS_Logout : IPacket
 {
         
     // 프로토콜 구분   
@@ -2150,7 +2151,7 @@ class SS_Logout : IPacket
     }
 }
 
-class SS_LoginResult : IPacket
+public class SS_LoginResult : IPacket
 {
     public int result;
 	public class Lecture
@@ -2289,7 +2290,7 @@ class SS_LoginResult : IPacket
     }
 }
 
-class SS_EnterRoom : IPacket
+public class SS_EnterRoom : IPacket
 {
         
     // 프로토콜 구분   
@@ -2334,7 +2335,7 @@ class SS_EnterRoom : IPacket
     }
 }
 
-class SS_ScreenRequest : IPacket
+public class SS_ScreenRequest : IPacket
 {
         
     // 프로토콜 구분   
@@ -2379,7 +2380,7 @@ class SS_ScreenRequest : IPacket
     }
 }
 
-class SS_QResult : IPacket
+public class SS_QResult : IPacket
 {
     public string result;    
     // 프로토콜 구분   
@@ -2430,7 +2431,7 @@ class SS_QResult : IPacket
     }
 }
 
-class SS_AtdRequest : IPacket
+public class SS_AtdRequest : IPacket
 {
     public int classTime;    
     // 프로토콜 구분   
@@ -2477,7 +2478,7 @@ class SS_AtdRequest : IPacket
     }
 }
 
-class SS_QuizOX : IPacket
+public class SS_QuizOX : IPacket
 {
     public string quiz;    
     // 프로토콜 구분   
@@ -2528,7 +2529,7 @@ class SS_QuizOX : IPacket
     }
 }
 
-class SS_Quiz : IPacket
+public class SS_Quiz : IPacket
 {
     public string quiz;    
     // 프로토콜 구분   
@@ -2579,7 +2580,7 @@ class SS_Quiz : IPacket
     }
 }
 
-class SS_ImgSendFaild : IPacket
+public class SS_ImgSendFaild : IPacket
 {
         
     // 프로토콜 구분   
@@ -2624,7 +2625,7 @@ class SS_ImgSendFaild : IPacket
     }
 }
 
-class SS_EndOfClass : IPacket
+public class SS_EndOfClass : IPacket
 {
         
     // 프로토콜 구분   
@@ -2660,6 +2661,53 @@ class SS_EndOfClass : IPacket
         count += sizeof(ushort);
 
         
+        // 전체 데이터사이즈를 배열 처음부터 인트크기만큼 넣어준다.
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
+
+        return SendBufferHelper.Close(count);
+
+
+    }
+}
+
+public class SS_QustionFaild : IPacket
+{
+    public int result;    
+    // 프로토콜 구분   
+    public ushort Protocol { get { return (ushort)PacketID.SS_QustionFaild; } }
+
+    public  void Read(ArraySegment<byte> segment)
+    {
+        // 배열 현재 위치 초기화
+        int count = 0;
+        // 전체 데이터 사이즈
+        BitConverter.ToInt32(segment.Array, segment.Offset + count);
+        // 배열 현재 위치 이동
+        count += sizeof(int);
+        // 배열 현재 위치 이동
+        count += sizeof(ushort);
+        
+        this.result = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+		count += sizeof(int);
+       
+
+    }
+
+    public  ArraySegment<byte> Write()
+    {
+        // 버퍼 짤라서 이동시킬 크기     
+        ArraySegment<byte> segment = SendBufferHelper.Open(4096);   
+        // 배열 현재 위치 초기화
+        int count = 0;        
+        // 전체 데이터 사이즈 (마지막에 합쳐서 넣을것이므로 여기서는 인트 크기만큼만 배열의 현재 위치를 미리 옮겨준다. )
+        count += sizeof(int);
+        // 프로토콜 지정
+        Array.Copy(BitConverter.GetBytes((ushort)PacketID.SS_QustionFaild), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+       // 배열 현재 위치 이동
+        count += sizeof(ushort);
+
+        Array.Copy(BitConverter.GetBytes(result), 0, segment.Array, segment.Offset + count, sizeof(int));
+		count += sizeof(int);
         // 전체 데이터사이즈를 배열 처음부터 인트크기만큼 넣어준다.
         Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
