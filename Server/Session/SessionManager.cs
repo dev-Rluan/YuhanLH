@@ -457,6 +457,7 @@ namespace Server
                     List<Student> students = db.GetStudentsExistLecture(lecture.lecture_code);
                     foreach (Student s in students)
                     {
+                        Console.WriteLine(s.Id);
                         Student student = db.GetStudent(s.Id);
                         Console.WriteLine(student.StudentId);
                         db.PR_Attendance(student.StudentId, lecture.lecture_code, packet.week);

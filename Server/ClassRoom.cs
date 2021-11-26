@@ -101,20 +101,7 @@ namespace Server
                 }
             }
         }
-        /// <summary>
-        /// 학생 출석
-        /// </summary>
-        /// <param name="session"></param>
-        /// <param name="packet"></param>
-        public void AtdResult(string studentId, CS_AtdCheck packet)
-        {
-            Console.WriteLine("교수에게 출석요청 보내기");
-            SP_AddAtd pkt = new SP_AddAtd();
-            pkt.studentId = studentId;
-            pkt.classTime = packet.classTime;
-            ProfessorClient.Send(pkt.Write());
-        }
-
+   
        
 
         public List<ClientSession> GetStudentList()
@@ -320,7 +307,22 @@ namespace Server
             pkt.classTime = packet.classTime;            
             BroadCast(pkt.Write());
         }
-       
+        /// <summary>
+        /// 학생 출석
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="packet"></param>
+        public void AtdResult(string studentId, CS_AtdCheck packet)
+        {
+            Console.WriteLine("교수에게 출석요청 보내기");
+            SP_AddAtd pkt = new SP_AddAtd();
+            pkt.studentId = studentId;
+            pkt.classTime = packet.classTime;
+            pkt.attr = packet.attr;
+            ProfessorClient.Send(pkt.Write());
+        }
+
+
         public void BroadCast(ArraySegment<byte> buffer)
         {
             foreach(ClientSession s in _sessions)

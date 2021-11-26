@@ -403,8 +403,7 @@ namespace Server
         /// <param name="Week_Code"></param>
         public void PR_Attendance(string Student_Id, string Lecture_code, int Week_Code)
         {
-            if (!attFlag)
-            {
+            
                 string query = $@"
                             insert into attendance_mark
                             values(att_seq.nextval, '{Student_Id}', '{Lecture_code}', {Week_Code}, 0, 0, 0)
@@ -412,8 +411,7 @@ namespace Server
 
                 Console.WriteLine(query);
                 Execute(query);
-                attFlag = true;
-            }
+            
         }
 
         /// <summary>
