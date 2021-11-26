@@ -25,6 +25,8 @@ namespace Server
         /// 교수 아이디
         /// </summary>
         public string Host { get; set; }
+        int classTime= 0;
+        int week = 0;
         JobQueue _jobQueue = new JobQueue();
         
         /// <summary>
@@ -104,10 +106,11 @@ namespace Server
         /// </summary>
         /// <param name="session"></param>
         /// <param name="packet"></param>
-        public void AtdResult(ClientSession session, CS_AtdCheck packet)
+        public void AtdResult(string studentId, CS_AtdCheck packet)
         {
+            Console.WriteLine("교수에게 출석요청 보내기");
             SP_AddAtd pkt = new SP_AddAtd();
-            pkt.studentId = session.ID;
+            pkt.studentId = studentId;
             pkt.classTime = packet.classTime;
             ProfessorClient.Send(pkt.Write());
         }
@@ -183,7 +186,7 @@ namespace Server
             }
             else
             {
-                Console.WriteLine("여기까지는 옴");
+                Console.WriteLine("퀴즈요청오고 방에 학생있음");
                 foreach (CP_QuizOX.Student s2 in packet.students)
                 {
                     QuizOXSend(s2.studentId, packet.quiz);
@@ -195,10 +198,10 @@ namespace Server
         /// </summary>
         /// <param name="session"></param>
         /// <param name="packet"></param>
-        public void Quiz_Result(ClientSession session, CS_Quiz packet)
+        public void Quiz_Result(string studentId, CS_Quiz packet)
         {
             SP_QuizResult pkt = new SP_QuizResult();
-            pkt.studentId = session.ID;
+            pkt.studentId = studentId;
             pkt.result = packet.result;
             ProfessorClient.Send(pkt.Write());
         }
@@ -207,10 +210,10 @@ namespace Server
         /// </summary>
         /// <param name="session"></param>
         /// <param name="packet"></param>
-        public void QuizOX_Result(ClientSession session, CS_QuizOX packet)
+        public void QuizOX_Result(string studentId, CS_QuizOX packet)
         {
             SP_QuizOXResult pkt = new SP_QuizOXResult();
-            pkt.studentId = session.ID;
+            pkt.studentId = studentId;
             pkt.result = packet.result;
             ProfessorClient.Send(pkt.Write());
         }
@@ -297,11 +300,23 @@ namespace Server
             pkt.studentId = GetStudentID(session);
             Console.WriteLine("교수에세 접속한 학생 보내기2");
             ProfessorClient.Send(pkt.Write());
+            // 현재 교수가 출석 요청을 한 상황이면
+            if(classTime > 0)
+            {
+                // 잘 안되면 슬립걸기
+                SS_AtdRequest atdRequest_packet = new SS_AtdRequest();
+                atdRequest_packet.classTime = classTime;
+                atdRequest_packet.week = week;
+                session.Send(atdRequest_packet.Write());
+            }
         }
 
         public void AttRequest(CP_Atd packet)
         {
+            classTime = packet.classTime;
+            week = packet.week;
             SS_AtdRequest pkt = new SS_AtdRequest();
+            pkt.week = packet.week;
             pkt.classTime = packet.classTime;            
             BroadCast(pkt.Write());
         }

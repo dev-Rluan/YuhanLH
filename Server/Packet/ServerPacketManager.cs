@@ -40,6 +40,9 @@ public class PacketManager
         _onRecv.Add((ushort)PacketID.CP_EndOfClass, MakePacket<CP_EndOfClass>);
         _handler.Add((ushort)PacketID.CP_EndOfClass, PacketHandler.CP_EndOfClassHandler);
   
+        _onRecv.Add((ushort)PacketID.CP_AtdListRequest, MakePacket<CP_AtdListRequest>);
+        _handler.Add((ushort)PacketID.CP_AtdListRequest, PacketHandler.CP_AtdListRequestHandler);
+  
         _onRecv.Add((ushort)PacketID.CS_Login, MakePacket<CS_Login>);
         _handler.Add((ushort)PacketID.CS_Login, PacketHandler.CS_LoginHandler);
   

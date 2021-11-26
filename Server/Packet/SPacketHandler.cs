@@ -63,7 +63,6 @@ class PacketHandler
         Program.sessionManager.StudnetList(clientSession);
 
     }
-
     public static void CS_LoginHandler(PacketSession session, IPacket packet)
     {
         CS_Login sc_loginPacket = packet as CS_Login;
@@ -71,6 +70,12 @@ class PacketHandler
 
         Program.sessionManager.S_Login(clientSession, sc_loginPacket.id, sc_loginPacket.pwd);
         //sm.Login(clientSession, sc_loginPacket.id, sc_loginPacket.pwd, 0);
+
+    }
+    public static void CP_AtdListRequestHandler(PacketSession session, IPacket packet)
+    {
+        ClientSession clientSession = session as ClientSession;
+        Program.sessionManager.AtdListRequest(clientSession);
        
     }
 

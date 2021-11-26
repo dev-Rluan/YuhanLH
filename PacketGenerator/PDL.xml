@@ -41,7 +41,9 @@
 	</packet>
 	<packet name ="CP_EndOfClass">
 	</packet>
-	
+	<packet name ="CP_AtdListRequest">
+		
+	</packet>
 
 	<!-- CS_ = 학생클라이언트에서 보내는 패킷 -->
 	<!--로그인 요청-->
@@ -58,7 +60,6 @@
 	</packet>
 	<!--스크린샷 요청에 대한 결과-->
 	<packet name = "CS_ScreenResult">    
-		<string name ="studentId"/>
 		<bytes name ="img"/>
 	</packet>
 	<!--학생 질문 (텍스트)-->
@@ -110,7 +111,16 @@
 			<string name ="end_time"/>			
 		</list>	
 	</packet>
-  
+	<!--전체 출석부 -->
+	<packet name ="SP_AtdList">
+		<list name ="atdList">
+			<string name="studentId"/>
+			<int name ="week"/>
+			<int name ="first_class"/>
+			<int name ="second_class"/>
+			<int name ="third_class"/>			
+		</list>
+	</packet>
 	<!--학생 정보-->
 	<packet name = "SP_StudentInfo">
 		<list name ="student">
@@ -193,6 +203,7 @@
 			<string name ="end_time"/>
 		</list>
 	</packet>
+  
   <!--수업 입장-->
   <packet name="SS_EnterRoom">    
   </packet>
@@ -206,6 +217,7 @@
 	<!--출석 체크 요청-->
 	<packet name = "SS_AtdRequest">
 		<int name ="classTime"/>
+		<int name ="week"/>
 	</packet>
 	<!--OX 퀴즈-->
 	<packet name = "SS_QuizOX">

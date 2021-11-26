@@ -447,8 +447,8 @@ namespace Server
             query = $@"
                         update attendance_mark
                         set {strClass} = {Att}
-                        where student_Id = {Student_Id}
-                        and Lecture_code = {Lecture_code}
+                        where student_Id = '{Student_Id}'
+                        and Lecture_code = '{Lecture_code}'
                         and week_code = {Week_Code}
                         ";
 
@@ -574,6 +574,7 @@ namespace Server
 
             return lectures;
         }
+        
 
         /// <summary>
         /// 교수가 강의하고 있는 강의들 중 특정 시간의 강의를 반환받는 함수입니다.
@@ -701,6 +702,93 @@ namespace Server
                 }
             }
             return _return;
+        }
+
+        /// <summary>
+        /// 주차에 해당하는 강의의 출석부를 가져옵니다.
+        /// </summary>
+        /// <param name="Lecture_code"></param>
+        /// <param name="Week_Code"></param>
+        /// <returns></returns>
+        public List<Attendance> GetAttendanceList(string Lecture_code, int Week_Code)
+        {
+            List<Attendance> attendances = new List<Attendance>();
+            Attendance attendance;
+            string student_Id;
+            int Attendance_code, first_class, second_class, third_class;
+
+            using (data = Select("*",
+                                "Attendance_mark",
+                                $@"lecture_code = '{Lecture_code}'
+                                   AND Week_code = {Week_Code}"))
+            {
+                foreach (DataRow r in data.Tables[0].Rows)
+                {
+                    Attendance_code = int.Parse(r["attendance_code"].ToString());
+                    student_Id = r["student_id"].ToString();
+                    first_class = int.Parse(r["first_class"].ToString());
+                    second_class = int.Parse(r["second_class"].ToString());
+                    third_class = int.Parse(r["third_class"].ToString());
+                    attendance = new Attendance(Attendance_code, student_Id, Lecture_code, Week_Code, first_class, second_class, third_class);
+                    attendances.Add(attendance);
+                }
+            }
+
+            return attendances;
+        }
+        /// <summary>
+        /// 주차에 해당하는 강의의 출석부를 가져옵니다.
+        /// </summary>
+        /// <param name="Lecture_code"></param>
+        /// <param name="Week_Code"></param>
+        /// <returns></returns>
+        public List<Attendance> GetAttendanceListAll(string Lecture_code)
+        {
+            List<Attendance> attendances = new List<Attendance>();
+            Attendance attendance;
+            string student_Id;
+            int Attendance_code, first_class, second_class, third_class, week_code;
+
+            using (data = Select("*",
+                                "Attendance_mark",
+                                $@"lecture_code = '{Lecture_code}'"))
+            {
+                foreach (DataRow r in data.Tables[0].Rows)
+                {
+                    Attendance_code = int.Parse(r["attendance_code"].ToString());
+                    student_Id = r["student_id"].ToString();
+                    first_class = int.Parse(r["first_class"].ToString());
+                    second_class = int.Parse(r["second_class"].ToString());
+                    third_class = int.Parse(r["third_class"].ToString());
+                    week_code = int.Parse(r["week_code"].ToString());
+                    attendance = new Attendance(Attendance_code, student_Id, Lecture_code, week_code, first_class, second_class, third_class);
+                    attendances.Add(attendance);
+                }
+            }
+
+            return attendances;
+        }
+
+        /// <summary>
+        /// 출석부에 생성되어 있는 특정 강의의 출석부 중 제일 최근 주차가 몇주차인지 알려줍니다.<br>
+        /// 해당 강의가 한번도 출석부를 생성하지 않았다면 0 을 반환합니다.
+        /// </summary>
+        /// <param name="Lecture_Code"></param>
+        /// <returns></returns>
+        public int GetAttrRecentWeekCode(string Lecture_Code)
+        {
+            int RecentWeekCode = 0;
+
+            using (data = Select("max(Week_code)", "Attendance_mark", $"lecture_code = {Lecture_Code}'"))
+            {
+                if (data.Tables[0].Rows.Count != 0)
+                {
+                    DataRow[] row = data.Tables[0].Select();
+                    RecentWeekCode = int.Parse(row[0].ItemArray[0].ToString());
+                }
+            }
+
+            return RecentWeekCode;
         }
     }
 }

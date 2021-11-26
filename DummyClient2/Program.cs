@@ -44,6 +44,9 @@ namespace DummyClient2
                         string s6 = Console.ReadLine();
                         sessionManager.AtdStart(s5, s6);
                         break;
+                    case "atdList":
+                        sessionManager.AtdListRequest();
+                        break;
                 }
             }
         }

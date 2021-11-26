@@ -51,7 +51,8 @@ class PacketHandler
         }     
         public static void SS_AtdRequestHandler(PacketSession session, IPacket packet)
         {
-
+        SS_AtdRequest pkt = packet as SS_AtdRequest;
+        Console.WriteLine("출석 체크 하세요 : " + pkt.week + " " + pkt.classTime);
         }     
     public static void SS_QuizOXHandler(PacketSession session, IPacket packet)
     {

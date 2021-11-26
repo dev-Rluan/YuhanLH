@@ -54,7 +54,6 @@ namespace SClient
                     SClientForm.sclientform.textBox1.Text += img;
                 }
                 CS_ScreenResult Img_packet = new CS_ScreenResult();
-                Img_packet.studentId = "201607009";
                 Img_packet.img = img;
                 _sessions.Send(Img_packet.Write());
                 if (SClientForm.sclientform.lbLogin.InvokeRequired == true)

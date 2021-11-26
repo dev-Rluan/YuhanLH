@@ -148,6 +148,10 @@ class PacketHandler
             PClientForm.pclientform.ptBox.Image = bmp;
         }
     }
+    public static void SP_AtdListHandler(PacketSession session, IPacket packet)
+    {
+
+    }
     public static void SP_QustionTextHandler(PacketSession session, IPacket packet)
     {
 

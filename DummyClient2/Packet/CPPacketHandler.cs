@@ -96,8 +96,20 @@ class PacketHandler
     }
     public static void SP_AddAtdHandler(PacketSession session, IPacket packet)
         {
+        SP_AddAtd pkt = packet as SP_AddAtd;
 
+        Console.WriteLine("학생 출석 : " + pkt.studentId);
         }
-    
+    public static void SP_AtdListHandler(PacketSession session, IPacket packet)
+    {
+        SP_AtdList pkt = packet as SP_AtdList;
+        Console.WriteLine("출석부 들어옴");
+        foreach(SP_AtdList.AtdList a in pkt.atdLists)
+        {
+            Console.WriteLine($"출석부 :  {a.studentId} week : {a.week} {a.first_class} {a.second_class} {a.third_class}" );
+        }
+        
+    }
+
 
 }

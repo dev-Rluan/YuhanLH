@@ -32,6 +32,11 @@ namespace DummyClient2
             _sessions.Send(pkt.Write());
             Console.WriteLine("출석 시작");
         }
+        public void AtdListRequest()
+        {
+            CP_AtdListRequest pkt = new CP_AtdListRequest();
+            _sessions.Send(pkt.Write());
+        }
         public void StudentListRequest()
         {
             lock (_lock)

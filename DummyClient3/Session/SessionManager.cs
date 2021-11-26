@@ -65,6 +65,7 @@ namespace DummyClient3
             CS_AtdCheck pkt = new CS_AtdCheck();
             pkt.classTime = 1;
             pkt.week = 1;
+            pkt.attr = 2;
             _sessions.Send(pkt.Write());
 
         }
@@ -74,7 +75,6 @@ namespace DummyClient3
             {               
                 byte[] img = { 0 };           
                 CS_ScreenResult Img_packet = new CS_ScreenResult();
-                Img_packet.studentId = Id;
                 Img_packet.img = img;
                 _sessions.Send(Img_packet.Write());
               

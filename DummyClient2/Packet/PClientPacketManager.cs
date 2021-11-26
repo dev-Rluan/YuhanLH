@@ -25,6 +25,9 @@ public class PacketManager
         _onRecv.Add((ushort)PacketID.SP_LoginResult, MakePacket<SP_LoginResult>);
         _handler.Add((ushort)PacketID.SP_LoginResult, PacketHandler.SP_LoginResultHandler);
   
+        _onRecv.Add((ushort)PacketID.SP_AtdList, MakePacket<SP_AtdList>);
+        _handler.Add((ushort)PacketID.SP_AtdList, PacketHandler.SP_AtdListHandler);
+  
         _onRecv.Add((ushort)PacketID.SP_StudentInfo, MakePacket<SP_StudentInfo>);
         _handler.Add((ushort)PacketID.SP_StudentInfo, PacketHandler.SP_StudentInfoHandler);
   

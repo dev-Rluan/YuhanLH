@@ -36,6 +36,7 @@ namespace DummyClient3
                         sessionManager.askAndImg(s5);
                         break;
                     case "atd":
+                        sessionManager.Atd();
                         break;
                     case "Quiz":
                         string s6 = Console.ReadLine();
@@ -51,6 +52,7 @@ namespace DummyClient3
                         {
                             sessionManager.QuizOX(false);
                         }
+
                         
                         break;
 
