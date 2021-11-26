@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -102,13 +103,14 @@ namespace Server
                         SP_LoginResult pkt = new SP_LoginResult();
                         // 교수의 모든 수업 리스트 가져오기                          
                         Professor professor = db.GetProfessor(id);
+                        pkt.name = professor.Name;
                         List<Lecture> _lecture = db.GetLectureExistProfessor(professor.ProfessorId);
 
                         Console.WriteLine("교수의 모든 수업 리스트 가져오기");
                         // 리스트 객체에 넣기위한 빈 Lecture객체
                         SP_LoginResult.Lecture sp_lc = new SP_LoginResult.Lecture();
                         // result에 있는 수업번호로 수업정보 가져와서 리스트 객체에 넣어줌
-
+                        
                         foreach (Lecture lc in _lecture)
                         {                            
                             List<Student> studentList = db.GetStudentsExistLecture(lc.lecture_code);
@@ -132,6 +134,7 @@ namespace Server
                         // 패킷 돌려주기
                         Console.WriteLine("교수에게 정보 보내주기");                             
                         session.Send(pkt.Write());
+                        Thread.Sleep(1500);
                         SelectPushClass();
 
                     }
@@ -191,9 +194,9 @@ namespace Server
                         {
                             Console.WriteLine("현재시간에 해당하는 수업 없음");
                             _waitingList.Add(session);
-                            SS_Result result_packet = new SS_Result();
-                            result_packet.result = false;
-                            session.Send(result_packet.Write());
+                            //SS_Result result_packet = new SS_Result();
+                            //result_packet.result = false;
+                            //session.Send(result_packet.Write());
                         }
                         else
                         {
@@ -211,30 +214,7 @@ namespace Server
                                     Console.WriteLine("학생 방접속");
                                     room.Push(()=>room.Enter(session));
                                 }
-                                SS_LoginResult pkt = new SS_LoginResult();
-                                pkt.name = student.Name;
-                                pkt.studentID = student.StudentId;
-                                List<IInformation> schedules = db.GetScheduleList(student.StudentId);
-                                List<Lecture> lectures = new List<Lecture>();
-                                foreach (Schedule scheduleL in schedules)
-                                {
-                                    Lecture lec = db.GetLecture(scheduleL.LectureCode);
-                                    lectures.Add(lec);
-                                }
-                                foreach (Lecture l in lectures)
-                                {
-                                    SS_LoginResult.Lecture lectureResult = new SS_LoginResult.Lecture();
-                                    lectureResult.credit = l.credit;
-                                    lectureResult.end_time = l.end_time;
-                                    lectureResult.lecture_code = l.lecture_code;
-                                    lectureResult.lecture_name = l.lecture_name;
-                                    lectureResult.professor_id = l.professor_id;
-                                    lectureResult.weekday = l.week_day;
-                                    lectureResult.strat_time = l.start_time;
-                                    pkt.lectures.Add(lectureResult);
-                                }
-                                _loginSessions.Add(id, session);
-                                session.Send(pkt.Write());
+                              
                             }
                             else
                             {
@@ -242,13 +222,39 @@ namespace Server
                                 // 없으면 대기 리스트에 넣어준다.
                                 Console.WriteLine(session.ID, session.Name);
                                 _waitingList.Add(session);
-                                SS_Result result_packet = new SS_Result();
-                                result_packet.result = false;
-                                session.Send(result_packet.Write());
+                                //SS_Result result_packet = new SS_Result();
+                                //result_packet.result = false;
+                                //session.Send(result_packet.Write());
                             }                          
-                        }                          
+                        }
+                        SS_LoginResult pkt = new SS_LoginResult();
+                        pkt.name = student.Name;
+                        pkt.studentID = student.StudentId;
+                        List<IInformation> schedules = db.GetScheduleList(student.StudentId);
+                        List<Lecture> lectures = new List<Lecture>();
+                        foreach (Schedule scheduleL in schedules)
+                        {
+                            Lecture lec = db.GetLecture(scheduleL.LectureCode);
+                            lectures.Add(lec);
+                        }
+                        foreach (Lecture l in lectures)
+                        {
+                            Professor professor = db.GetProfessor(db.GetProfessorID(l.professor_id));
+                            SS_LoginResult.Lecture lectureResult = new SS_LoginResult.Lecture();
+                            lectureResult.credit = l.credit;
+                            lectureResult.end_time = l.end_time;
+                            lectureResult.lecture_code = l.lecture_code;
+                            lectureResult.lecture_name = l.lecture_name;
+                            lectureResult.professor_id = professor.Name;
+                            lectureResult.weekday = l.week_day;
+                            lectureResult.strat_time = l.start_time;
+                            pkt.lectures.Add(lectureResult);
+                        }
+                        _loginSessions.Add(id, session);
+                        session.Send(pkt.Write());
+                        Console.WriteLine("로그인 성공 패킷 전송 완료");
                     }
-                    Console.WriteLine("로그인 성공 패킷 전송 완료");
+                  
                 }
                 else
                 {
@@ -324,6 +330,7 @@ namespace Server
             {
                 if (_classRoom.TryGetValue(GetProfessorId(session), out ClassRoom room))
                 {
+                    Console.WriteLine("스크린샷 보낼 방 찾음");
                     room.Push(() => room.Img_Send(packet.img, packet.studentId));
                 }
             }          
@@ -406,10 +413,19 @@ namespace Server
             {
                 if(packet.classTime == 1)
                 {
-                    Lecture lecture = db.GetLectureExistProfessorTime(session.ID, DateTime.Now.ToString("HHmm"));
+                    //Lecture lecture = db.GetLectureExistProfessorTime(session.ID, DateTime.Now.ToString("HHmm"));
+                    Professor professor = db.GetProfessor(session.ID);
+                    Lecture lecture = db.GetLectureExistProfessorTime(professor.ProfessorId, "1205");
+                    if(lecture == null)
+                    {
+                        return;
+                    }
                     List<Student> students = db.GetStudentsExistLecture(lecture.lecture_code);
                     foreach (Student s in students)
                     {
+                        //Student student = db.GetStudent(s.Id);
+                        //Console.WriteLine(student.StudentId);
+                        //db.PR_Attendance(student.StudentId, lecture.lecture_code, packet.week);
                         db.PR_Attendance(s.Id, lecture.lecture_code, packet.week);
                     }                    
                 }
@@ -420,7 +436,24 @@ namespace Server
                 }               
             }
         }
-
+        /// <summary>
+        /// 학생의 출석 요청
+        /// </summary>
+        /// <param name="session"></param>
+        /// <param name="packet"></param>
+        public void AtdResult(ClientSession session, CS_AtdCheck packet)
+        {
+            lock (_lock)
+            {
+                //Student student = db.GetStudent(session.ID);
+                //db.ST_Attendance(session.ID, GetLectureCode(session), packet.week, packet.classTime, packet.Attr);
+                db.ST_Attendance(session.ID, GetLectureCode(session), packet.week, packet.classTime, packet.Attr);
+                if (_classRoom.TryGetValue(session.Host, out ClassRoom room))
+                {
+                    room.Push(() => room.AtdResult(session, packet));
+                }
+            }
+        }
         /// <summary>
         /// 학생의 퀴즈 답 요청
         /// </summary>
@@ -471,7 +504,8 @@ namespace Server
                             Console.WriteLine("학생의 질문 요청(Text) 2 : 현재 시간에 맞는 교수의 방 있음 ");
                             if (_classRoom.TryGetValue(GetProfessorId(session), out ClassRoom room))
                             {
-                                room.Push(() => room.QustionText(session, packet));
+                                 
+                                room.Push(() => room.QustionText(db.GetStudent(session.ID).StudentId, packet));
 
                                 Console.WriteLine("학생의 질문 요청(Text) 3 : 현재 시간에 맞는 교수의 방 에 질문 뿌리기 ");
                             }
@@ -514,7 +548,7 @@ namespace Server
                             Console.WriteLine("학생의 질문 요청(Img) 2 : 현재 시간에 맞는 교수의 방 있음 ");
                             if (_classRoom.TryGetValue(GetProfessorId(session), out ClassRoom room))
                             {
-                                room.Push(() => room.QustionImg(session, packet));
+                                room.Push(() => room.QustionImg(db.GetStudent(session.ID).StudentId, packet));
 
                                 Console.WriteLine("학생의 질문 요청(Img) 3 : 현재 시간에 맞는 교수의 방 에 질문 뿌리기 ");
                             }
@@ -556,7 +590,7 @@ namespace Server
                             Console.WriteLine("학생의 질문 요청 2 : 현재 시간에 맞는 교수의 방 있음 ");
                             if (_classRoom.TryGetValue(GetProfessorId(session), out ClassRoom room))
                             {
-                                room.Push(() => room.Qustion(session, packet));
+                                room.Push(() => room.Qustion(db.GetStudent(session.ID).StudentId, packet));
 
                                 Console.WriteLine("학생의 질문 요청(Text) 3 : 현재 시간에 맞는 교수의 방 에 질문 뿌리기 ");
                             }
@@ -579,22 +613,7 @@ namespace Server
                 }
             }           
         }
-        /// <summary>
-        /// 학생의 출석 요청
-        /// </summary>
-        /// <param name="session"></param>
-        /// <param name="packet"></param>
-        public void AtdResult(ClientSession session, CS_AtdCheck packet)
-        {
-            lock (_lock)
-            {
-                db.ST_Attendance(session.ID, GetLectureCode(session), packet.week, packet.classTime, packet.Attr);
-                if(_classRoom.TryGetValue(session.Host, out ClassRoom room))
-                {
-                    room.Push(() => room.AtdResult(session, packet));
-                }
-            }
-        }
+      
 
 
        
@@ -819,14 +838,23 @@ namespace Server
         public string GetProfessorId(ClientSession session)
         {
             Lecture lecture = db.GetLecture(GetLectureCode(session));
-            if(lecture != null)
+            if (lecture != null)
             {
-                return lecture.professor_id;
+                string professorID = db.GetProfessorID(lecture.professor_id);
+                if (professorID != null)
+                {
+                    return professorID;
+                }
+                else
+                {
+                    return null;
+                }
             }
             else
             {
                 return null;
-            }            
+            }
+                    
         }
         /// <summary>
         /// 현재 대기큐에 있는 학생들을 검사해서 시간에 맞는 교수에게 보내준다.
@@ -859,15 +887,17 @@ namespace Server
 
                     if (_classRoom.ContainsKey(professorID))
                     {
-                        Console.WriteLine("교수 있음");
-                        SS_EnterRoom enter_packet = new SS_EnterRoom();
-                        _waitingList[i].Send(enter_packet.Write());
-                        //if (_classRoom.TryGetValue(professorID, out ClassRoom room))
-                        //{
-                        //    _waitingList[i].Host = professorID;
-                        //    room.Push(() => room.Enter(_waitingList[i]));
-                        //    _waitingList.RemoveAt(i);
-                        //}
+                        //Console.WriteLine("교수 있음");
+                        //SS_EnterRoom enter_packet = new SS_EnterRoom();
+                        //_waitingList[i].Send(enter_packet.Write());
+
+                        if (_classRoom.TryGetValue(professorID, out ClassRoom room))
+                        {
+                            _waitingList[i].Host = professorID;
+                            
+                            room.Push(() => room.Enter(_waitingList[i]));
+                            _waitingList.RemoveAt(i);
+                        }
                     }
                 }
             }          

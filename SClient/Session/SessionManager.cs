@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -28,6 +29,7 @@ namespace SClient
         {
             lock (_lock) 
             {
+                Thread.Sleep(500);
                 if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
                 {
                     SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
@@ -40,12 +42,32 @@ namespace SClient
                     SClientForm.sclientform.textBox1.Text += "스크린샷 찍기";
                 }
                 byte[] img = ScreenCopy.Copy();
-                SClientForm.sclientform.textBox1.Text = "스크린샷 찍기";
+                if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
+                {
+                    SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
+                    {
+                        SClientForm.sclientform.textBox1.Text += img;
+                    });
+                }
+                else
+                {
+                    SClientForm.sclientform.textBox1.Text += img;
+                }
                 CS_ScreenResult Img_packet = new CS_ScreenResult();
-                Img_packet.studentId = "test";
+                Img_packet.studentId = "201607009";
                 Img_packet.img = img;
                 _sessions.Send(Img_packet.Write());
-                SClientForm.sclientform.textBox1.Text = "스크린샷 보내기";
+                if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
+                {
+                    SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
+                    {
+                        SClientForm.sclientform.textBox1.Text += "스크린샷 보내기";
+                    });
+                }
+                else
+                {
+                    SClientForm.sclientform.textBox1.Text += "스크린샷 보내기";
+                }
             }
         }
       

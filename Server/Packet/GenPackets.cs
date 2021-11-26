@@ -987,8 +987,7 @@ public class CS_Qustion : IPacket
 public class CS_AtdCheck : IPacket
 {
     public int classTime;
-	public int week;
-	public int Attr;    
+	public int week;    
     // 프로토콜 구분   
     public ushort Protocol { get { return (ushort)PacketID.CS_AtdCheck; } }
 
@@ -1006,8 +1005,6 @@ public class CS_AtdCheck : IPacket
         this.classTime = BitConverter.ToInt32(segment.Array, segment.Offset + count);
 		count += sizeof(int);
 		this.week = BitConverter.ToInt32(segment.Array, segment.Offset + count);
-		count += sizeof(int);
-		this.Attr = BitConverter.ToInt32(segment.Array, segment.Offset + count);
 		count += sizeof(int);
        
 
@@ -1029,8 +1026,6 @@ public class CS_AtdCheck : IPacket
         Array.Copy(BitConverter.GetBytes(classTime), 0, segment.Array, segment.Offset + count, sizeof(int));
 		count += sizeof(int);
 		Array.Copy(BitConverter.GetBytes(week), 0, segment.Array, segment.Offset + count, sizeof(int));
-		count += sizeof(int);
-		Array.Copy(BitConverter.GetBytes(Attr), 0, segment.Array, segment.Offset + count, sizeof(int));
 		count += sizeof(int);
         // 전체 데이터사이즈를 배열 처음부터 인트크기만큼 넣어준다.
         Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
@@ -1137,7 +1132,7 @@ public class SP_LoginFailed : IPacket
 
 public class SP_LoginResult : IPacket
 {
-    public int result;
+    public string name;
 	public class Student
 	{
 	   public string studentId;
@@ -1278,8 +1273,10 @@ public class SP_LoginResult : IPacket
         // 배열 현재 위치 이동
         count += sizeof(ushort);
         
-        this.result = BitConverter.ToInt32(segment.Array, segment.Offset + count);
-		count += sizeof(int);
+        ushort nameLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
+		count += sizeof(ushort);
+		this.name = Encoding.Unicode.GetString(segment.Array, segment.Offset + count, nameLen);
+		count += nameLen;
 		this.students.Clear();
 		ushort studentLen = BitConverter.ToUInt16(segment.Array, segment.Offset + count);
 		count += sizeof(ushort); 
@@ -1315,8 +1312,10 @@ public class SP_LoginResult : IPacket
        // 배열 현재 위치 이동
         count += sizeof(ushort);
 
-        Array.Copy(BitConverter.GetBytes(result), 0, segment.Array, segment.Offset + count, sizeof(int));
-		count += sizeof(int);
+        ushort nameLen = (ushort)Encoding.Unicode.GetBytes(this.name, 0, this.name.Length, segment.Array, segment.Offset + count + sizeof(ushort));
+		Array.Copy(BitConverter.GetBytes(nameLen), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+		count += sizeof(ushort);
+		count += nameLen;
 		Array.Copy(BitConverter.GetBytes((ushort)this.students.Count), 0, segment.Array, segment.Offset + count, sizeof(ushort));
 		count += sizeof(ushort);
 		foreach(Student student in students)

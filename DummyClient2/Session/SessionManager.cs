@@ -16,13 +16,21 @@ namespace DummyClient2
             {
                 CP_Login loging_packet = new CP_Login();
 
-                loging_packet.id = "dnjsdlf";
-                loging_packet.pwd = "rladnjsdlf";
+                loging_packet.id = "test";
+                loging_packet.pwd = "test1234";
                 ArraySegment<byte> segment = loging_packet.Write();
                 _sessions.Send(segment);
                 
             }
 
+        }
+        public void AtdStart(string a, string b)
+        {
+            CP_Atd pkt = new CP_Atd();
+            pkt.classTime = Convert.ToInt32(a);
+            pkt.week = Convert.ToInt32(b);
+            _sessions.Send(pkt.Write());
+            Console.WriteLine("출석 시작");
         }
         public void StudentListRequest()
         {

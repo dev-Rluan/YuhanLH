@@ -407,9 +407,10 @@ namespace Server
             {
                 string query = $@"
                             insert into attendance_mark
-                            values(att_seq.nextval, '{Student_Id}', {Week_Code}, 0, 0, 0);
+                            values(att_seq.nextval, '{Student_Id}', '{Lecture_code}', {Week_Code}, 0, 0, 0)
                     ";
 
+                Console.WriteLine(query);
                 Execute(query);
                 attFlag = true;
             }
@@ -579,12 +580,12 @@ namespace Server
         /// </summary>
         /// <param name="Professor_Id"></param>
         /// <param name="Start_Time"></param>
-        public Lecture GetLectureExistProfessorTime(string Professor_Id, string Start_Time)
+        public Lecture GetLectureExistProfessorTime(string Professor_Id, string Time )
         {
             Lecture lecture;
 
             using (data = Select("*", "Lecture", @$"Professor_Id = '{Professor_Id}' AND
-                                                    Start_Time = '{Start_Time}' AND
+                                                    Start_Time <= '{Time}' AND end_time >= '{Time}' AND
                                                     Week_Day = '수'"))
                 //Week_Day = '{getDay(DateTime.Now)}'"))
             {
@@ -596,6 +597,11 @@ namespace Server
                                         row[0].ItemArray[4].ToString(),
                                         row[0].ItemArray[5].ToString(),
                                         row[0].ItemArray[6].ToString());
+                if (data.Tables[0].Rows.Count == 0)
+                {
+                    Console.WriteLine("없음");
+                    return null;
+                }
             }
 
             return lecture;

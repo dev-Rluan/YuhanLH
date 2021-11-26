@@ -1,5 +1,7 @@
 using SClient;
 using System;
+using System.Collections.Generic;
+using System.Threading;
 using System.Windows.Forms;
 
 class PacketHandler
@@ -72,9 +74,24 @@ class PacketHandler
     }     
     public static void SS_LoginResultHandler(PacketSession session, IPacket packet)
     {
-        SS_LoginResult pkt = packet as SS_LoginResult;
-      
-            if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
+        SS_LoginResult loginResult_packet = packet as SS_LoginResult;
+        List<SS_LoginResult.Lecture> LectureResult = loginResult_packet.lectures;
+        string nowtime = "1205";
+        foreach(SS_LoginResult.Lecture result in LectureResult)
+        {
+            if (Convert.ToInt32(result.strat_time) <= Convert.ToInt32(nowtime) && Convert.ToInt32(result.end_time) >= Convert.ToInt32(nowtime))
+            {
+
+                if (result.weekday == "수")
+                {
+
+                   //현재 수업 시간
+
+                }
+            }
+        }
+        
+        if (SClientForm.sclientform.lbLogin.InvokeRequired == true)
             {
                 SClientForm.sclientform.lbLogin.Invoke((MethodInvoker)delegate
                 {
@@ -90,6 +107,7 @@ class PacketHandler
     }
     public static void SS_EnterRoomHandler(PacketSession session, IPacket packet)
     {
+        Thread.Sleep(1000);
         SClientForm.sessionManager.LoginSend();
     }
     public static void SS_QResultHandler(PacketSession session, IPacket packet)

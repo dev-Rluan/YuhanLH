@@ -109,7 +109,6 @@ namespace Server
             SP_AddAtd pkt = new SP_AddAtd();
             pkt.studentId = session.ID;
             pkt.classTime = packet.classTime;
-            pkt.attr = packet.Attr;
             ProfessorClient.Send(pkt.Write());
         }
 
@@ -216,25 +215,25 @@ namespace Server
             ProfessorClient.Send(pkt.Write());
         }
 
-        public void QustionText(ClientSession session, CS_QustionText packet)
+        public void QustionText(string studentID, CS_QustionText packet)
         {
             SP_QustionText pkt = new SP_QustionText();
             pkt.qustion = packet.qustion;
-            pkt.studentId = session.ID;
+            pkt.studentId = studentID;
             ProfessorClient.Send(pkt.Write());            
         }
-        public void QustionImg(ClientSession session, CS_QustionImg packet)
+        public void QustionImg(string studentID, CS_QustionImg packet)
         {
             SP_QustionImg pkt = new SP_QustionImg();
-            pkt.studentId = session.ID;
+            pkt.studentId = studentID;
             ProfessorClient.Send(pkt.Write());
         }
-        public void Qustion(ClientSession session, CS_Qustion packet)
+        public void Qustion(string studentID, CS_Qustion packet)
         {
             SP_Qustion pkt = new SP_Qustion();
             pkt.qustion = packet.qustion;
             pkt.img = packet.img;
-            pkt.studentId = session.ID;
+            pkt.studentId = studentID;
             ProfessorClient.Send(pkt.Write());
         }
 
@@ -268,6 +267,7 @@ namespace Server
         /// <param name="id"></param>
         public void Img_Send( byte[] img, string id)
         {
+            Console.WriteLine("스크린샷 보낼 패킷 생성");
             SP_ScreenResult sp_screenPacket = new SP_ScreenResult();
             sp_screenPacket.studentId = id;
             sp_screenPacket.img = img;
@@ -287,6 +287,7 @@ namespace Server
 
         public void Enter(ClientSession session)
         {
+
             Console.WriteLine(ProfessorClient.ID + " : 학생 수업방 접속");
             _sessions.Add(session);
             Console.WriteLine("접속한 학생" + session.ID);

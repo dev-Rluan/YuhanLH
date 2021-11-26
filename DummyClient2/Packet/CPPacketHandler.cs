@@ -56,27 +56,32 @@ class PacketHandler
     }
     public static void SP_QustionTextHandler(PacketSession session, IPacket packet)
     {
-
+        SP_QustionText pkt = packet as SP_QustionText;
+        Console.WriteLine("Áú¹® ¿È : " + pkt.studentId + "ÀÇ " + pkt.qustion);
     }
     public static void SP_QustionImgHandler(PacketSession session, IPacket packet)
     {
-
+        SP_QustionImg pkt = packet as SP_QustionImg;
+        Console.WriteLine("Áú¹® ¿È : " + pkt.studentId + "ÀÇ " + pkt.img);
     }
     public static void SP_QustionHandler(PacketSession session, IPacket packet)
     {
-
+        SP_Qustion pkt = packet as SP_Qustion;
+        Console.WriteLine("Áú¹® ¿È : " + pkt.studentId + "ÀÇ " + pkt.img + " ¿Í" + pkt.qustion);
     }
     public static void SP_QuizResultHandler(PacketSession session, IPacket packet)
     {
-
+        SP_QuizResult pkt = packet as SP_QuizResult;
+        Console.WriteLine("ÄûÁî Á¤´ä : " + pkt.studentId + "ÀÇ" + pkt.result);
     }
     public static void SP_EndClassHandler(PacketSession session, IPacket packet)
     {
-
+        
     }
     public static void SP_QuizOXResultHandler(PacketSession session, IPacket packet)
     {
-
+        SP_QuizOXResult pkt = packet as SP_QuizOXResult;
+        Console.WriteLine("ÄûÁî Á¤´ä : " + pkt.studentId + "ÀÇ" + pkt.result);
     }
     public static void SP_AddStudentHandler(PacketSession session, IPacket packet)
     {

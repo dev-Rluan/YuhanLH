@@ -78,7 +78,7 @@
 	<packet name = "CS_AtdCheck">
 		<int name ="classTime"/>
 		<int name ="week"/>
-		<int name ="Attr"/>
+		<int name ="attr"/>
 	</packet>
 
 
@@ -94,7 +94,7 @@
 	</packet>
 	<!--교수 로그인 성공-->
 	<packet name = "SP_LoginResult">
-    <int name ="result"/>
+    <string name ="name"/>
 		<list name ="student">
 			<string name ="studentId"/>
 			<string name ="studentName"/>

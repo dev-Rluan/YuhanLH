@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace DummyClient2
+namespace DummyClient3
 {
     class Program
     {
@@ -20,30 +20,40 @@ namespace DummyClient2
                 switch (s)
                 {
                     case "Login":
-                        sessionManager.LoginSend();
-                        break;
-                    case "Quiz":
-                        Console.WriteLine("보낼 퀴즈를 입력해주세요");
                         string s2 = Console.ReadLine();
                         string s3 = Console.ReadLine();
-                        sessionManager.Quiz(s2, s3);
-                        
+                        sessionManager.LoginSend(s2, s3);
                         break;
-                    case "QuizOX":
-                        break;
-                    case "Screen":
-                        Console.WriteLine("스크린 요청할 학생의 학번을 입력해 주세요");
+                    case "ask":
                         string s4 = Console.ReadLine();
-                        sessionManager.ScreenRequest(s4);
+                        sessionManager.ask(s4);
                         break;
-                    case "Student":
-                        sessionManager.StudentListRequest();
+                    case "screenshot":
+                        sessionManager.SCShot();
+                        break;
+                    case "qustion":
+                        string s5 = Console.ReadLine();
+                        sessionManager.askAndImg(s5);
                         break;
                     case "atd":
-                        string s5 = Console.ReadLine();
-                        string s6 = Console.ReadLine();
-                        sessionManager.AtdStart(s5, s6);
                         break;
+                    case "Quiz":
+                        string s6 = Console.ReadLine();
+                        sessionManager.Quiz(s6);
+                        break;
+                    case "QuizOX":
+                        string s7 = Console.ReadLine();
+                        if(s7 == "O")
+                        {
+                            sessionManager.QuizOX(true);
+                        }
+                        else
+                        {
+                            sessionManager.QuizOX(false);
+                        }
+                        
+                        break;
+
                 }
             }
         }
