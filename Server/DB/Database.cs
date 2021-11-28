@@ -191,6 +191,7 @@ namespace Server
                     }
                     catch (Exception e )
                     {
+                        
                         Console.WriteLine(e.StackTrace);
                     }
                 }
@@ -404,14 +405,21 @@ namespace Server
         public void PR_Attendance(string Student_Id, string Lecture_code, int Week_Code)
         {
             
-                string query = $@"
-                            insert into attendance_mark
-                            values(att_seq.nextval, '{Student_Id}', '{Lecture_code}', {Week_Code}, 0, 0, 0)
-                    ";
+            string query = $@"
+                        insert into attendance_mark
+                        values(att_seq.nextval, '{Student_Id}', '{Lecture_code}', {Week_Code}, 1, 1, 1)
+                ";
 
-                Console.WriteLine(query);
+            if (Select("*", "Attendance_mark",
+             @$"Lecture_code = '{Lecture_code}' AND Week_Code = {Week_Code} AND Student_id = '{Student_Id}'").Tables[0].Rows.Count != 0)
+            {
+               Console.WriteLine("이미 추가된 데이터 입니다.");
+            }
+            else
+            {
                 Execute(query);
-            
+            }
+
         }
 
         /// <summary>
@@ -499,8 +507,8 @@ namespace Server
             string lecture_code, lecture_name;
             Schedule schedule;
 
-            //using (data = SelectInnerJoin($"stu_lec.student_id = {studentID}", time, getDay(DateTime.Now))
-            using (data = SelectInnerJoin($"stu_lec.student_id = {studentID}", time, "수"))
+            using (data = SelectInnerJoin($"stu_lec.student_id = {studentID}", time, getDay(DateTime.Now)))
+            //using (data = SelectInnerJoin($"stu_lec.student_id = {studentID}", time, "수"))
             {
                 if (data.Tables[0].Rows.Count == 0)
                 {
@@ -585,8 +593,11 @@ namespace Server
 
             using (data = Select("*", "Lecture", @$"Professor_Id = '{Professor_Id}' AND
                                                     Start_Time <= '{Time}' AND end_time >= '{Time}' AND
-                                                    Week_Day = '수'"))
-                //Week_Day = '{getDay(DateTime.Now)}'"))
+                                                    Week_Day = '{getDay(DateTime.Now)}'"))
+                //Week_Day = '수'"))
+                
+            
+
             {
                 DataRow[] row = data.Tables[0].Select();
                 lecture = new Lecture(row[0].ItemArray[0].ToString(),

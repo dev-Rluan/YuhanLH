@@ -216,6 +216,7 @@ namespace Server
         {
             SP_QustionImg pkt = new SP_QustionImg();
             pkt.studentId = studentID;
+            pkt.img = packet.img;
             ProfessorClient.Send(pkt.Write());
         }
         public void Qustion(string studentID, CS_Qustion packet)

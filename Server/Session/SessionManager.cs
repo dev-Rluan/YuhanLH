@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -108,11 +109,12 @@ namespace Server
 
                         Console.WriteLine("교수의 모든 수업 리스트 가져오기");
                         // 리스트 객체에 넣기위한 빈 Lecture객체
-                        SP_LoginResult.Lecture sp_lc = new SP_LoginResult.Lecture();
+                        
                         // result에 있는 수업번호로 수업정보 가져와서 리스트 객체에 넣어줌
                         
                         foreach (Lecture lc in _lecture)
-                        {                            
+                        {
+                            SP_LoginResult.Lecture sp_lc = new SP_LoginResult.Lecture();
                             List<Student> studentList = db.GetStudentsExistLecture(lc.lecture_code);
                             foreach(Student studentInfo in studentList)
                             {
@@ -189,8 +191,8 @@ namespace Server
                         Student student = db.GetStudent(id);
                         session.ID = id;
                         session.Name = student.Name;
-                        Schedule schedule = db.GetScheduleExistTime("1205", student.StudentId);
-                        //Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
+                        //Schedule schedule = db.GetScheduleExistTime("1205", student.StudentId);
+                        Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
                         if (schedule == null)
                         {
                             Console.WriteLine("현재시간에 해당하는 수업 없음");
@@ -277,8 +279,10 @@ namespace Server
                 SP_AtdList pkt = new SP_AtdList();
                 Professor professor = db.GetProfessor(session.ID);
                 //db.GetLectureExistProfessorTime(professor.ProfessorId, DateTime.Now.ToString("HHmm"));                
-                List<Attendance> atdList = db.GetAttendanceListAll(db.GetLectureExistProfessorTime(professor.ProfessorId, "1205").lecture_code);
-                foreach(Attendance a in atdList)
+                List<Attendance> atdList = db.GetAttendanceListAll(db.GetLectureExistProfessorTime(professor.ProfessorId, DateTime.Now.ToString("HHmm")).lecture_code);
+                //List<Attendance> atdList = db.GetAttendanceListAll(db.GetLectureExistProfessorTime(professor.ProfessorId, "1405").lecture_code);
+
+                foreach (Attendance a in atdList)
                 {
                     SP_AtdList.AtdList atd = new SP_AtdList.AtdList();
                     atd.week = a.Week_Code;
@@ -446,11 +450,11 @@ namespace Server
             lock (_lock)
             {
                 if(packet.classTime == 1)
-                {
-                    //Lecture lecture = db.GetLectureExistProfessorTime(session.ID, DateTime.Now.ToString("HHmm"));
+                {                    
                     Professor professor = db.GetProfessor(session.ID);
-                    Lecture lecture = db.GetLectureExistProfessorTime(professor.ProfessorId, "1205");
-                    if(lecture == null)
+                    Lecture lecture = db.GetLectureExistProfessorTime(professor.ProfessorId, DateTime.Now.ToString("HHmm"));
+                    //Lecture lecture = db.GetLectureExistProfessorTime(professor.ProfessorId, "1405");
+                    if (lecture == null)
                     {
                         return;
                     }
@@ -471,6 +475,28 @@ namespace Server
                 }               
             }
         }
+        #region 특정 일자의 주차 구하기 - GetWeekNumber(year, month, day, dayOfWeek)
+        /// <summary>
+        /// 특정일자의 주차 구하기
+        /// <summary>
+        /// <param name="year"></param>
+        /// <param name="month"></param>
+        /// <param name="day"></param>
+        /// <param name="dayOfWeek"></param>
+        ///  <returns></returns>
+        public int GetWeekNumber(int year, int month, int day, DayOfWeek dayOfWeek)
+        {
+            DateTime calculationDate = new DateTime(year, month, day); //주차를 구할 일자
+            DateTime standardDate = new DateTime(year, 8, 30);   //기준일
+            Calendar calendarCalc = CultureInfo.CurrentCulture.Calendar;
+            int weekNumber = calendarCalc.GetWeekOfYear(calculationDate, CalendarWeekRule.FirstDay, dayOfWeek)
+
+                 - calendarCalc.GetWeekOfYear(standardDate, CalendarWeekRule.FirstDay, dayOfWeek) + 1;
+            return weekNumber;
+        }
+        #endregion
+
+
         /// <summary>
         /// 학생의 출석 요청
         /// </summary>
@@ -484,10 +510,13 @@ namespace Server
                 db.ST_Attendance(student.StudentId, GetLectureCode(session), packet.week, packet.classTime, packet.attr);
                 Console.WriteLine("학생의 출석 요청 : " + session.ID + packet.week + packet.classTime + packet.attr) ;
                 //db.ST_Attendance(session.ID, GetLectureCode(session), packet.week, packet.classTime, packet.attr);
-                if (_classRoom.TryGetValue(session.Host, out ClassRoom room))
+                if (_classRoom.ContainsKey(session.Host))
                 {
-                    room.Push(() => room.AtdResult(student.StudentId, packet));
-                }
+                    if (_classRoom.TryGetValue(session.Host, out ClassRoom room))
+                    {
+                        room.Push(() => room.AtdResult(student.StudentId, packet));
+                    }
+                }               
             }
         }
         /// <summary>
@@ -855,8 +884,8 @@ namespace Server
         public string GetLectureCode(ClientSession session)
         {
             Student student = db.GetStudent(session.ID);
-            //Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
-            Schedule schedule = db.GetScheduleExistTime("1205", student.StudentId);
+            Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
+            //Schedule schedule = db.GetScheduleExistTime("1205", student.StudentId);
             if (schedule != null)
             {
                 return schedule.LectureCode;
@@ -910,8 +939,8 @@ namespace Server
                     {
                         Student student = db.GetStudent(_waitingList[i].ID);
                         Console.WriteLine("대기큐 학생 검색 : " + student.StudentId);
-                        //Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
-                        Schedule schedule = db.GetScheduleExistTime("1205", student.StudentId);
+                        Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
+                        //Schedule schedule = db.GetScheduleExistTime("1205", student.StudentId);
                         if (schedule == null)
                         {
                             Console.WriteLine("스케쥴 비었음");
@@ -1031,6 +1060,7 @@ namespace Server
                 }
             }
         }
+
         /// <summary>
         /// 연결이 해제 되었을 때 호출되는 함수
         /// </summary>
