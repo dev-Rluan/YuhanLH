@@ -191,7 +191,7 @@ namespace Server
                         Student student = db.GetStudent(id);
                         session.ID = id;
                         session.Name = student.Name;
-                        //Schedule schedule = db.GetScheduleExistTime("1205", student.StudentId);
+                        //Schedule schedule = db.GetScheduleExistTime("1005", student.StudentId);
                         Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
                         if (schedule == null)
                         {
@@ -280,7 +280,7 @@ namespace Server
                 Professor professor = db.GetProfessor(session.ID);
                 //db.GetLectureExistProfessorTime(professor.ProfessorId, DateTime.Now.ToString("HHmm"));                
                 List<Attendance> atdList = db.GetAttendanceListAll(db.GetLectureExistProfessorTime(professor.ProfessorId, DateTime.Now.ToString("HHmm")).lecture_code);
-                //List<Attendance> atdList = db.GetAttendanceListAll(db.GetLectureExistProfessorTime(professor.ProfessorId, "1405").lecture_code);
+                //List<Attendance> atdList = db.GetAttendanceListAll(db.GetLectureExistProfessorTime(professor.ProfessorId, "1005").lecture_code);
 
                 foreach (Attendance a in atdList)
                 {
@@ -453,7 +453,7 @@ namespace Server
                 {                    
                     Professor professor = db.GetProfessor(session.ID);
                     Lecture lecture = db.GetLectureExistProfessorTime(professor.ProfessorId, DateTime.Now.ToString("HHmm"));
-                    //Lecture lecture = db.GetLectureExistProfessorTime(professor.ProfessorId, "1405");
+                    //Lecture lecture = db.GetLectureExistProfessorTime(professor.ProfessorId, "1005");
                     if (lecture == null)
                     {
                         return;
@@ -885,7 +885,7 @@ namespace Server
         {
             Student student = db.GetStudent(session.ID);
             Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
-            //Schedule schedule = db.GetScheduleExistTime("1205", student.StudentId);
+            //Schedule schedule = db.GetScheduleExistTime("1005", student.StudentId);
             if (schedule != null)
             {
                 return schedule.LectureCode;
@@ -940,7 +940,7 @@ namespace Server
                         Student student = db.GetStudent(_waitingList[i].ID);
                         Console.WriteLine("대기큐 학생 검색 : " + student.StudentId);
                         Schedule schedule = db.GetScheduleExistTime(DateTime.Now.ToString("HHmm"), student.StudentId);
-                        //Schedule schedule = db.GetScheduleExistTime("1205", student.StudentId);
+                        //Schedule schedule = db.GetScheduleExistTime("1005", student.StudentId);
                         if (schedule == null)
                         {
                             Console.WriteLine("스케쥴 비었음");

@@ -594,9 +594,7 @@ namespace Server
             using (data = Select("*", "Lecture", @$"Professor_Id = '{Professor_Id}' AND
                                                     Start_Time <= '{Time}' AND end_time >= '{Time}' AND
                                                     Week_Day = '{getDay(DateTime.Now)}'"))
-                //Week_Day = '수'"))
-                
-            
+                                                    //Week_Day = '수'"))
 
             {
                 DataRow[] row = data.Tables[0].Select();
