@@ -15,7 +15,7 @@ namespace Server
         private const int SCHEDULE = 2;
 
 
-        private static string dbIp = "10.102.0.14";
+        private static string dbIp = "LocalHost";
         private static string dbName = "deskDB";
         private static string dbId = "C##capstone_admin";
         private static string dbPw = "yuhanunivcapstone1212";
@@ -407,7 +407,7 @@ namespace Server
             
             string query = $@"
                         insert into attendance_mark
-                        values(att_seq.nextval, '{Student_Id}', '{Lecture_code}', {Week_Code}, 1, 1, 1)
+                        values(att_seq.nextval, '{Student_Id}', '{Lecture_code}', {Week_Code}, 0, 0, 0)
                 ";
 
             if (Select("*", "Attendance_mark",

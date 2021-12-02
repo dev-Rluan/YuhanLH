@@ -27,6 +27,7 @@ namespace Server
         public string Host { get; set; }
         int classTime= 0;
         int week = 0;
+        string atdTime = "";
         JobQueue _jobQueue = new JobQueue();
         
         /// <summary>
@@ -232,7 +233,7 @@ namespace Server
         /// <summary>
         /// 수업종료를 학생들에게 알려주고 룸에서 비워준다.
         /// </summary>
-        public void BroadCast_EndClass()
+        public void BroadCast_EndClass(int i)
         {
             if (_sessions.Count < 1)
             {
@@ -243,6 +244,7 @@ namespace Server
             {
                 Console.WriteLine("룸에 접속한 학생 있음");
                 SS_EndOfClass pkt = new SS_EndOfClass();
+                pkt.result = i;
                 BroadCast(pkt.Write());
                 _sessions.Clear();
                 
@@ -276,9 +278,9 @@ namespace Server
             return db.GetStudent(session.ID).StudentId;
         }
 
+        
         public void Enter(ClientSession session)
         {
-
             Console.WriteLine(ProfessorClient.ID + " : 학생 수업방 접속");
             _sessions.Add(session);
             Console.WriteLine("접속한 학생" + session.ID);
@@ -288,8 +290,11 @@ namespace Server
             pkt.studentId = GetStudentID(session);
             Console.WriteLine("교수에세 접속한 학생 보내기2");
             ProfessorClient.Send(pkt.Write());
-            // 현재 교수가 출석 요청을 한 상황이면
-            if(classTime > 0)
+
+            SS_EnterRoom enterPacket = new SS_EnterRoom();
+            session.Send(enterPacket.Write());
+            
+            if (classTime > 0)
             {
                 // 잘 안되면 슬립걸기
                 SS_AtdRequest atdRequest_packet = new SS_AtdRequest();
@@ -303,6 +308,7 @@ namespace Server
         {
             classTime = packet.classTime;
             week = packet.week;
+            atdTime = DateTime.Now.ToString("HHmmss");
             SS_AtdRequest pkt = new SS_AtdRequest();
             pkt.week = packet.week;
             pkt.classTime = packet.classTime;            
@@ -313,14 +319,38 @@ namespace Server
         /// </summary>
         /// <param name="session"></param>
         /// <param name="packet"></param>
-        public void AtdResult(string studentId, CS_AtdCheck packet)
+        public void AtdResult(string studentId, CS_AtdCheck packet, ClientSession session)
         {
-            Console.WriteLine("교수에게 출석요청 보내기");
             SP_AddAtd pkt = new SP_AddAtd();
+            SS_AtdResult ss_AtdResult = new SS_AtdResult();
+            if (Convert.ToInt32(DateTime.Now.ToString("HHmmss")) <= Convert.ToInt32(atdTime) + 500)
+            {
+                Console.WriteLine(DateTime.Now.ToString("HHmmss") +  " <= "  + (Convert.ToInt32(atdTime) + 500).ToString());
+                Console.WriteLine("학생 출석");
+                ss_AtdResult.result = 1;
+                pkt.attr = 1;
+            }
+            else if (Convert.ToInt32(DateTime.Now.ToString("HHmmss")) <= Convert.ToInt32(atdTime) + 1500)
+            {
+                Console.WriteLine(DateTime.Now.ToString("HHmmss") + " <= " + (Convert.ToInt32(atdTime) + 500).ToString());
+                Console.WriteLine("학생 지각");
+                ss_AtdResult.result = 2;
+                pkt.attr = 2;
+            }
+            else
+            {
+                Console.WriteLine(DateTime.Now.ToString("HHmmss") + "and" + atdTime);
+                Console.WriteLine("학생 결석");
+                ss_AtdResult.result = 0;
+                pkt.attr = 0;
+            }
+            Console.WriteLine("교수에게 출석요청 보내기");            
             pkt.studentId = studentId;
             pkt.classTime = packet.classTime;
-            pkt.attr = packet.attr;
             ProfessorClient.Send(pkt.Write());
+
+            ss_AtdResult.classTime = packet.classTime;
+            session.Send(ss_AtdResult.Write());
         }
 
 

@@ -1,8 +1,9 @@
+using Server;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using Server;
+
 
 public enum PacketID
 {
@@ -51,6 +52,7 @@ public enum PacketID
 	SS_ImgSendFaild = 43,
 	SS_EndOfClass = 44,
 	SS_QustionFaild = 45,
+	SS_AtdResult = 46,
 	
 }
 
@@ -2787,7 +2789,7 @@ public class SS_ImgSendFaild : IPacket
 
 public class SS_EndOfClass : IPacket
 {
-        
+    public int result;    
     // 프로토콜 구분   
     public ushort Protocol { get { return (ushort)PacketID.SS_EndOfClass; } }
 
@@ -2802,7 +2804,8 @@ public class SS_EndOfClass : IPacket
         // 배열 현재 위치 이동
         count += sizeof(ushort);
         
-        
+        this.result = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+		count += sizeof(int);
        
 
     }
@@ -2820,7 +2823,8 @@ public class SS_EndOfClass : IPacket
        // 배열 현재 위치 이동
         count += sizeof(ushort);
 
-        
+        Array.Copy(BitConverter.GetBytes(result), 0, segment.Array, segment.Offset + count, sizeof(int));
+		count += sizeof(int);
         // 전체 데이터사이즈를 배열 처음부터 인트크기만큼 넣어준다.
         Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
 
@@ -2867,6 +2871,58 @@ public class SS_QustionFaild : IPacket
         count += sizeof(ushort);
 
         Array.Copy(BitConverter.GetBytes(result), 0, segment.Array, segment.Offset + count, sizeof(int));
+		count += sizeof(int);
+        // 전체 데이터사이즈를 배열 처음부터 인트크기만큼 넣어준다.
+        Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));
+
+        return SendBufferHelper.Close(count);
+
+
+    }
+}
+
+public class SS_AtdResult : IPacket
+{
+    public int classTime;
+	public int result;    
+    // 프로토콜 구분   
+    public ushort Protocol { get { return (ushort)PacketID.SS_AtdResult; } }
+
+    public  void Read(ArraySegment<byte> segment)
+    {
+        // 배열 현재 위치 초기화
+        int count = 0;
+        // 전체 데이터 사이즈
+        BitConverter.ToInt32(segment.Array, segment.Offset + count);
+        // 배열 현재 위치 이동
+        count += sizeof(int);
+        // 배열 현재 위치 이동
+        count += sizeof(ushort);
+        
+        this.classTime = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+		count += sizeof(int);
+		this.result = BitConverter.ToInt32(segment.Array, segment.Offset + count);
+		count += sizeof(int);
+       
+
+    }
+
+    public  ArraySegment<byte> Write()
+    {
+        // 버퍼 짤라서 이동시킬 크기     
+        ArraySegment<byte> segment = SendBufferHelper.Open(4096);   
+        // 배열 현재 위치 초기화
+        int count = 0;        
+        // 전체 데이터 사이즈 (마지막에 합쳐서 넣을것이므로 여기서는 인트 크기만큼만 배열의 현재 위치를 미리 옮겨준다. )
+        count += sizeof(int);
+        // 프로토콜 지정
+        Array.Copy(BitConverter.GetBytes((ushort)PacketID.SS_AtdResult), 0, segment.Array, segment.Offset + count, sizeof(ushort));
+       // 배열 현재 위치 이동
+        count += sizeof(ushort);
+
+        Array.Copy(BitConverter.GetBytes(classTime), 0, segment.Array, segment.Offset + count, sizeof(int));
+		count += sizeof(int);
+		Array.Copy(BitConverter.GetBytes(result), 0, segment.Array, segment.Offset + count, sizeof(int));
 		count += sizeof(int);
         // 전체 데이터사이즈를 배열 처음부터 인트크기만큼 넣어준다.
         Array.Copy(BitConverter.GetBytes(count), 0, segment.Array, segment.Offset, sizeof(int));

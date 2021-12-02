@@ -231,9 +231,14 @@
   <packet name ="SS_ImgSendFaild">
   </packet>
 	<!--수업 종료-->
-	<packet name ="SS_EndOfClass">    
+	<packet name ="SS_EndOfClass">
+		<int name ="result"/>
   </packet>
 	<packet name ="SS_QustionFaild">
+		<int name ="result"/>
+	</packet>
+	<packet name ="SS_AtdResult">
+		<int name ="classTime"/>
 		<int name ="result"/>
 	</packet>
 
