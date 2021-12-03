@@ -7,7 +7,7 @@ Server
 - 기초적인 서버 프로그램 로직은 먼저 올려놓은 게임서버로직과 비슷함
 - 수업마다 다른 Room 생성 Dicto 
 - 현재 프로토콜 목록
-- ![image](https://user-images.githubusercontent.com/73861946/141688155-03350461-05cc-464c-93cf-897a64e4d4d1.png)
+- ![image](https://user-images.githubusercontent.com/73861946/144662179-6dd8c2d7-97b5-4a3f-b908-06edbbcd9fb6.png)
 - 세션관리를 통한 유저의 정보 관리
   * 현재 학생이든 교수이던 로그인 또는 방 입장요청이 룸생성 전에 먼저 들어오면 시간에 맞춰서 방을 생성해주는 로직인데 이부분을 교수자에 따라서 방을 생성해주는 로직으로 변경 할 예정이다.
 
