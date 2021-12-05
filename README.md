@@ -43,6 +43,7 @@ PPT 정리
 ![yuhanCap15](https://user-images.githubusercontent.com/73861946/144713142-5592309f-e437-4297-8e5d-f49fd1589da7.png)
 ![yuhanCap16](https://user-images.githubusercontent.com/73861946/144713143-520915c5-b073-4f9f-af1f-424dc1367d40.png)
 ![PowerPoint 슬라이드 쇼  -  YuhanCapston(Server) pptx 2021-12-05 오전 4_24_04](https://user-images.githubusercontent.com/73861946/144723122-f4ed43e9-e2f3-4d96-98df-c1d3bcf7e741.png)
+![yuhanCap20](https://user-images.githubusercontent.com/73861946/144753884-b8a1b433-7a76-49ef-8bf8-b933dfc2183c.png)
 
 
 
