@@ -93,6 +93,7 @@
 	<packet name = "SP_LoginFailed">
 		<ushort name ="result"/>
 	</packet>
+	
 	<!--교수 로그인 성공-->
 	<packet name = "SP_LoginResult">
     <string name ="name"/>
