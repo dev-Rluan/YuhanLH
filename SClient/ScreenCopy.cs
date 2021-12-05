@@ -49,7 +49,7 @@ namespace SClient
             ImageCodecInfo jpgEncoder = tempimg.GetEncoder(ImageFormat.Jpeg);
             System.Drawing.Imaging.Encoder myencoder = System.Drawing.Imaging.Encoder.Quality;
             EncoderParameters myEncoderParameters = new EncoderParameters(1);
-            EncoderParameter myEncoderParameter = new EncoderParameter(myencoder, 6L);
+            EncoderParameter myEncoderParameter = new EncoderParameter(myencoder, 25L);
             myEncoderParameters.Param[0] = myEncoderParameter;
             bmp.Save(ms, jpgEncoder, myEncoderParameters);
             byte[] data = ms.GetBuffer();

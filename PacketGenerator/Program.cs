@@ -130,8 +130,11 @@ namespace PacketGenerator
             // 패킷 네임 추출 
             string packetName = r["name"];
 
+            // 멤버 부분 
             string memberCode = "";
+            // Read 메서드 
             string readCode = "";
+            // Write 메서드
             string writeCode = "";
 
             
@@ -140,7 +143,7 @@ namespace PacketGenerator
             {
                 if (r.Depth != depth)
                     break;
-
+                // memberName 저장
                 string memberName = r["name"];
                 // 멤버의 이름이 부정확하면 리턴
                 if (string.IsNullOrEmpty(memberName))
@@ -227,6 +230,7 @@ namespace PacketGenerator
 
             Tuple<string, string, string> t = ParseMembers(r);
 
+            
             string memberCode = string.Format(PacketFormat.memberListFormat,
                 FirstCharToUpper(listName),
                 FirstCharToLower(listName),
@@ -248,6 +252,7 @@ namespace PacketGenerator
 
         public static string ToMemberType(string memberType)
         {
+            // 타입에 맞춰서 컨버터 형식 반환
             switch (memberType) 
             {
                 case "bool":

@@ -12,70 +12,36 @@ namespace Server
     class Program
     {
         static Listener listener = new Listener();
-        public static ClassRoom Room = new ClassRoom();
+        //public static ClassRoom Room = new ClassRoom();
         public static SessionManager sessionManager = new SessionManager();
         public static JobTimer jobTimer = new JobTimer();
         public static PacketManager packetManager = new PacketManager();
-        static void FlushRoom()
-        {
-            Room.Push(() => Room.Flush());
-            jobTimer.Push(FlushRoom, 50);
-        }
 
-        //static void OnAcceptHandler(Socket client_socket)
-        //{
-        //    try
-        //    {
-        //        GameSession session = new GameSession();
-        //        session.Start(client_socket);
+        /*  static void FlushRoom()
+          {
+              Room.Push(() => Room.Flush());
+              jobTimer.Push(FlushRoom, 50);
+          }*/
+       
 
-
-        //        byte[] send_buffer = Encoding.UTF8.GetBytes("Welcome to MMORPG Server!");
-        //        session.Send(send_buffer);
-
-
-        //        Thread.Sleep(1000);
-
-        //        session.Disconnect();
-
-        //        ////받는다
-        //        //byte[] receive_buffer = new byte[1024];
-        //        //int reveByte = client_socket.Receive(receive_buffer);
-        //        //String receData = Encoding.UTF8.GetString(receive_buffer, 0, reveByte);
-        //        //Console.WriteLine($"[fromClient] {receData}");
-
-        //        ////보낸다
-        //        //byte[] send_buffer = Encoding.UTF8.GetBytes("Welcome to MMORPG Server!");
-        //        //client_socket.Send(send_buffer);
-
-        //        ////쫓아 낸다.
-        //        //client_socket.Shutdown(SocketShutdown.Both);
-        //        //client_socket.Close();
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        Console.WriteLine(e);
-        //    }
-        //}
         static void Main(string[] args)
         {
-            String host = Dns.GetHostName();
-            IPHostEntry ipHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = ipHost.AddressList[0];
-            for (int i = 7771; i < 7775; i++)
-            {
-                IPEndPoint endPoint = new IPEndPoint(ipAddr, i);
-                listener.Init(endPoint, () => { return sessionManager.Generate(); });
-                Console.WriteLine($"Listening... port : {i}");
-            }
-
-
-
+            Console.WriteLine("프로그램 시작");
+            //String host = Dns.GetHostName();
+            //IPHostEntry ipHost = Dns.GetHostEntry(host);
+            //IPAddress ipAddr = ipHost.AddressList[0];
+            //Console.WriteLine(ipAddr);
+            //IPAddress ip = IPAddress.Parse("49.247.149.125");
+            //Console.WriteLine(ip);
+            IPAddress ip2 = IPAddress.Parse("0.0.0.0");
+            Console.WriteLine(ip2);
+            IPEndPoint endPoint = new IPEndPoint(ip2, 7777);
+            listener.Init(endPoint, () => { return sessionManager.Generate(); });
+            Console.WriteLine($"Listening... port : 7777");                   
 
             //FlushRoom();
-            jobTimer.Push(FlushRoom);
+            //jobTimer.Push(FlushRoom);
             //int roomTick = 0;
-        
 
 
             while (true)
@@ -86,8 +52,13 @@ namespace Server
                 //    Room.Push(() => Room.Flush());
                 //    roomTick = now + 250;
                 //}
-                jobTimer.Flush();
+                //jobTimer.Flush();
 
+                String s = Console.ReadLine();
+                if (s == "getList")
+                {
+                    sessionManager.GetWatingList();
+                }
             }
 
         }

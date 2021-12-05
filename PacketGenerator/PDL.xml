@@ -1,39 +1,249 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <PDL>
+	<!-- CP_ = 교수클라이언트에서 보내는 패킷-->
+	<!--로그인 요청-->
 	<packet name ="CP_Login">
 		<string name ="id"/>
 		<string name ="pwd"/>
 	</packet>
+	<!--학생 캡처화면 요청-->
+	<packet name = "CP_ScreenRequest">
+		<list name ="student">
+				<string name="studentId"/>
+	 </list>
+	</packet>
+	<!--OX 퀴즈 요청-->
+	<packet name ="CP_QuizOX">
+		<string name ="quiz"/>
+		<list name ="student">
+			<string name ="studentId"/>
+		</list>
+	</packet>
+	<!--퀴즈 요청-->
+	<packet name ="CP_Quiz">
+		<string name ="quiz"/>
+		<list name ="student">
+			<string name ="studentId"/>
+		</list>
+	</packet>
+	<!--학생의 질문에 대한 답변-->
+	<packet name ="CP_QResult">
+		<string name="studentId"/>
+		<string name="result"/>
+	</packet>
+	<!--출석 요청-->
+	<packet name ="CP_Atd">
+		<int name ="classTime"/>
+		<int name ="week"/>	
+	</packet>
+	<!--학생 리스트 최신화 요청-->
+	<packet name ="CP_StudentList">
+	</packet>
+	<packet name ="CP_EndOfClass">
+	</packet>
+	<packet name ="CP_AtdListRequest">
+		
+	</packet>
+
+	<!-- CS_ = 학생클라이언트에서 보내는 패킷 -->
+	<!--로그인 요청-->
 	<packet name = "CS_Login">
 		<string name ="id"/>
 		<string name ="pwd"/>
 	</packet>
-	<packet name = "SS_Result"> 
-		<bool name ="result"/>		
+	<!--퀴즈 답변-->
+	<packet name = "CS_Quiz">
+		<string name ="result"/>
 	</packet>
+	<packet name = "CS_QuizOX">
+		<bool name ="result"/>
+	</packet>
+	<!--스크린샷 요청에 대한 결과-->
+	<packet name = "CS_ScreenResult">    
+		<bytes name ="img"/>
+	</packet>
+	<!--학생 질문 (텍스트)-->
+	<packet name = "CS_QustionText">
+		<string name ="qustion"/>
+	</packet>
+	<!--학생 질문 (이미지)-->
+	<packet name = "CS_QustionImg">
+		<bytes name ="img"/>
+	</packet>
+	<!--학생 질문 (텍스트와 이미지)-->
+	<packet name = "CS_Qustion">
+		<string name ="qustion"/>
+		<bytes name ="img"/>
+	</packet>
+	<!--출석 체크-->
+	<packet name = "CS_AtdCheck">
+		<int name ="classTime"/>
+		<int name ="week"/>
+		<int name ="attr"/>
+	</packet>
+
+
+
+	<!-- SP_ = 서버에서 교수클라이언트에게 보내느 패킷-->
+	<!-- SP_Result = 테스트용 로그인 반환값-->
 	<packet name = "SP_Result">
 		<bool name ="result"/>
 	</packet>
-	<packet name = "CP_Chat">
-		<string name = "id" />
-		<string name = "chat"/>
-	</packet>
-	<packet name = "CS_Chat">
-		<string name = "id" />
-		<string name = "chat"/>
-	</packet>
-	<packet name = "CP_ScreenRequest">
-		<string name ="id"/>
-		<string name ="student"/>
-	</packet>
-	<packet name = "CS_ScreenResult">
-		<string name ="id"/>
-		<bytes name ="img"/>
-	</packet>
-	<packet name = "SP_ScreenResult">
-		<string name ="id"/>
-		<bytes name ="img"/>
+	<!--교수 로그인 실패-->
+	<packet name = "SP_LoginFailed">
+		<ushort name ="result"/>
 	</packet>
 	
+	<!--교수 로그인 성공-->
+	<packet name = "SP_LoginResult">
+    <string name ="name"/>
+		<list name ="student">
+			<string name ="studentId"/>
+			<string name ="studentName"/>
+			<string name ="lectureCode"/>
+		</list>
+		<list name ="Lecture">
+			<string name ="lecture_code"/>
+			<string name ="professor_id"/>
+			<string name ="lecture_name"/>
+			<int name ="credit"/>
+			<string name ="weekday"/>
+			<string name ="strat_time"/>
+			<string name ="end_time"/>			
+		</list>	
+	</packet>
+	<!--전체 출석부 -->
+	<packet name ="SP_AtdList">
+		<list name ="atdList">
+			<string name="studentId"/>
+			<int name ="week"/>
+			<int name ="first_class"/>
+			<int name ="second_class"/>
+			<int name ="third_class"/>			
+		</list>
+	</packet>
+	<!--학생 정보-->
+	<packet name = "SP_StudentInfo">
+		<list name ="student">
+			<string name ="studentId"/>
+		</list>
+	</packet>
+	<!--학생 스크린샷 반환-->
+	<packet name = "SP_ScreenResult">
+		<string name ="studentId"/>
+		<bytes name ="img"/>
+	</packet>
+	<!--학생질문 (텍스트)-->
+	<packet name ="SP_QustionText">
+		<string name="studentId"/>
+		<string name ="qustion"/>
+	</packet>
+	<!--학생질문 (이미지)-->
+	<packet name ="SP_QustionImg">
+		<string name="studentId"/>
+		<bytes name ="img"/>
+	</packet>
+	<!--학생질문 (텍스트와 이미지)-->
+	<packet name ="SP_Qustion">
+		<string name="studentId"/>
+		<string name ="qustion"/>
+		<bytes name ="img"/>
+	</packet>
+	<!--퀴즈에대한 학생의 답-->
+	<packet name ="SP_QuizResult">
+		<string name ="studentId"/>
+		<string name ="result"/>
+	</packet>
+	<!--OX퀴즈에대한 학생의 답-->
+	<packet name ="SP_QuizOXResult">
+		<string name ="studentId"/>
+		<bool name ="result"/>
+	</packet>
+	<!--학생 접속-->
+	<packet name ="SP_AddStudent">
+		<string name ="studentId"/>
+	</packet>
+	<!--학생 나감-->
+	<packet name ="SP_LeaveStudent">
+		<string name ="studentId"/>
+	</packet>
+	<!--출석 체크 요청-->
+	<packet name ="SP_AddAtd">
+		<string name ="studentId"/>
+		<int name ="classTime"/>
+		<int name ="attr"/>
+	</packet>
+  <!--수업 종료-->
+    <packet name ="SP_EndClass">
+    </packet>
+	
+	<!-- SS_ = 서버에서 학생클라이언트에게 보내느 패킷-->
+	<!-- SS_Result = 테스트용 로그인 반환값-->
+	<packet name = "SS_Result">
+		<bool name ="result"/>
+	</packet>
+	<!--학생 로그인 실패-->
+	<packet name = "SS_LoginFailed">
+		<ushort name ="result"/>
+	</packet>
+  <!--로그아웃 성공적으로 실행됨-->
+  <packet name ="SS_Logout">
+  </packet>
+	<!--학생 로그인성공, 시간표 가져오기-->
+	<packet name = "SS_LoginResult">
+    <int name ="result"/>		
+		<string name ="studentID"/>
+		<string name ="name"/>
+		<list name ="Lecture">
+			<string name ="lecture_code"/>
+			<string name ="professor_id"/>
+			<string name ="lecture_name"/>
+			<int name ="credit"/>
+			<string name ="weekday"/>
+			<string name ="strat_time"/>
+			<string name ="end_time"/>
+		</list>
+	</packet>
   
+  <!--수업 입장-->
+  <packet name="SS_EnterRoom">    
+  </packet>
+	<!--교수의 스크린샷 요청-->
+	<packet name ="SS_ScreenRequest">
+	</packet>
+	<!--질문에대한 교수의 답변-->
+	<packet name = "SS_QResult">
+		<string name ="result"/>
+	</packet>
+	<!--출석 체크 요청-->
+	<packet name = "SS_AtdRequest">
+		<int name ="classTime"/>
+		<int name ="week"/>
+	</packet>
+	<!--OX 퀴즈-->
+	<packet name = "SS_QuizOX">
+		<string name ="quiz"/>
+	</packet>
+	<!--퀴즈-->
+	<packet name = "SS_Quiz">
+		<string name ="quiz"/>
+	</packet>
+  <!--교수가 이미지 요청을해서 보냈으나 교수가 존재하지 않습니다.-->
+  <packet name ="SS_ImgSendFaild">
+  </packet>
+	<!--수업 종료-->
+	<packet name ="SS_EndOfClass">
+		<int name ="result"/>
+  </packet>
+	<packet name ="SS_QustionFaild">
+		<int name ="result"/>
+	</packet>
+	<packet name ="SS_AtdResult">
+		<int name ="classTime"/>
+		<int name ="result"/>
+	</packet>
+
+
 </PDL>
+
+

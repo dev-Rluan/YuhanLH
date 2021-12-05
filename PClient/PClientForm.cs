@@ -17,6 +17,9 @@ namespace PClient
         public static SessionManager sessionManager;
         public static PacketManager packetManager;
 
+
+       
+
         public PClientForm()
         {
             InitializeComponent();
@@ -27,10 +30,8 @@ namespace PClient
 
         private void PClientForm_Load(object sender, EventArgs e)
         {
-            String host = Dns.GetHostName();
-            IPHostEntry ipHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = ipHost.AddressList[0];
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, 7773);
+            IPAddress ip = IPAddress.Parse("49.247.149.125");
+            IPEndPoint endPoint = new IPEndPoint(ip, 7777);
             Connector connector = new Connector();
             connector.Connect(endPoint, () => { return sessionManager.Generate(); });
 

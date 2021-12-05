@@ -18,6 +18,45 @@ public class PacketManager
   
         _onRecv.Add((ushort)PacketID.SS_Result, MakePacket<SS_Result>);
         _handler.Add((ushort)PacketID.SS_Result, PacketHandler.SS_ResultHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_LoginFailed, MakePacket<SS_LoginFailed>);
+        _handler.Add((ushort)PacketID.SS_LoginFailed, PacketHandler.SS_LoginFailedHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_Logout, MakePacket<SS_Logout>);
+        _handler.Add((ushort)PacketID.SS_Logout, PacketHandler.SS_LogoutHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_LoginResult, MakePacket<SS_LoginResult>);
+        _handler.Add((ushort)PacketID.SS_LoginResult, PacketHandler.SS_LoginResultHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_EnterRoom, MakePacket<SS_EnterRoom>);
+        _handler.Add((ushort)PacketID.SS_EnterRoom, PacketHandler.SS_EnterRoomHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_ScreenRequest, MakePacket<SS_ScreenRequest>);
+        _handler.Add((ushort)PacketID.SS_ScreenRequest, PacketHandler.SS_ScreenRequestHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_QResult, MakePacket<SS_QResult>);
+        _handler.Add((ushort)PacketID.SS_QResult, PacketHandler.SS_QResultHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_AtdRequest, MakePacket<SS_AtdRequest>);
+        _handler.Add((ushort)PacketID.SS_AtdRequest, PacketHandler.SS_AtdRequestHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_QuizOX, MakePacket<SS_QuizOX>);
+        _handler.Add((ushort)PacketID.SS_QuizOX, PacketHandler.SS_QuizOXHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_Quiz, MakePacket<SS_Quiz>);
+        _handler.Add((ushort)PacketID.SS_Quiz, PacketHandler.SS_QuizHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_ImgSendFaild, MakePacket<SS_ImgSendFaild>);
+        _handler.Add((ushort)PacketID.SS_ImgSendFaild, PacketHandler.SS_ImgSendFaildHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_EndOfClass, MakePacket<SS_EndOfClass>);
+        _handler.Add((ushort)PacketID.SS_EndOfClass, PacketHandler.SS_EndOfClassHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_QustionFaild, MakePacket<SS_QustionFaild>);
+        _handler.Add((ushort)PacketID.SS_QustionFaild, PacketHandler.SS_QustionFaildHandler);
+  
+        _onRecv.Add((ushort)PacketID.SS_AtdResult, MakePacket<SS_AtdResult>);
+        _handler.Add((ushort)PacketID.SS_AtdResult, PacketHandler.SS_AtdResultHandler);
 
     }
 

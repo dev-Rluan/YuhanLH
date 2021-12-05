@@ -12,8 +12,15 @@ namespace Server
    
     public abstract class PacketSession : Session
     {
+        /// <summary>
+        /// 헤더 사이즈
+        /// </summary>
         public static readonly int HeaderSize = 2;
-
+        /// <summary>
+        /// 리시브이벤트가 발생되었을때 호출되는 메서드
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
         public sealed override int OnRecv(ArraySegment<byte> buffer)
         {
             
@@ -51,11 +58,11 @@ namespace Server
     }
 
      public abstract  class Session
-    {
+     {
         Socket _socket;
         int _disconnected = 0;
 
-        RecvBuffer _recvBuffer = new RecvBuffer(37483647);
+        RecvBuffer _recvBuffer = new RecvBuffer(65535000);
 
         Queue<ArraySegment<byte>> _sendQueue = new Queue<ArraySegment<byte>>();        
         List<ArraySegment<byte>>    _pendingList = new List<ArraySegment<byte>>();

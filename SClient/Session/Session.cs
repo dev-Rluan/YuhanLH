@@ -54,7 +54,7 @@ namespace SClient
         Socket _socket;
         int _disconnected = 0;
 
-        RecvBuffer _recvBuffer = new RecvBuffer(37483647);
+        RecvBuffer _recvBuffer = new RecvBuffer(65535000);
 
         Queue<ArraySegment<byte>> _sendQueue = new Queue<ArraySegment<byte>>();        
         List<ArraySegment<byte>>    _pendingList = new List<ArraySegment<byte>>();
