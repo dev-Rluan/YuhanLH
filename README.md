@@ -20,10 +20,9 @@ DB
 
 
 Client
-- PClient - 테스트용 교수 프로그램
-- SCient - 테스트용 학생 프로그램
-- Professor : 
-- Student   :
+- PClient - 교수 프로그램
+- SCient - 학생 프로그램
+- Client 프로그램 - https://github.com/KOHYEONJEONG/yh_clientTeam
 
 PPT 정리
 ![yuhanCap1](https://user-images.githubusercontent.com/73861946/144713109-1ada90ec-c453-4b53-9f07-40a03d979d04.png)
