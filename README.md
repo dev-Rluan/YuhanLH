@@ -11,8 +11,9 @@ Server
 - 세션관리를 통한 유저의 정보 관리
   * 현재 학생이든 교수이던 로그인 또는 방 입장요청이 룸생성 전에 먼저 들어오면 시간에 맞춰서 방을 생성해주는 로직인데 이부분을 교수자에 따라서 방을 생성해주는 로직으로 변경 할 예정이다.
 
-주요기능 
-[https://github.com/KOHYEONJEONG/yh_clientTeam/tree/shc#%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5](https://github.com/KOHYEONJEONG/yh_clientTeam/tree/shc)
+
+[프로젝트 주요기능](https://github.com/KOHYEONJEONG/yh_clientTeam/tree/shc)
+담당 부분 코드
 
 DB
 - oracle을 사용하여 구성
@@ -25,7 +26,65 @@ Client
 - SCient - 학생 프로그램
 - Client 프로그램 - https://github.com/KOHYEONJEONG/yh_clientTeam
 
-PPT 정리
+
+## 코드 구조
+![image](https://user-images.githubusercontent.com/73861946/197353990-34fe2ae0-d0f3-41f0-87c9-923cadffba4c.png)
+
+## 주요 개발 코드
+### 콘솔 프로그램 + Socket 통신
+ * ![image](https://user-images.githubusercontent.com/73861946/141686016-addfc4f3-3d79-4684-9e02-8766fd4b5786.png)
+ * 서버 가동
+- 비동기 방식 사용하여 데이터 통신관리
+  * ![image](https://user-images.githubusercontent.com/73861946/141670455-93808b18-55bc-49f3-a4a5-a40b0806044e.png)
+- ServerCore라는 클래스 라이브러리에 공통부분 작성
+- 세션을 통해서 사용자의 정보를 관리한다.
+ * session 이라는 클래스에 통신을 위한 메소드 정의 
+ * ![image](https://user-images.githubusercontent.com/73861946/197354294-697af6ac-d886-4c69-a1f7-2158d65f0082.png)
+  + 연결된 소켓 저장, 네트워크 통신을 위한 메서드 정의
+  + SendBuffer, RecvBuffer를 사용하여 송, 수신 데이터 전송
+ * 서버는 ClientSession, 클라이언트는 ServerSession 이라는 클래스에 session 클래스를 상속받아서 각자 접속한 유저와 서버와의 통신을 관리한다.
+  + 세션 안에는 객체( 유저, 서버 )의 정보를 기록한다.
+  + ![image](https://user-images.githubusercontent.com/73861946/197354331-3ec3ca28-c636-4433-b6ea-dcebe2ad39d2.png)
+  + ↑ 각 유저의 정보(ClientSession)
+
+
+### SessionManager : 전체 세션을 의미한다. 
+ * 모든 정보처리를 담당한다. 
+  + 서버에 처음 접속하는 객체는 세션 번호를 key로 가진 Dictionary에 저장한다.
+  + 데이터 손실이 일어날만한 곳은 lock을 사용하여 처리한다.
+  + https://github.com/dev-Rluan/YuhanLH/blob/main/Server/Session/SessionManager.cs
+- classroom : class(수업) 하나를 나타낸다.
+ *  수업, 교수, 학생들의 세션 정보를 가지며 이벤트를 위한 메서드들을 가지고 있다.
+ *  https://github.com/dev-Rluan/YuhanLH/blob/main/Server/ClassRoom.cs
+
+ 
+### PacketManager : 패킷을 관리하는 클래스
+- - xml 파일에 패킷 구조를 정의하고 xml파일을 읽어들여 미리 정의 한 string Format형식으로 패킷을 정의하고 읽고 쓸수있는 클래스 생성
+ * ![image](https://user-images.githubusercontent.com/73861946/197355206-0a6d1752-d110-4bf9-8a36-86b2e21fac70.png)
+ * 완성된 패킷 클래스
+ * ![image](https://user-images.githubusercontent.com/73861946/141686504-c75de10a-c30b-4a75-9ff9-03209b644e83.png)
+ * (전체 구조는 너무 많기 때문에 생략하였습니다 - PacketGenerator: Program.cs, Server : GenPacket.cs)
+ * 전체 패킷 핸들러 함수 저장과 그것을 실행하는 Action을 Dictionary에 저장
+ * ![image](https://user-images.githubusercontent.com/73861946/141686327-b3286c0b-79e2-4747-b6af-4a76191b62e8.png)
+ * 핸들러 추가
+ * ![image](https://user-images.githubusercontent.com/73861946/197355142-1a6447b2-cce4-4f40-a872-4091d3c1a4b1.png)
+ * 서버로 데이터가 Recv되었을때 호출하여 패킷을 검사하는 메서드
+ * ![image](https://user-images.githubusercontent.com/73861946/197355163-ef48d879-8aa9-45b4-9e3d-f99d37c05fde.png)
+ * 핸들러 함수가 실행하는 함수들
+ * ![image](https://user-images.githubusercontent.com/73861946/197355176-207c5420-d132-46d3-8fb1-a047a0b0cf49.png)
+
+
+
+핸들러 함수까지오면 클라이언트측에서 데이터 관리한다.
+
+## MySQL을 사용한 DB연결
+- Database 객체 초기화해서 사용
+- ![image](https://user-images.githubusercontent.com/73861946/197355255-94c8f6de-b93a-4562-9ed7-da0bd5fb2385.png)
+- ![image](https://user-images.githubusercontent.com/73861946/197355262-abe5746e-a72f-4fb4-aa66-34d013626022.png)
+- https://github.com/dev-Rluan/YuhanLH/blob/main/Server/DB/Database.cs
+
+
+## PPT 정리
 ![yuhanCap1](https://user-images.githubusercontent.com/73861946/144713109-1ada90ec-c453-4b53-9f07-40a03d979d04.png)
 ![yuhanCap2](https://user-images.githubusercontent.com/73861946/144713111-deae79ed-c8d4-498a-9800-18f8e513ee47.png)
 ![yuhanCap3](https://user-images.githubusercontent.com/73861946/144713112-4e59818e-4727-40a7-99fa-c802879aaa63.png)
