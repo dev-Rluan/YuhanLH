@@ -11,7 +11,8 @@ Server
 - 세션관리를 통한 유저의 정보 관리
   * 현재 학생이든 교수이던 로그인 또는 방 입장요청이 룸생성 전에 먼저 들어오면 시간에 맞춰서 방을 생성해주는 로직인데 이부분을 교수자에 따라서 방을 생성해주는 로직으로 변경 할 예정이다.
 
-
+주요기능 
+https://github.com/KOHYEONJEONG/yh_clientTeam/tree/shc#%EC%A3%BC%EC%9A%94-%EA%B8%B0%EB%8A%A5
 
 DB
 - oracle을 사용하여 구성
