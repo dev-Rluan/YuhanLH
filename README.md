@@ -1,37 +1,40 @@
 # YuhanLH
 
-유한대학교 2021캡스톤 디자인 프로젝트 '유한등대' 
+2021년 유한대학교 캡스톤 프로젝트 ‘유한등대’의 C# 소켓 서버 구현 기록입니다. 학생·교수의 연결, 수업별 Room, 세션과 수업 데이터를 처리합니다.
 
-Server
-- C#을 사용한 소켓 통신 프로그램을 이용하여 유저(학생, 교수)간의 통신과 데이터 처리를 담당
-- 기초적인 서버 프로그램 로직은 먼저 올려놓은 게임서버로직과 비슷함
-- 수업마다 다른 Room 생성  
-- 현재 프로토콜 목록
-- ![image](https://user-images.githubusercontent.com/73861946/144662179-6dd8c2d7-97b5-4a3f-b908-06edbbcd9fb6.png)
-- 세션관리를 통한 유저의 정보 관리
-  * 현재 학생이든 교수이던 로그인 또는 방 입장요청이 룸생성 전에 먼저 들어오면 시간에 맞춰서 방을 생성해주는 로직인데 이부분을 교수자에 따라서 방을 생성해주는 로직으로 변경 할 예정이다.
+## 담당 범위와 구성
 
+| 경로 | 역할 |
+|---|---|
+| [Server](Server/) | 수업 Room, 사용자 세션, 패킷과 DB 처리 |
+| [ServerCore](ServerCore/) | 공통 소켓 통신·송수신 버퍼 |
+| [PacketGenerator](PacketGenerator/) | 패킷 코드 생성 |
+| [PClient](PClient/) · [SClient](SClient/) | 교수·학생 통신 클라이언트 |
+| [DummyClient](DummyClient/) | 통신 실험용 클라이언트 |
+| [Protocol.xlsx](Protocol.xlsx) | 프로토콜 자료 |
 
-[프로젝트 주요기능](https://github.com/KOHYEONJEONG/yh_clientTeam/tree/shc)
-담당 부분 코드
+별도 클라이언트 프로젝트는 [yh_clientTeam](https://github.com/KOHYEONJEONG/yh_clientTeam), 기존 주요 기능 자료는 [shc 브랜치](https://github.com/KOHYEONJEONG/yh_clientTeam/tree/shc)에 있습니다.
 
-DB
-- oracle을 사용하여 구성
-- 학생, 교수, 수업정보, 수업, 출석정보, 로그인 테이블 등으로 구성
-- 서버에서 동작하여 데이터 처리를 돕는다.
+## 코드 확인과 실행 준비
 
+[Server.sln](Server.sln)을 솔루션으로 열어 프로젝트 구성을 확인합니다. 서버 프로젝트는 `net5.0`을 대상으로 하며 Oracle 연동 패키지를 사용합니다. DB·네트워크 설정과 기존 개발 환경을 준비한 뒤 실행해야 합니다.
 
-Client
-- PClient - 교수 프로그램
-- SCient - 학생 프로그램
-- Client 프로그램 - https://github.com/KOHYEONJEONG/yh_clientTeam
+수업 Room 생성 방식 변경 등 기존 개선 메모는 개발 당시 계획으로 보관합니다. 이 문서는 현재 운영 중인 수업 서비스를 뜻하지 않습니다.
 
+## 프로토콜과 개발 당시 계획
+
+![프로토콜 기록](https://user-images.githubusercontent.com/73861946/144662179-6dd8c2d7-97b5-4a3f-b908-06edbbcd9fb6.png)
+
+기존 README에는 로그인·방 입장 요청 시 수업 시간에 맞춰 Room을 만드는 방식을 교수 기준 생성으로 바꾸려는 계획이 기록되어 있습니다. 이 항목은 개발 당시 계획으로 구분합니다.
 
 ## 코드 구조
+
 ![image](https://user-images.githubusercontent.com/73861946/197353990-34fe2ae0-d0f3-41f0-87c9-923cadffba4c.png)
 
 ## 주요 개발 코드
+
 ### 콘솔 프로그램 + Socket 통신
+
  * ![image](https://user-images.githubusercontent.com/73861946/141686016-addfc4f3-3d79-4684-9e02-8766fd4b5786.png)
  * 서버 가동
 - 비동기 방식 사용하여 데이터 통신관리
@@ -49,6 +52,7 @@ Client
 
 
 ### SessionManager : 전체 세션을 의미한다. 
+
  * 모든 정보처리를 담당한다. 
   + 서버에 처음 접속하는 객체는 세션 번호를 key로 가진 Dictionary에 저장한다.
   + 데이터 손실이 일어날만한 곳은 lock을 사용하여 처리한다.
@@ -59,7 +63,8 @@ Client
 
  
 ### PacketManager : 패킷을 관리하는 클래스
-- - xml 파일에 패킷 구조를 정의하고 xml파일을 읽어들여 미리 정의 한 string Format형식으로 패킷을 정의하고 읽고 쓸수있는 클래스 생성
+
+- XML 파일에 패킷 구조를 정의하고 xml파일을 읽어들여 미리 정의 한 string Format형식으로 패킷을 정의하고 읽고 쓸수있는 클래스 생성
  * ![image](https://user-images.githubusercontent.com/73861946/197355206-0a6d1752-d110-4bf9-8a36-86b2e21fac70.png)
  * 완성된 패킷 클래스
  * ![image](https://user-images.githubusercontent.com/73861946/141686504-c75de10a-c30b-4a75-9ff9-03209b644e83.png)
@@ -77,14 +82,20 @@ Client
 
 핸들러 함수까지오면 클라이언트측에서 데이터 관리한다.
 
-## MySQL을 사용한 DB연결
+## 데이터베이스 연동 기록
+
+현재 [Server/DB/Database.cs](Server/DB/Database.cs)는 Oracle 클라이언트를 사용합니다. 아래 이미지와 설명은 기존 개발 기록으로 보관합니다.
 - Database 객체 초기화해서 사용
 - ![image](https://user-images.githubusercontent.com/73861946/197355255-94c8f6de-b93a-4562-9ed7-da0bd5fb2385.png)
 - ![image](https://user-images.githubusercontent.com/73861946/197355262-abe5746e-a72f-4fb4-aa66-34d013626022.png)
 - https://github.com/dev-Rluan/YuhanLH/blob/main/Server/DB/Database.cs
 
 
-## PPT 정리
+## 발표 자료
+
+<details>
+<summary>캡스톤 발표 슬라이드와 화면 기록</summary>
+
 ![yuhanCap1](https://user-images.githubusercontent.com/73861946/144713109-1ada90ec-c453-4b53-9f07-40a03d979d04.png)
 ![yuhanCap2](https://user-images.githubusercontent.com/73861946/144713111-deae79ed-c8d4-498a-9800-18f8e513ee47.png)
 ![yuhanCap3](https://user-images.githubusercontent.com/73861946/144713112-4e59818e-4727-40a7-99fa-c802879aaa63.png)
@@ -106,18 +117,4 @@ Client
 ![PowerPoint 슬라이드 쇼  -  YuhanCapston(Server) pptx 2021-12-05 오전 4_24_04](https://user-images.githubusercontent.com/73861946/144723122-f4ed43e9-e2f3-4d96-98df-c1d3bcf7e741.png)
 ![yuhanCap20](https://user-images.githubusercontent.com/73861946/144753884-b8a1b433-7a76-49ef-8bf8-b933dfc2183c.png)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+</details>
